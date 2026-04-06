@@ -4,7 +4,6 @@ import useProductId from "@/store/useProductIdStore";
 import { useMutation } from "@tanstack/react-query";
 import Product from "../ProductCard/Product";
 import { Skeleton } from "@mui/material";
-import { userConsultationApi } from "@/api/consultationApi";
 import useCheckoutStore from "@/store/checkoutStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
 import useGpDetailsStore from "@/store/gpDetailStore";
