@@ -9,7 +9,6 @@ import useCartStore from "@/store/useCartStore";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import useReorder from "@/store/useReorderStore";
-import { abandonCart } from "@/api/abandonCartApi";
 import { useMutation } from "@tanstack/react-query";
 import useProductId from "@/store/useProductIdStore";
 import BackButton from "@/Components/BackButton/BackButton";
@@ -21,6 +20,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useNeedleConsent from "@/store/needleConsent";
 import { FaShoppingCart } from "react-icons/fa";
+import { abandonCart } from "@/api/mergeRoute";
 
 export default function DosageSelection() {
   const [shownDoseIds, setShownDoseIds] = useState([]);

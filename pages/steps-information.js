@@ -2,8 +2,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { userConsultationApi } from "@/api/consultationApi";
-import { getMedicalQuestions } from "@/api/getQuestions";
 import useBmiStore from "@/store/bmiStore";
 import useCheckoutStore from "@/store/checkoutStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
@@ -28,6 +26,7 @@ import StepsHeader from "@/layout/stepsHeader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReturning from "@/store/useReturningPatient";
+import { getMedicalQuestions, userConsultationApi } from "@/api/mergeRoute";
 
 export default function StepsInformation() {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -60,7 +59,7 @@ export default function StepsInformation() {
     clearShipping,
     clearBilling,
     setCheckShippingForAccordion,
-    setCheckBillingForAccordion
+    setCheckBillingForAccordion,
   } = useShippingOrBillingStore();
   const { clearToken } = useAuthStore();
   const { setIsPasswordReset } = usePasswordReset();
@@ -98,7 +97,7 @@ export default function StepsInformation() {
         setMedicalInfo(data?.data?.data?.medicalInfo);
         setPatientInfo(data?.data?.data?.patientInfo);
         setShipping(data?.data?.data?.shipping);
-        setCheckShippingForAccordion(data?.data?.data?.shipping)
+        setCheckShippingForAccordion(data?.data?.data?.shipping);
         setBilling(data?.data?.data?.billing);
         setCheckBillingForAccordion(data?.data?.data?.billing);
         setAuthUserDetail(data?.data?.data?.auth_user);
@@ -178,7 +177,7 @@ export default function StepsInformation() {
     }
   }, [productId]);
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   //   setTimeout(() => {
   //     router.push("/step1");

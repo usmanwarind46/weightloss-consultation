@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableRow, Paper, TableHead } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TableHead,
+} from "@mui/material";
 import moment from "moment";
-import getOrderByIdApi from "@/api/getOrderByIdApi";
 import { motion } from "framer-motion";
 import StepsHeader from "@/layout/stepsHeader";
 import Link from "next/link";
@@ -11,6 +18,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import ProtectedPage from "@/Components/ProtectedPage/ProtectedPage";
 import DashBoardLayout from "@/Components/Dashboard/DashboardLayout/DashBoardLayout";
+import { getOrderByIdApi } from "@/api/mergeRoute";
 
 const OrderDetail = () => {
   const [order, setOrder] = useState(null);
@@ -81,26 +89,29 @@ const OrderDetail = () => {
 
   const formatWeight = (data) => {
     if (data?.weight_unit == "metrics") return `${data.kg} kg`;
-    if (data?.weight_unit == "imperial") return `${data.stones} st ${data.pound} lbs`;
+    if (data?.weight_unit == "imperial")
+      return `${data.stones} st ${data.pound} lbs`;
     return "N/A";
   };
   return (
     <>
       <MetaLayout canonical={`${meta_url}order-detail/`} />
 
-
-
       <ProtectedPage>
         <DashBoardLayout>
           <div className="p-3 sm:p-6 sm:bg-[#F9FAFB] sm:min-h-screen sm:rounded-md sm:shadow-md my-5 sm:m-5">
             <div className="relative flex flex-row">
               <p className="h-fit whitespace-nowrap inline-flex items-center px-6 py-2 bg-primary border border-transparent rounded-tr-full rounded-br-full font-semibold text-xs cursor-text text-white uppercase tracking-widest hover:bg-primary focus:bg-primary active:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition ease-in-out duration-150  absolute -left-4 -top-4 lg:relative lg:top-0 lg:left-0">
-                {moment(date, "DD-MM-YYYY", true).isValid() ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY") : "N/A"} {time}
+                {moment(date, "DD-MM-YYYY", true).isValid()
+                  ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY")
+                  : "N/A"}{" "}
+                {time}
               </p>
             </div>
             <div className="flex flex-col md:flex-row justify-between items-center my-6">
               <h1 className="text-2xl bold-font text-[#1C1C29] my-4 sm:mb-4 md:mb-0">
-                Details of Order # <span className="niba-bold-font">{order?.data?.order?.id}</span>
+                Details of Order #{" "}
+                <span className="niba-bold-font">{order?.data?.order?.id}</span>
               </h1>
               {/* Tabs */}
 
@@ -108,17 +119,23 @@ const OrderDetail = () => {
               <div className="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
                 <button className="reg-font px-5 py-3 text-black rounded-full transition duration-300 ease-in-out w-full md:w-auto">
                   <span className="mx-1 my-1">Order Status</span>
-                  <span className="reg-font bg-primary text-xs p-2 rounded-lg text-white">{order?.data?.order?.status}</span>
+                  <span className="reg-font bg-primary text-xs p-2 rounded-lg text-white">
+                    {order?.data?.order?.status}
+                  </span>
                 </button>
 
                 <button className="reg-font px-5 py-3 text-black rounded-full transition duration-300 ease-in-out w-full md:w-auto">
                   <span className="mx-1 my-1">Payment Status</span>
-                  <span className="reg-font bg-primary text-xs p-2 rounded-lg text-white">{order?.data?.order?.payments?.status}</span>
+                  <span className="reg-font bg-primary text-xs p-2 rounded-lg text-white">
+                    {order?.data?.order?.payments?.status}
+                  </span>
                 </button>
 
                 <button className="reg-font px-5 py-3 text-black rounded-full transition duration-300 ease-in-out w-full md:w-auto">
                   <span className="mx-1 my-1">Order Total</span>
-                  <span className="reg-font bg-primary text-xs p-2 rounded-lg text-white">£{order?.data?.order?.total_price}</span>
+                  <span className="reg-font bg-primary text-xs p-2 rounded-lg text-white">
+                    £{order?.data?.order?.total_price}
+                  </span>
                 </button>
               </div>
             </div>
@@ -144,9 +161,14 @@ const OrderDetail = () => {
                     {/* Product Detail */}
 
                     <div className="rounded-lg ">
-                      <h2 className="text-xl font-bold text-[#1C1C29] mb-4">Order Details</h2>
+                      <h2 className="text-xl font-bold text-[#1C1C29] mb-4">
+                        Order Details
+                      </h2>
 
-                      <TableContainer component={Paper} className="rounded-lg shadow">
+                      <TableContainer
+                        component={Paper}
+                        className="rounded-lg shadow"
+                      >
                         <Table>
                           {/* Table Head */}
                           <TableHead className="bg-gray-100">
@@ -167,10 +189,22 @@ const OrderDetail = () => {
                           <TableBody>
                             {/* // ?.filter((product) => product.name.includes("mg")) */}
                             {products?.map((product) => (
-                              <TableRow key={product.id} className="hover:bg-gray-50">
-                                <TableCell className="text-gray-800 capitalize py-3">{product.label}</TableCell>
-                                <TableCell className="text-gray-800 py-3">{product.quantity}</TableCell>
-                                <TableCell className="text-gray-800 py-3">£{(parseFloat(product.price) * product.quantity).toFixed(2)}</TableCell>
+                              <TableRow
+                                key={product.id}
+                                className="hover:bg-gray-50"
+                              >
+                                <TableCell className="text-gray-800 capitalize py-3">
+                                  {product.label}
+                                </TableCell>
+                                <TableCell className="text-gray-800 py-3">
+                                  {product.quantity}
+                                </TableCell>
+                                <TableCell className="text-gray-800 py-3">
+                                  £
+                                  {(
+                                    parseFloat(product.price) * product.quantity
+                                  ).toFixed(2)}
+                                </TableCell>
                               </TableRow>
                             ))}
 
@@ -178,21 +212,31 @@ const OrderDetail = () => {
                             {orders?.discount > 0 && (
                               <>
                                 <TableRow className="hover:bg-gray-50">
-                                  <TableCell className="text-gray-800 py-3 reg-font">Discount Amount</TableCell>
+                                  <TableCell className="text-gray-800 py-3 reg-font">
+                                    Discount Amount
+                                  </TableCell>
                                   <TableCell></TableCell>
                                   <TableCell className="text-gray-800 py-3">
-                                    {orders?.type === "Fixed" ? `-£${orders?.discount_value}` : `-${parseFloat(orders?.discount_value).toFixed(1)}%`}
+                                    {orders?.type === "Fixed"
+                                      ? `-£${orders?.discount_value}`
+                                      : `-${parseFloat(orders?.discount_value).toFixed(1)}%`}
                                   </TableCell>
                                 </TableRow>
 
                                 <TableRow className="hover:bg-gray-50">
-                                  <TableCell className="text-gray-800 py-3 reg-font">Coupon Code</TableCell>
+                                  <TableCell className="text-gray-800 py-3 reg-font">
+                                    Coupon Code
+                                  </TableCell>
                                   <TableCell></TableCell>
-                                  <TableCell className="text-gray-800 py-3">{orders?.code || "N/A"}</TableCell>
+                                  <TableCell className="text-gray-800 py-3">
+                                    {orders?.code || "N/A"}
+                                  </TableCell>
                                 </TableRow>
 
                                 <TableRow className="hover:bg-gray-50">
-                                  <TableCell className="text-gray-800 py-3 reg-font">Discount Type</TableCell>
+                                  <TableCell className="text-gray-800 py-3 reg-font">
+                                    Discount Type
+                                  </TableCell>
                                   <TableCell></TableCell>
                                   <TableCell className="text-gray-800 py-3">{`${orders?.type === "Fixed" ? "Fixed" : "Percentage"}`}</TableCell>
                                 </TableRow>
@@ -200,9 +244,13 @@ const OrderDetail = () => {
                             )}
 
                             <TableRow className="hover:bg-gray-50">
-                              <TableCell className="text-gray-800 py-3">Shipping Fee</TableCell>
+                              <TableCell className="text-gray-800 py-3">
+                                Shipping Fee
+                              </TableCell>
                               <TableCell></TableCell>
-                              <TableCell className="text-gray-800 py-3">£{shipmentFee}</TableCell>
+                              <TableCell className="text-gray-800 py-3">
+                                £{shipmentFee}
+                              </TableCell>
                             </TableRow>
                             {/* Total Row */}
                             <TableRow className="font-bold ">
@@ -226,41 +274,70 @@ const OrderDetail = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
                     {/* Patient Information Section */}
                     <div className="sm:bg-gray-50 rounded-lg ">
-                      <h2 className="text-xl font-bold text-[#1C1C29] mb-4">Patient Information</h2>
+                      <h2 className="text-xl font-bold text-[#1C1C29] mb-4">
+                        Patient Information
+                      </h2>
                       <TableContainer component={Paper}>
                         <Table>
                           <TableBody>
                             <TableRow>
-                              <TableCell style={{ width: "50%" }} className="reg-font">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font"
+                              >
                                 First Name
                               </TableCell>
-                              <TableCell style={{ width: "50%" }} className="text-[#1C1C29] capitalize">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="text-[#1C1C29] capitalize"
+                              >
                                 {patientData?.firstName || "N/A"}
                               </TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell className="reg-font">Last Name</TableCell>
-                              <TableCell className="text-[#1C1C29] capitalize">{patientData?.lastName || "N/A"}</TableCell>
+                              <TableCell className="reg-font">
+                                Last Name
+                              </TableCell>
+                              <TableCell className="text-[#1C1C29] capitalize">
+                                {patientData?.lastName || "N/A"}
+                              </TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell className="reg-font">Pregnancy</TableCell>
-                              <TableCell className="text-[#1C1C29] capitalize">{patientData?.pregnancy || "N/A"}</TableCell>
+                              <TableCell className="reg-font">
+                                Pregnancy
+                              </TableCell>
+                              <TableCell className="text-[#1C1C29] capitalize">
+                                {patientData?.pregnancy || "N/A"}
+                              </TableCell>
                             </TableRow>
                             <TableRow>
                               <TableCell className="reg-font">Gender</TableCell>
-                              <TableCell className="text-[#1C1C29] capitalize">{patientData?.gender || "N/A"}</TableCell>
+                              <TableCell className="text-[#1C1C29] capitalize">
+                                {patientData?.gender || "N/A"}
+                              </TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell className="reg-font">Date of birth</TableCell>
+                              <TableCell className="reg-font">
+                                Date of birth
+                              </TableCell>
                               <TableCell className="text-[#1C1C29] capitalize">
-                                {moment(patientData?.dob, "DD-MM-YYYY", true).isValid()
-                                  ? moment(patientData.dob, "DD-MM-YYYY").format("DD-MM-YYYY")
+                                {moment(
+                                  patientData?.dob,
+                                  "DD-MM-YYYY",
+                                  true,
+                                ).isValid()
+                                  ? moment(
+                                      patientData.dob,
+                                      "DD-MM-YYYY",
+                                    ).format("DD-MM-YYYY")
                                   : "N/A"}
                               </TableCell>
                             </TableRow>
                             <TableRow>
                               <TableCell className="reg-font">Phone</TableCell>
-                              <TableCell className="text-[#1C1C29] capitalize">{patientData?.phoneNo || "N/A"}</TableCell>
+                              <TableCell className="text-[#1C1C29] capitalize">
+                                {patientData?.phoneNo || "N/A"}
+                              </TableCell>
                             </TableRow>
                           </TableBody>
                         </Table>
@@ -341,40 +418,64 @@ const OrderDetail = () => {
                   {/* Medical info */}
 
                   <div className="sm:bg-gray-50 rounded-lg mb-6">
-                    {medicalInfo && medicalInfo.length > 0 ? <h2 className="text-xl niba-bold-font text-[#1C1C29] mb-4 p-4">Medical Information</h2> : ""}
+                    {medicalInfo && medicalInfo.length > 0 ? (
+                      <h2 className="text-xl niba-bold-font text-[#1C1C29] mb-4 p-4">
+                        Medical Information
+                      </h2>
+                    ) : (
+                      ""
+                    )}
                     {medicalInfo && medicalInfo.length > 0 ? (
                       <TableContainer component={Paper} className="mb-6">
                         <Table>
                           <TableHead>
                             <TableRow>
-                              <TableCell className="font-semibold text-[#1C1C29]">SNO#</TableCell>
-                              <TableCell className="font-semibold text-[#1C1C29]">Question</TableCell>
-                              <TableCell className="font-semibold text-[#1C1C29]">Answer</TableCell>
+                              <TableCell className="font-semibold text-[#1C1C29]">
+                                SNO#
+                              </TableCell>
+                              <TableCell className="font-semibold text-[#1C1C29]">
+                                Question
+                              </TableCell>
+                              <TableCell className="font-semibold text-[#1C1C29]">
+                                Answer
+                              </TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
                             {medicalInfo.map((item, index) => (
                               <TableRow key={item.id || index}>
-                                <TableCell className="reg-font text-[#1C1C29]">{index + 1}</TableCell>
-
                                 <TableCell className="reg-font text-[#1C1C29]">
-                                  <div dangerouslySetInnerHTML={{ __html: item.question }} />
-
-                                  {item.answer === "yes" && item.has_sub_field && item.subfield_response && (
-                                    <ul className="list-disc pl-4 text-[#f59e0b] mt-1">
-                                      <li>{item.subfield_response}</li>
-                                    </ul>
-                                  )}
+                                  {index + 1}
                                 </TableCell>
 
-                                <TableCell className="reg-font text-[#1C1C29] capitalize">{item.answer}</TableCell>
+                                <TableCell className="reg-font text-[#1C1C29]">
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: item.question,
+                                    }}
+                                  />
+
+                                  {item.answer === "yes" &&
+                                    item.has_sub_field &&
+                                    item.subfield_response && (
+                                      <ul className="list-disc pl-4 text-[#f59e0b] mt-1">
+                                        <li>{item.subfield_response}</li>
+                                      </ul>
+                                    )}
+                                </TableCell>
+
+                                <TableCell className="reg-font text-[#1C1C29] capitalize">
+                                  {item.answer}
+                                </TableCell>
                               </TableRow>
                             ))}
                           </TableBody>
                         </Table>
                       </TableContainer>
                     ) : (
-                      <p className="text-center text-gray-500 px-4 pb-4">Medical information not found.</p>
+                      <p className="text-center text-gray-500 px-4 pb-4">
+                        Medical information not found.
+                      </p>
                     )}
                   </div>
                 </>
@@ -383,7 +484,9 @@ const OrderDetail = () => {
               {activeTab === 5 && (
                 <>
                   <h1 className="text-2xl font-light my-4">
-                    <span className="niba-bold-font text-black">User Consent</span>
+                    <span className="niba-bold-font text-black">
+                      User Consent
+                    </span>
                   </h1>
                   <div className="relative overflow-x-auto border rounded-lg">
                     {startConcent ? (
@@ -402,7 +505,9 @@ const OrderDetail = () => {
                             <td className="px-6 py-3 text-gray-700 reg-font">
                               <div
                                 dangerouslySetInnerHTML={{
-                                  __html: startConcent.PatientAcknowledgment?.question,
+                                  __html:
+                                    startConcent.PatientAcknowledgment
+                                      ?.question,
                                 }}
                               ></div>
                             </td>
@@ -415,7 +520,9 @@ const OrderDetail = () => {
                               <td className="px-6 py-3 text-gray-700 mt-1 reg-font">
                                 <div
                                   dangerouslySetInnerHTML={{
-                                    __html: startConcent.PatientAcknowledgment.confirmation.confirmation_details,
+                                    __html:
+                                      startConcent.PatientAcknowledgment
+                                        .confirmation.confirmation_details,
                                   }}
                                 />
                               </td>
@@ -426,25 +533,31 @@ const OrderDetail = () => {
                         </tbody>
                       </table>
                     ) : (
-                      <div className="p-6 text-center text-gray-500">No Consent here</div>
+                      <div className="p-6 text-center text-gray-500">
+                        No Consent here
+                      </div>
                     )}
 
                     {/* Additional styling for confirmation details */}
                     <style jsx>{`
-                  .mt-1 ul {
-                    list-style-type: disc;
-                    padding-left: 1.5rem;
-                  }
-                  .mt-1 li {
-                    margin-bottom: 0.5rem;
-                    color: #4a5568;
-                  }
-                `}</style>
+                      .mt-1 ul {
+                        list-style-type: disc;
+                        padding-left: 1.5rem;
+                      }
+                      .mt-1 li {
+                        margin-bottom: 0.5rem;
+                        color: #4a5568;
+                      }
+                    `}</style>
                   </div>
-                  {order?.items?.some((item) => item.product_concent !== null) && (
+                  {order?.items?.some(
+                    (item) => item.product_concent !== null,
+                  ) && (
                     <>
                       <h1 className="text-2xl font-light my-4">
-                        <span className="niba-bold-font">Product Related Consent</span>
+                        <span className="niba-bold-font">
+                          Product Related Consent
+                        </span>
                       </h1>
 
                       <div className="relative overflow-x-auto border rounded-lg">
@@ -477,15 +590,15 @@ const OrderDetail = () => {
 
                         {/* Additional styling for confirmation details */}
                         <style jsx>{`
-                      .mt-1 ul {
-                        list-style-type: disc;
-                        padding-left: 1.5rem;
-                      }
-                      .mt-1 li {
-                        margin-bottom: 0.5rem;
-                        color: #4a5568;
-                      }
-                    `}</style>
+                          .mt-1 ul {
+                            list-style-type: disc;
+                            padding-left: 1.5rem;
+                          }
+                          .mt-1 li {
+                            margin-bottom: 0.5rem;
+                            color: #4a5568;
+                          }
+                        `}</style>
                       </div>
                     </>
                   )}
@@ -493,10 +606,15 @@ const OrderDetail = () => {
                   {confirmationInfo?.length > 0 && (
                     <>
                       <h1 className="text-2xl font-light mt-8 mb-4">
-                        <span className="niba-bold-font text-black">Confirmation</span>
+                        <span className="niba-bold-font text-black">
+                          Confirmation
+                        </span>
                       </h1>
 
-                      <TableContainer component={Paper} className="rounded-lg overflow-x-auto">
+                      <TableContainer
+                        component={Paper}
+                        className="rounded-lg overflow-x-auto"
+                      >
                         <Table aria-label="confirmation table">
                           <TableBody>
                             {confirmationInfo.map((item, index) => (
@@ -588,26 +706,40 @@ const OrderDetail = () => {
                     </>
                   )}
 
-                  {product_terms_conditions && product_terms_conditions !== null && product_terms_conditions !== "" && (
-                    <>
-                      <h1 className="text-2xl font-light mt-8 mb-4">
-                        <span className="niba-bold-font text-black">Medication Terms & Conditions</span>
-                      </h1>
+                  {product_terms_conditions &&
+                    product_terms_conditions !== null &&
+                    product_terms_conditions !== "" && (
+                      <>
+                        <h1 className="text-2xl font-light mt-8 mb-4">
+                          <span className="niba-bold-font text-black">
+                            Medication Terms & Conditions
+                          </span>
+                        </h1>
 
-                      <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
-                        <Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell sx={{ minWidth: 400, textTransform: "uppercase" }}>Response</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            <TableRow>
-                              <TableCell>
-                                <div
-                                  className="prose"
-                                  dangerouslySetInnerHTML={{
-                                    __html: `
+                        <TableContainer
+                          component={Paper}
+                          sx={{ borderRadius: 2 }}
+                        >
+                          <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell
+                                  sx={{
+                                    minWidth: 400,
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  Response
+                                </TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell>
+                                  <div
+                                    className="prose"
+                                    dangerouslySetInnerHTML={{
+                                      __html: `
                     <style>
                       .prose ol {
                           list-style-type: decimal;
@@ -639,15 +771,15 @@ const OrderDetail = () => {
                     </style>
                     ${product_terms_conditions}
                   `,
-                                  }}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </>
-                  )}
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </>
+                    )}
                 </>
               )}
 
@@ -657,70 +789,134 @@ const OrderDetail = () => {
                     {/* Patient Information Section */}
 
                     <div className="sm:bg-gray-50 rounded-lg mb-6">
-                      <h2 className="text-xl niba-bold-font text-[#1C1C29] mb-4">Shipping Information</h2>
+                      <h2 className="text-xl niba-bold-font text-[#1C1C29] mb-4">
+                        Shipping Information
+                      </h2>
                       <TableContainer component={Paper}>
                         <Table>
                           <TableBody>
                             <TableRow>
-                              <TableCell style={{ width: "50%" }} className="reg-font  paragraph">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  paragraph"
+                              >
                                 First Name
                               </TableCell>
-                              <TableCell style={{ width: "50%" }} className="reg-font  text-[#1C1C29] capitalize">
-                                {shippingData?.first_name ? shippingData?.first_name : patientData?.firstName ? patientData?.firstName : "N/A"}
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  text-[#1C1C29] capitalize"
+                              >
+                                {shippingData?.first_name
+                                  ? shippingData?.first_name
+                                  : patientData?.firstName
+                                    ? patientData?.firstName
+                                    : "N/A"}
                               </TableCell>
                             </TableRow>
 
                             <TableRow>
-                              <TableCell style={{ width: "50%" }} className="reg-font  paragraph">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  paragraph"
+                              >
                                 Last Name
                               </TableCell>
-                              <TableCell style={{ width: "50%" }} className="reg-font  text-[#1C1C29] capitalize">
-                                {shippingData?.last_name ? shippingData?.last_name : patientData?.lastName ? patientData?.lastName : "N/A"}
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  text-[#1C1C29] capitalize"
+                              >
+                                {shippingData?.last_name
+                                  ? shippingData?.last_name
+                                  : patientData?.lastName
+                                    ? patientData?.lastName
+                                    : "N/A"}
                               </TableCell>
                             </TableRow>
 
                             <TableRow>
-                              <TableCell style={{ width: "50%" }} className="reg-font  paragraph">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  paragraph"
+                              >
                                 Address1
                               </TableCell>
-                              <TableCell style={{ width: "50%" }} className="reg-font  text-[#1C1C29] capitalize">
-                                {shippingData?.addressone ? shippingData?.addressone : "N/A"}
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  text-[#1C1C29] capitalize"
+                              >
+                                {shippingData?.addressone
+                                  ? shippingData?.addressone
+                                  : "N/A"}
                               </TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell style={{ width: "50%" }} className="reg-font  paragraph">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  paragraph"
+                              >
                                 Address2
                               </TableCell>
-                              <TableCell style={{ width: "50%" }} className="reg-font  text-[#1C1C29] capitalize">
-                                {shippingData?.addresstwo ? shippingData?.addresstwo : "N/A"}
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  text-[#1C1C29] capitalize"
+                              >
+                                {shippingData?.addresstwo
+                                  ? shippingData?.addresstwo
+                                  : "N/A"}
                                 {/* {shippingData.addresstwo ? shippingData?.addresstwo : "N/A"} */}
                               </TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell className="reg-font  paragraph">City</TableCell>
-                              <TableCell className="reg-font  text-[#1C1C29] capitalize">{shippingData?.city ? shippingData?.city : "N/A"}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="reg-font  paragraph">County / Province / Region:</TableCell>
-                              <TableCell className="reg-font  text-[#1C1C29] capitalize">{shippingData?.state ? shippingData?.state : "N/A"}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="reg-font  paragraph">Postalcode</TableCell>
+                              <TableCell className="reg-font  paragraph">
+                                City
+                              </TableCell>
                               <TableCell className="reg-font  text-[#1C1C29] capitalize">
-                                {shippingData?.postalcode ? shippingData?.postalcode : "N/A"}
+                                {shippingData?.city
+                                  ? shippingData?.city
+                                  : "N/A"}
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="reg-font  paragraph">
+                                County / Province / Region:
+                              </TableCell>
+                              <TableCell className="reg-font  text-[#1C1C29] capitalize">
+                                {shippingData?.state
+                                  ? shippingData?.state
+                                  : "N/A"}
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="reg-font  paragraph">
+                                Postalcode
+                              </TableCell>
+                              <TableCell className="reg-font  text-[#1C1C29] capitalize">
+                                {shippingData?.postalcode
+                                  ? shippingData?.postalcode
+                                  : "N/A"}
                               </TableCell>
                             </TableRow>
 
                             <TableRow>
-                              <TableCell className="reg-font  paragraph">Country</TableCell>
+                              <TableCell className="reg-font  paragraph">
+                                Country
+                              </TableCell>
                               <TableCell className="reg-font  text-[#1C1C29] capitalize">
-                                {shippingData?.country ? shippingData?.country : "N/A"}
+                                {shippingData?.country
+                                  ? shippingData?.country
+                                  : "N/A"}
                               </TableCell>
                             </TableRow>
 
                             <TableRow>
-                              <TableCell className="reg-font  paragraph">Phone Number</TableCell>
-                              <TableCell className="reg-font  text-[#1C1C29] capitalize">{patientData?.phoneNo ? patientData?.phoneNo : "N/A"}</TableCell>
+                              <TableCell className="reg-font  paragraph">
+                                Phone Number
+                              </TableCell>
+                              <TableCell className="reg-font  text-[#1C1C29] capitalize">
+                                {patientData?.phoneNo
+                                  ? patientData?.phoneNo
+                                  : "N/A"}
+                              </TableCell>
                             </TableRow>
                           </TableBody>
                         </Table>
@@ -728,45 +924,83 @@ const OrderDetail = () => {
                     </div>
 
                     <div className="sm:bg-gray-50 rounded-lg mb-6">
-                      <h2 className="text-xl niba-bold-font text-[#1C1C29] mb-4">Billing Information</h2>
+                      <h2 className="text-xl niba-bold-font text-[#1C1C29] mb-4">
+                        Billing Information
+                      </h2>
                       <TableContainer component={Paper}>
                         <Table>
                           <TableBody>
                             <TableRow>
-                              <TableCell style={{ width: "50%" }} className="reg-font  paragraph">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  paragraph"
+                              >
                                 Address1
                               </TableCell>
-                              <TableCell style={{ width: "50%" }} className="reg-font  text-[#1C1C29] capitalize">
-                                {BillingData?.addressone ? BillingData?.addressone : "N/A"}
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  text-[#1C1C29] capitalize"
+                              >
+                                {BillingData?.addressone
+                                  ? BillingData?.addressone
+                                  : "N/A"}
                               </TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell style={{ width: "50%" }} className="reg-font  paragraph">
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  paragraph"
+                              >
                                 Address2
                               </TableCell>
-                              <TableCell style={{ width: "50%" }} className="reg-font  text-[#1C1C29] capitalize">
-                                {BillingData?.addresstwo ? BillingData?.addresstwo : "N/A"}
+                              <TableCell
+                                style={{ width: "50%" }}
+                                className="reg-font  text-[#1C1C29] capitalize"
+                              >
+                                {BillingData?.addresstwo
+                                  ? BillingData?.addresstwo
+                                  : "N/A"}
                                 {/* {shippingData.addresstwo ? shippingData?.addresstwo : "N/A"} */}
                               </TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell className="reg-font  paragraph">City</TableCell>
-                              <TableCell className="reg-font  text-[#1C1C29] capitalize">{BillingData?.city ? BillingData?.city : "N/A"}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="reg-font  paragraph">County / Province / Region:</TableCell>
-                              <TableCell className="reg-font  text-[#1C1C29] capitalize">{BillingData?.state ? BillingData?.state : "N/A"}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="reg-font  paragraph">Postalcode</TableCell>
+                              <TableCell className="reg-font  paragraph">
+                                City
+                              </TableCell>
                               <TableCell className="reg-font  text-[#1C1C29] capitalize">
-                                {BillingData?.postalcode ? BillingData?.postalcode : "N/A"}
+                                {BillingData?.city ? BillingData?.city : "N/A"}
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="reg-font  paragraph">
+                                County / Province / Region:
+                              </TableCell>
+                              <TableCell className="reg-font  text-[#1C1C29] capitalize">
+                                {BillingData?.state
+                                  ? BillingData?.state
+                                  : "N/A"}
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="reg-font  paragraph">
+                                Postalcode
+                              </TableCell>
+                              <TableCell className="reg-font  text-[#1C1C29] capitalize">
+                                {BillingData?.postalcode
+                                  ? BillingData?.postalcode
+                                  : "N/A"}
                               </TableCell>
                             </TableRow>
 
                             <TableRow>
-                              <TableCell className="reg-font  paragraph">Country</TableCell>
-                              <TableCell className="reg-font  text-[#1C1C29] capitalize">{BillingData?.country ? BillingData?.country : "N/A"}</TableCell>
+                              <TableCell className="reg-font  paragraph">
+                                Country
+                              </TableCell>
+                              <TableCell className="reg-font  text-[#1C1C29] capitalize">
+                                {BillingData?.country
+                                  ? BillingData?.country
+                                  : "N/A"}
+                              </TableCell>
                             </TableRow>
                           </TableBody>
                         </Table>
@@ -779,13 +1013,14 @@ const OrderDetail = () => {
 
             <div className="flex justify-start my-3">
               <Link href="/orders/">
-                <button className="reg-font px-6 py-2 bg-primary cursor-pointer text-white rounded-md hover:bg-primary transition">Back</button>
+                <button className="reg-font px-6 py-2 bg-primary cursor-pointer text-white rounded-md hover:bg-primary transition">
+                  Back
+                </button>
               </Link>
             </div>
           </div>
         </DashBoardLayout>
       </ProtectedPage>
-
     </>
   );
 };

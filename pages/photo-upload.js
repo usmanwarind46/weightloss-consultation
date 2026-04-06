@@ -4,7 +4,6 @@ import { FiUpload } from "react-icons/fi";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import toast from "react-hot-toast";
 import useReorder from "@/store/useReorderStore";
-import { ImageUplaodApi } from "@/api/ImageUploadApi";
 import useCartStore from "@/store/useCartStore";
 import useImageUploadStore from "@/store/useImageUploadStore ";
 import GetImageIsUplaod from "@/api/GetImageIsUplaod";
@@ -26,8 +25,8 @@ import { GetIdVerification } from "@/api/IdVerificationApi";
 import { heicTo, isHeic } from "heic-to"; // ✅ import heic converter
 import { MdDelete } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
-import UploadPhotoLogs from "@/api/UploadLogsApi";
 import PageLoader from "@/Components/PageLoader/PageLoader";
+import { ImageUplaodApi, UploadPhotoLogs } from "@/api/mergeRoute";
 
 // ✅ Allowed file types
 const ALLOWED_TYPES = [

@@ -4,7 +4,6 @@ import SectionHeader from "./SectionHeader";
 import { useRouter } from "next/router";
 import useCartStore from "@/store/useCartStore";
 import toast from "react-hot-toast";
-import { CouponApi } from "@/api/couponApi";
 import useCouponStore from "@/store/couponStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { RxCross2 } from "react-icons/rx";
@@ -17,7 +16,6 @@ import useGpDetailsStore from "@/store/gpDetailStore";
 import useBmiStore from "@/store/bmiStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
 import PaymentPage from "../PaymentSection/PaymentPage";
-import sendStepData from "@/api/stepsDataApi";
 import { useMutation } from "@tanstack/react-query";
 import useSignupStore from "@/store/signupStore";
 import useProductId from "@/store/useProductIdStore";
@@ -31,20 +29,34 @@ import useLastBmi from "@/store/useLastBmiStore";
 import useUserDataStore from "@/store/userDataStore";
 import OrderSummaryHeader from "./OrderSummaryHeader";
 import useNeedleConsent from "@/store/needleConsent";
+import { CouponApi, sendStepData } from "@/api/mergeRoute";
 
-const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onComplete, isCompleted }) => {
+const OrderSummary = ({
+  isConcentCheck,
+  isShippingCheck,
+  isBillingCheck,
+  onComplete,
+  isCompleted,
+}) => {
   const router = useRouter();
   const [discountCode, setDiscountCode] = useState("");
   // Get some data to store✌✌
   const { items, totalAmount, setCheckOut, setOrderId } = useCartStore();
   const { Coupon, setCoupon, clearCoupon } = useCouponStore();
-  const { shipping, billing, billingSameAsShipping, clearShipping, clearBilling } = useShippingOrBillingStore();
+  const {
+    shipping,
+    billing,
+    billingSameAsShipping,
+    clearShipping,
+    clearBilling,
+  } = useShippingOrBillingStore();
 
   const { patientInfo, clearPatientInfo } = usePatientInfoStore();
   const { medicalInfo, clearMedicalInfo } = useMedicalInfoStore();
   const { gpdetails, clearGpDetails } = useGpDetailsStore();
   const { bmi, clearBmi } = useBmiStore();
-  const { confirmationInfo, clearConfirmationInfo } = useConfirmationInfoStore();
+  const { confirmationInfo, clearConfirmationInfo } =
+    useConfirmationInfoStore();
   const { email } = useSignupStore();
   const { productId, clearProductId } = useProductId();
 
@@ -62,7 +74,8 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
   const { clearLastBmi } = useLastBmi();
   const { clearUserData } = useUserDataStore();
 
-  const { clearFirstName, clearLastName, clearEmail, clearConfirmationEmail } = useSignupStore();
+  const { clearFirstName, clearLastName, clearEmail, clearConfirmationEmail } =
+    useSignupStore();
 
   const isApplyEnabled = discountCode.trim().length > 0;
   const handleEdit = () => {
@@ -164,13 +177,17 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
         setIsButtonLoading(false);
         Object.keys(errors).forEach((key) => {
           const errorMessage = errors[key];
-          Array.isArray(errorMessage) ? errorMessage.forEach((msg) => toast.error(msg)) : toast.error(errorMessage);
+          Array.isArray(errorMessage)
+            ? errorMessage.forEach((msg) => toast.error(msg))
+            : toast.error(errorMessage);
         });
       } else if (singleOutOfStock && typeof singleOutOfStock === "object") {
         setIsButtonLoading(false);
         Object.keys(singleOutOfStock).forEach((key) => {
           const errorMessage = singleOutOfStock[key];
-          Array.isArray(errorMessage) ? errorMessage.forEach((msg) => toast.error(msg)) : toast.error(errorMessage);
+          Array.isArray(errorMessage)
+            ? errorMessage.forEach((msg) => toast.error(msg))
+            : toast.error(errorMessage);
         });
         router.push("/gathering-data");
       } else if (singleOutOfStock && typeof singleOutOfStock != "object") {
@@ -265,14 +282,20 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
             <div className="mb-24 sm:mb-0">
               <div className="bg-white p-6 rounded-2xl shadow-lg font-inter">
                 <div className="relative">
-                  <OrderSummaryHeader stepNumber={4} title="Order Summary" isCompleted={onComplete} />
+                  <OrderSummaryHeader
+                    stepNumber={4}
+                    title="Order Summary"
+                    isCompleted={onComplete}
+                  />
                   <div className="absolute right-14 bottom-2 w-20">
                     <button
                       type="button"
                       onClick={handleEdit}
                       className="flex justify-around align-middle cursor-pointer ml-2 p-2 w-30 rounded-lg bg-white hover:bg-gray-100 text-primary shadow transition"
                     >
-                      <span className="reg-font text-sm text-gray-500">Edit order</span>
+                      <span className="reg-font text-sm text-gray-500">
+                        Edit order
+                      </span>
                       <HiOutlinePencilAlt className="w-4 h-4" color="#4565BF" />
                     </button>
                   </div>
@@ -288,10 +311,14 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
                             <span className="text-base bold-font text-gray-900 truncate">
                               {dose?.product} {dose?.name}
                             </span>
-                            <span className="bold-font text-sm text-gray-600 mt-1">Quantity: x{dose?.qty}</span>
+                            <span className="bold-font text-sm text-gray-600 mt-1">
+                              Quantity: x{dose?.qty}
+                            </span>
                           </div>
 
-                          <span className="text-base bold-font text-black px-4 py-1 rounded-full">£{dose?.price?.toFixed(2)}</span>
+                          <span className="text-base bold-font text-black px-4 py-1 rounded-full">
+                            £{dose?.price?.toFixed(2)}
+                          </span>
                         </li>
 
                         {/* Additional item if product is Mounjaro */}
@@ -314,18 +341,26 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
                         className="group flex items-center justify-between rounded-lg bg-[#E9F6FA] hover:bg-blue-50  p-4 shadow-md transition-all duration-200"
                       >
                         <div className="flex flex-col">
-                          <span className="text-base bold-font text-gray-900  truncate">{addon?.name}</span>
-                          <span className="bold-font text-sm text-gray-600 mt-1">Quantity: x{addon?.qty}</span>
+                          <span className="text-base bold-font text-gray-900  truncate">
+                            {addon?.name}
+                          </span>
+                          <span className="bold-font text-sm text-gray-600 mt-1">
+                            Quantity: x{addon?.qty}
+                          </span>
                         </div>
 
-                        <span className="text-base bold-font  text-black px-4 py-1 rounded-full">£{addon?.price?.toFixed(2)}</span>
+                        <span className="text-base bold-font  text-black px-4 py-1 rounded-full">
+                          £{addon?.price?.toFixed(2)}
+                        </span>
                       </li>
                     ))}
                   </ul>
 
                   <div className="flex justify-between items-center mt-8">
                     <p className="bold-font paragraph !text-black">Subtotal</p>
-                    <p className="bold-font text-black">£{totalAmount?.toFixed(2)}</p>
+                    <p className="bold-font text-black">
+                      £{totalAmount?.toFixed(2)}
+                    </p>
                   </div>
 
                   <div className="flex justify-between items-center mt-4">
@@ -335,28 +370,35 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
 
                   {Coupon && (
                     <div className="flex justify-between items-center mt-4">
-                      <p className="text-sm text-[#1f9e8c] bold-font">Discount</p>
-                      <p className="text-sm text-[#1f9e8c] bold-font">-£{discountAmount?.toFixed(2)}</p>
+                      <p className="text-sm text-[#1f9e8c] bold-font">
+                        Discount
+                      </p>
+                      <p className="text-sm text-[#1f9e8c] bold-font">
+                        -£{discountAmount?.toFixed(2)}
+                      </p>
                     </div>
                   )}
 
                   {shipping?.country_name && (
-
-
                     <div className="flex justify-between items-center mt-4">
                       <p className="bold-font paragraph !text-black">
                         Shipping
-                        <span className="reg-font paragraph ms-2">({shipping?.country_name})</span>
+                        <span className="reg-font paragraph ms-2">
+                          ({shipping?.country_name})
+                        </span>
                       </p>
-                      <p className="bold-font text-black">£{shipping?.country_price}</p>
+                      <p className="bold-font text-black">
+                        £{shipping?.country_price}
+                      </p>
                     </div>
-
                   )}
                   <hr className="my-4 border-gray-200" />
 
                   <div className="flex justify-between items-center">
                     <p className="bold-font text-xl text-black">Total</p>
-                    <p className="bold-font text-xl text-black">£{finalTotal?.toFixed(2)}</p>
+                    <p className="bold-font text-xl text-black">
+                      £{finalTotal?.toFixed(2)}
+                    </p>
                   </div>
 
                   <hr className="my-4 border-gray-200" />
@@ -378,15 +420,24 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
 
                           <div>
                             <p className="niba-bold-font text-[#1f9e8c]">
-                              {Coupon?.Data?.code} <span className="reg-font paragraph">Applied</span>
+                              {Coupon?.Data?.code}{" "}
+                              <span className="reg-font paragraph">
+                                Applied
+                              </span>
                             </p>
                             <p className="text-gray-700 text-md  reg-font">
-                              - £{Coupon?.Data?.discount} {Coupon?.Data?.type === "Percent" && `(${Coupon?.Data?.discount}% off)`}
+                              - £{Coupon?.Data?.discount}{" "}
+                              {Coupon?.Data?.type === "Percent" &&
+                                `(${Coupon?.Data?.discount}% off)`}
                             </p>
                           </div>
                         </div>
 
-                        <button type="button" onClick={handleRemoveCoupon} className="text-red-500 text-sm reg-font hover:underline cursor-pointer">
+                        <button
+                          type="button"
+                          onClick={handleRemoveCoupon}
+                          className="text-red-500 text-sm reg-font hover:underline cursor-pointer"
+                        >
                           <RxCross2 className="bold-font " size={24} />
                         </button>
                       </motion.div>
@@ -403,8 +454,11 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
                           type="button"
                           onClick={handleApplyCoupon}
                           disabled={!isApplyEnabled}
-                          className={`cursor-pointer px-6 text-sm bold-font text-white transition-all duration-200 ${isApplyEnabled ? "bg-primary hover:bg-primary" : "bg-gray-300 cursor-not-allowed"
-                            }`}
+                          className={`cursor-pointer px-6 text-sm bold-font text-white transition-all duration-200 ${
+                            isApplyEnabled
+                              ? "bg-primary hover:bg-primary"
+                              : "bg-gray-300 cursor-not-allowed"
+                          }`}
                         >
                           {couponLoading ? "Applying..." : "Apply"}
                         </button>
@@ -413,14 +467,14 @@ const OrderSummary = ({ isConcentCheck, isShippingCheck, isBillingCheck, onCompl
                   </AnimatePresence>
                 </div>
                 <div className="my-5">
-
                   <NextButton
-                    disabled={!(isConcentCheck && isShippingCheck && isBillingCheck)}
+                    disabled={
+                      !(isConcentCheck && isShippingCheck && isBillingCheck)
+                    }
                     label="Proceed to Payment "
                     onClick={handlePayment}
                     loading={isButtonLoading}
                   />
-
                 </div>
               </div>
             </div>

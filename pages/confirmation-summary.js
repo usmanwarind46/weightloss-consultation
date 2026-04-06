@@ -9,7 +9,6 @@ import PageLoader from "@/Components/PageLoader/PageLoader";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import useBmiStore from "@/store/bmiStore";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
-import sendStepData from "@/api/stepsDataApi";
 import { useMutation } from "@tanstack/react-query";
 import useMedicalInfoStore from "@/store/medicalInfoStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
@@ -28,6 +27,7 @@ import useCheckoutStore from "@/store/checkoutStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
+import { sendStepData } from "@/api/mergeRoute";
 
 const ConfirmationSummary = () => {
   const router = useRouter();
@@ -76,7 +76,7 @@ const ConfirmationSummary = () => {
         console.log(data?.data?.lastConsultation?.fields, "data?.data?.data");
         setBmi(data?.data?.lastConsultation?.fields?.bmi);
         setConfirmationInfo(
-          data?.data?.lastConsultation?.fields?.confirmationInfo
+          data?.data?.lastConsultation?.fields?.confirmationInfo,
         );
         setGpDetails(data?.data?.lastConsultation?.fields?.gpdetails);
         setMedicalInfo(data?.data?.lastConsultation?.fields?.medicalInfo);

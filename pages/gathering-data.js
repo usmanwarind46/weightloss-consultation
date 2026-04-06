@@ -2,7 +2,6 @@ import StepsHeader from "@/layout/stepsHeader";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import getVariationsApi from "@/api/getVariationsApi";
 import toast from "react-hot-toast";
 import Fetcher from "@/library/Fetcher";
 import useVariationStore from "@/store/useVariationStore";
@@ -26,6 +25,7 @@ import useLastBmi from "@/store/useLastBmiStore";
 import useSignupStore from "@/store/signupStore";
 import useBmiStore from "@/store/bmiStore";
 import useUserDataStore from "@/store/userDataStore";
+import { getVariationsApi } from "@/api/mergeRoute";
 
 export default function GatherData() {
   const router = useRouter();
@@ -54,8 +54,8 @@ export default function GatherData() {
   const { clearLastBmi } = useLastBmi();
   const { clearUserData } = useUserDataStore();
 
-  const { clearFirstName, clearLastName, clearEmail, clearConfirmationEmail } = useSignupStore();
-
+  const { clearFirstName, clearLastName, clearEmail, clearConfirmationEmail } =
+    useSignupStore();
 
   // Variations fetch mutation
   const variationMutation = useMutation(getVariationsApi, {
@@ -100,8 +100,6 @@ export default function GatherData() {
         } else {
           setShowLoader(false);
           toast.error(error?.response?.data?.errors?.Product);
-
-
         }
       }
     },
@@ -121,7 +119,6 @@ export default function GatherData() {
       <StepsHeader />
       {showLoader && (
         <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-
           <PageLoader />
         </div>
       )}

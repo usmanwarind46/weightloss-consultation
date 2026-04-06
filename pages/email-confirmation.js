@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import useSignupStore from "@/store/signupStore";
 import useUserDataStore from "@/store/userDataStore";
 import useAuthStore from "@/store/authStore";
-import { registerUser } from "@/api/authApi";
 import { Login } from "@/api/loginApi";
 import Fetcher from "@/library/Fetcher";
 
@@ -25,6 +24,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import useReturning from "@/store/useReturningPatient";
+import { registerUser } from "@/api/mergeRoute";
 
 export default function EmailConfirmation() {
   const [showLoader, setShowLoader] = useState(false);
@@ -74,7 +74,7 @@ export default function EmailConfirmation() {
       setUserData(user);
       setToken(user?.token);
       setIsPasswordReset(true);
-      setIsReturningPatient(user?.isReturning)
+      setIsReturningPatient(user?.isReturning);
       Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${user?.token}`;
       router.push("/steps-information");
     },
@@ -156,8 +156,9 @@ export default function EmailConfirmation() {
       >
         <PageAnimationWrapper>
           <div
-            className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""
-              }`}
+            className={`relative ${
+              showLoader ? "pointer-events-none cursor-not-allowed" : ""
+            }`}
           >
             <form
               onSubmit={handleSubmit(handleSignupSubmit)}

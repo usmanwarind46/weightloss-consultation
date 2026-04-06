@@ -10,7 +10,6 @@ import useBmiStore from "@/store/bmiStore";
 import useMedicalInfoStore from "@/store/medicalInfoStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
 import useGpDetailsStore from "@/store/gpDetailStore";
-import sendStepData from "@/api/stepsDataApi";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useProductId from "@/store/useProductIdStore";
@@ -27,16 +26,21 @@ import useSignupStore from "@/store/signupStore";
 import PageLoader from "@/Components/PageLoader/PageLoader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
+import { sendStepData } from "@/api/mergeRoute";
 
 const ReviewAnswers = () => {
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(false);
 
-  const { patientInfo, setPatientInfo, clearPatientInfo } = usePatientInfoStore();
-  const { authUserDetail, setAuthUserDetail, clearAuthUserDetail } = useAuthUserDetailStore();
+  const { patientInfo, setPatientInfo, clearPatientInfo } =
+    usePatientInfoStore();
+  const { authUserDetail, setAuthUserDetail, clearAuthUserDetail } =
+    useAuthUserDetailStore();
   const { bmi, setBmi, clearBmi } = useBmiStore();
-  const { medicalInfo, setMedicalInfo, clearMedicalInfo } = useMedicalInfoStore();
-  const { confirmationInfo, setConfirmationInfo, clearConfirmationInfo } = useConfirmationInfoStore();
+  const { medicalInfo, setMedicalInfo, clearMedicalInfo } =
+    useMedicalInfoStore();
+  const { confirmationInfo, setConfirmationInfo, clearConfirmationInfo } =
+    useConfirmationInfoStore();
   const { gpdetails, setGpDetails, clearGpDetails } = useGpDetailsStore();
 
   const { clearCheckout } = useCheckoutStore();
@@ -49,7 +53,8 @@ const ReviewAnswers = () => {
   const { setLastBmi, clearLastBmi } = useLastBmi();
   const { clearUserData } = useUserDataStore();
 
-  const { clearFirstName, clearLastName, clearEmail, clearConfirmationEmail } = useSignupStore();
+  const { clearFirstName, clearLastName, clearEmail, clearConfirmationEmail } =
+    useSignupStore();
 
   console.log(confirmationInfo);
 
@@ -61,7 +66,9 @@ const ReviewAnswers = () => {
       if (data?.data?.lastConsultation) {
         console.log(data?.data?.lastConsultation?.fields, "data?.data?.data");
         setBmi(data?.data?.lastConsultation?.fields?.bmi);
-        setConfirmationInfo(data?.data?.lastConsultation?.fields?.confirmationInfo);
+        setConfirmationInfo(
+          data?.data?.lastConsultation?.fields?.confirmationInfo,
+        );
         setGpDetails(data?.data?.lastConsultation?.fields?.gpdetails);
         setMedicalInfo(data?.data?.lastConsultation?.fields?.medicalInfo);
         setPatientInfo(data?.data?.lastConsultation?.fields?.patientInfo);
@@ -106,14 +113,18 @@ const ReviewAnswers = () => {
           const errorMessages = error?.response?.data?.original?.errors;
           Object.keys(errorMessages).forEach((key) => {
             const errorMessage = errorMessages[key];
-            Array.isArray(errorMessage) ? errorMessage.forEach((msg) => toast.error(msg)) : toast.error(errorMessage);
+            Array.isArray(errorMessage)
+              ? errorMessage.forEach((msg) => toast.error(msg))
+              : toast.error(errorMessage);
           });
         } else if (error?.response?.data?.errors) {
           setShowLoader(false);
           const errorMessages = error?.response?.data?.original?.errors;
           Object.keys(errorMessages).forEach((key) => {
             const errorMessage = errorMessages[key];
-            Array.isArray(errorMessage) ? errorMessage.forEach((msg) => toast.error(msg)) : toast.error(errorMessage);
+            Array.isArray(errorMessage)
+              ? errorMessage.forEach((msg) => toast.error(msg))
+              : toast.error(errorMessage);
           });
         }
       }
@@ -136,8 +147,12 @@ const ReviewAnswers = () => {
       has_sub_field: item.has_sub_field,
     }));
 
-    const fname = patientInfo?.firstName ? patientInfo?.firstName : authUserDetail?.fname;
-    const lname = patientInfo?.lastName ? patientInfo?.lastName : authUserDetail?.lname;
+    const fname = patientInfo?.firstName
+      ? patientInfo?.firstName
+      : authUserDetail?.fname;
+    const lname = patientInfo?.lastName
+      ? patientInfo?.lastName
+      : authUserDetail?.lname;
 
     const formData = {
       // patientInfo: patientInfo,
@@ -163,7 +178,7 @@ const ReviewAnswers = () => {
   return (
     <>
       <MetaLayout canonical={`${meta_url}review-answers/`} />
-   
+
       <StepsHeader percentage={"95"} />
       <FormWrapper heading="Review Your Answers">
         <PageAnimationWrapper>
@@ -182,17 +197,33 @@ const ReviewAnswers = () => {
                   <hr className="mt-4 border-gray-200" />
                 </div> */}
                 <div>
-                  <p className="text-sm font-bold text-black">Patient Residential Address</p>
-                  <p className="text-sm text-gray-700 mt-1">{patientInfo?.address?.postalcode}</p>
-                  <p className="text-sm text-gray-700 mt-1">{patientInfo?.address?.addressone}</p>
-                  {patientInfo?.address?.addresstwo?.trim() && <p className="text-sm text-gray-700 mt-1">{patientInfo.address.addresstwo}</p>}
-                  <p className="text-sm text-gray-700 mt-1">{patientInfo?.address?.city}</p>
-                  <p className="text-sm text-gray-700 mt-1">{patientInfo?.address?.state}</p>
+                  <p className="text-sm font-bold text-black">
+                    Patient Residential Address
+                  </p>
+                  <p className="text-sm text-gray-700 mt-1">
+                    {patientInfo?.address?.postalcode}
+                  </p>
+                  <p className="text-sm text-gray-700 mt-1">
+                    {patientInfo?.address?.addressone}
+                  </p>
+                  {patientInfo?.address?.addresstwo?.trim() && (
+                    <p className="text-sm text-gray-700 mt-1">
+                      {patientInfo.address.addresstwo}
+                    </p>
+                  )}
+                  <p className="text-sm text-gray-700 mt-1">
+                    {patientInfo?.address?.city}
+                  </p>
+                  <p className="text-sm text-gray-700 mt-1">
+                    {patientInfo?.address?.state}
+                  </p>
                   <hr className="mt-4 border-gray-200" />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-black">Phone Number</p>
-                  <p className="text-sm text-gray-700 mt-1">{patientInfo?.phoneNo}</p>
+                  <p className="text-sm text-gray-700 mt-1">
+                    {patientInfo?.phoneNo}
+                  </p>
                   <hr className="mt-4 border-gray-200" />
                 </div>
 
@@ -216,8 +247,12 @@ const ReviewAnswers = () => {
                         className="text-sm font-bold text-black [&>ul]:list-disc [&>ul]:ml-6 [&>li]:mt-0.5"
                         dangerouslySetInnerHTML={{ __html: item.question }}
                       ></div>
-                      <p className="text-sm text-gray-700 mt-1 capitalize">{item?.answer} </p>
-                      <p className="text-sm text-gray-700 mt-1">{item?.subfield_response}</p>
+                      <p className="text-sm text-gray-700 mt-1 capitalize">
+                        {item?.answer}{" "}
+                      </p>
+                      <p className="text-sm text-gray-700 mt-1">
+                        {item?.subfield_response}
+                      </p>
                       <hr className="mt-4 border-gray-200" />
                     </div>
                   );
@@ -226,8 +261,16 @@ const ReviewAnswers = () => {
 
               {/* Bottom Action Buttons */}
               <div className="mt-8 space-y-3 block sm:flex justify-between">
-                <BackButton label="Edit answers" onClick={handleRestart} className={"mb-4  sm:mb-0 w-full"} />
-                <NextButton label="Confirm and Proceed" onClick={handleSubmit} className={""} />
+                <BackButton
+                  label="Edit answers"
+                  onClick={handleRestart}
+                  className={"mb-4  sm:mb-0 w-full"}
+                />
+                <NextButton
+                  label="Confirm and Proceed"
+                  onClick={handleSubmit}
+                  className={""}
+                />
               </div>
 
               {showLoader && (

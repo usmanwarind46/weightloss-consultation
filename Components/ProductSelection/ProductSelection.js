@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import FullScreenModal from "../FullScreenModal/FullScreenModal";
-import GetProductsApi from "@/api/getProducts";
 import useProductId from "@/store/useProductIdStore";
 import { useMutation } from "@tanstack/react-query";
 import Product from "../ProductCard/Product";
@@ -21,6 +20,7 @@ import Router from "next/router";
 import NextButton from "../NextButton/NextButton";
 import useReorderButtonStore from "@/store/useReorderButton";
 import useReorder from "@/store/useReorderStore";
+import { GetProductsApi } from "@/api/mergeRoute";
 
 const ProductSelection = ({ showProductSelection }) => {
   /* ───────────────  skeleton card ────────────── */
@@ -95,7 +95,7 @@ const ProductSelection = ({ showProductSelection }) => {
       }
     } else {
       setRedirection("/personal-details");
-      setReorder(false)
+      setReorder(false);
     }
     console.log(treatment, "treatment-name");
     setSelectedProductId((prev) => (prev === id ? null : id));
@@ -138,12 +138,13 @@ const ProductSelection = ({ showProductSelection }) => {
                 </div>
 
                 <div
-                  className={`flex flex-wrap gap-6 w-full ${productData.products.filter(
-                    (p) => p?.inventories?.[0]?.status === 1
-                  ).length === 1
-                    ? "justify-center"
-                    : "justify-center"
-                    }`}
+                  className={`flex flex-wrap gap-6 w-full ${
+                    productData.products.filter(
+                      (p) => p?.inventories?.[0]?.status === 1,
+                    ).length === 1
+                      ? "justify-center"
+                      : "justify-center"
+                  }`}
                 >
                   {(Array.isArray(productData.reorder)
                     ? productData.reorder
