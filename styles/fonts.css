@@ -1,0 +1,145 @@
+/* Regular Font */
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("../public/fonts/Poppins/Poppins-Regular.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins-Bold";
+  src: url("../public/fonts/Poppins/Poppins-Bold.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins-Light";
+  src: url("../public/fonts/Poppins/Poppins-Light.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins-SemiBold";
+  src: url("../public/fonts/Poppins/Poppins-SemiBold.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: "Inter-Regular";
+  src: url("../public/fonts/Inter/Inter_28pt-Regular.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Thin";
+  src: url("../public/fonts/Inter/Inter_28pt-Thin.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Bold";
+  src: url("../public/fonts/Inter/Inter_28pt-Bold.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Black";
+  src: url("../public/fonts/Inter/Inter_28pt-Black.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Medium";
+  src: url("../public/fonts/Inter/Inter_28pt-Medium.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-SemiBold";
+  src: url("../public/fonts/Inter/Inter_28pt-SemiBold.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Define a CSS variable for the font */
+:root {
+  --reg-font: "Poppins-Regular";
+  --bold-font: "Poppins-Bold";
+  --light-font: "Poppins-Light";
+  --semibold-font: "Poppins-SemiBold";
+  --font-reg: "Inter-Regular";
+  --font-thin: "Inter-Thin";
+  --font-bold: "Inter-Bold";
+  --font-black: "Inter-Black";
+  --font-medium: "Inter-Medium";
+  --fonts-semi-bold: "Inter-SemiBold";
+}
+
+/* Global class */
+.niba-reg-font {
+  font-family: var(--reg-font) !important;
+}
+
+.reg-font {
+  font-family: var(--font-thin) !important;
+
+}
+
+.reg-font {
+  font-family: var(--font-reg) !important;
+}
+
+.bold-font {
+  font-family: var(--font-bold) !important;
+
+}
+
+.font-semibold {
+  font-family: var(--fonts-semi-bold);
+}
+
+.black-font {
+  font-family: var(--font-black) !important;
+
+}
+
+.med-font {
+  font-family: var(--font-medium) !important;
+
+}
+
+.niba-bold-font {
+  font-family: var(--bold-font) !important;
+}
+
+
+.niba-light-font {
+  font-family: var(--light-font) !important;
+}
+
+.niba-semibold-font {
+  font-family: var(--semibold-font);
+}
+
+body {
+  font-family: var(--reg-font);
+}

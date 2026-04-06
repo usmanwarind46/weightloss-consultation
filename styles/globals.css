@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* @theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+} */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  /* background: var(--background); */
+  color: var(--foreground);
+  font-family: var(--font-reg);
+  background-color: #E9F6FA;
+}
+
+/* global css */
+
+.heading {
+  font-weight: 600;
+  word-break: break-word;
+  font-size: 2.5rem;
+  line-height: 125%;
+  color: darkslategray;
+}
+
+.paragraph {
+  line-height: 150%;
+  font-weight: 300;
+  white-space: pre-line;
+  word-break: break-word;
+  font-style: normal;
+  font-size: 1rem;
+  color: darkslategray;
+}
+
+
+.subHeading {
+  line-height: 150%;
+  font-weight: 300;
+  white-space: pre-line;
+  word-break: break-word;
+  font-style: normal;
+  font-size: 20px;
+  color: darkslategray;
+}
+
+.darkGrayColor {
+  color: darkslategray;
+}
+
+.bg-secondary {
+  background-color: #4DB581;
+}
+
+.text-primary {
+  color: #4565BF;
+}
+
+.border-primary {
+  color: #4565BF;
+}
+
+.bg-primary {
+  background-color: #4565BF;
+}
+
+.text-green {
+  color: #4DB581;
+}
+
+.bg-green {
+  background-color: #4DB581;
+}
+
+.headingDashBoard {
+  font-family: var(--bold-font);
+  font-weight: 400;
+  word-break: break-word;
+  font-size: 1.8rem;
+  line-height: 125%;
+  color: black;
+}
+
+.product-concent-list ol {
+  list-style: outside;
+}
+
+.concent-anchor a {
+  color: rgb(0, 0, 238);
+}
+
+.product-concent-list li {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 2rem;
+  }
+
+  .paragraph {
+    font-size: 0.95rem;
+  }
+
+  .subHeading {
+    font-size: 18px;
+  }
+
+  .headingDashBoard {
+    font-size: 1.6rem;
+
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 1.5rem;
+  }
+
+  .paragraph {
+    font-size: 0.875rem;
+  }
+
+  .subHeading {
+    font-size: 16px;
+  }
+
+  .headingDashBoard {
+    font-size: 1.4rem;
+
+  }
+}
