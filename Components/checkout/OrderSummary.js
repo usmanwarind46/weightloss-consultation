@@ -58,6 +58,7 @@ const OrderSummary = ({
   const { confirmationInfo, clearConfirmationInfo } =
     useConfirmationInfoStore();
   const { email } = useSignupStore();
+
   const { productId, clearProductId } = useProductId();
 
   // store addons or dose here 🔥🔥
