@@ -25,8 +25,10 @@ export const publicRoutes = [
   "/dosage-selection",
   "/checkout",
   "/re-order",
-
-
+  "/payment",
+  "/photo-upload",
+  "/id-verification",
+  "/explanation-evidence",
 ];
 
 export const loginRoute = "/login";

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { IoEye } from "react-icons/io5";
 import Link from "next/link";
 import Pagination from "@/Components/Pagination/Pagination";
-import GetOrdersApi from "@/api/getOrders";
 import { useMutation } from "@tanstack/react-query";
 import useOrderId from "@/store/useOrderIdStore";
 import { useRouter } from "next/router";
 import usePaginationStore from "@/store/pagination";
 import { useStatusStore } from "@/store/useStatusStore";
+import { GetOrdersApi } from "@/api/mergeRoutes";
 
 const MyOrders = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -58,9 +58,12 @@ const MyOrders = () => {
       order.order_id?.toString().includes(searchValue) ||
       order.treatment?.toLowerCase().includes(searchValue) ||
       // order.items.some((item) => item.name.toLowerCase().includes(searchValue));
-      order.items.some((item) => item.product.toLowerCase().includes(searchValue));
+      order.items.some((item) =>
+        item.product.toLowerCase().includes(searchValue),
+      );
 
-    const matchesStatus = status === "all" || order.status.toLowerCase() === status.toLowerCase();
+    const matchesStatus =
+      status === "all" || order.status.toLowerCase() === status.toLowerCase();
 
     return matchesSearch && matchesStatus;
   });
@@ -89,18 +92,30 @@ const MyOrders = () => {
     <div className="md:p-6 sm:px-2 sm:bg-[#F9FAFB] sm:min-h-screen sm:rounded-md sm:shadow-md my-5 md:me-5">
       {/* Search and Filter Section */}
       <header className="p-4">
-        <h1 className="md:text-3xl text-lg mb-2 headingDashBoard bold-font">My Orders</h1>
-        <p className="reg-font paragraph  text-left text-sm xl:w-3/4 mt-2">View your order history</p>
+        <h1 className="md:text-3xl text-lg mb-2 headingDashBoard bold-font">
+          My Orders
+        </h1>
+        <p className="reg-font paragraph  text-left text-sm xl:w-3/4 mt-2">
+          View your order history
+        </p>
       </header>
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4">
         <div className="w-full md:w-1/2">
-          <form className="flex items-center" onSubmit={(e) => e.preventDefault()}>
+          <form
+            className="flex items-center"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <label htmlFor="simple-search" className="sr-only">
               Search
             </label>
             <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg aria-hidden="true" className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  aria-hidden="true"
+                  className="w-5 h-5 text-gray-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path
                     fillRule="evenodd"
                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -121,7 +136,10 @@ const MyOrders = () => {
         </div>
 
         <div className="w-full md:w-auto flex items-center justify-between">
-          <label htmlFor="status" className="text-sm reg-font text-gray-700 mr-2">
+          <label
+            htmlFor="status"
+            className="text-sm reg-font text-gray-700 mr-2"
+          >
             Sort by status
           </label>
           <div className="relative">
@@ -129,7 +147,7 @@ const MyOrders = () => {
               value={status}
               onChange={(e) => handleStatusChange(e.target.value)}
               className={`reg-font text-sm rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-[#4565BF]-500 px-4 py-2 appearance-none pr-8 transition ease-in-out duration-200 ${getStatusClasses(
-                status
+                status,
               )}`}
             >
               <option value="all">All</option>
@@ -140,8 +158,19 @@ const MyOrders = () => {
             </select>
             {/* Custom Arrow Icon */}
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </div>
           </div>
@@ -152,7 +181,13 @@ const MyOrders = () => {
         <div class="flex items-start">
           <div class="flex">
             <span>
-              <svg class="w-6 h-6 text-blue-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                class="w-6 h-6 text-blue-500 mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -162,7 +197,10 @@ const MyOrders = () => {
               </svg>
             </span>
             <span class="font-bold">Note</span>
-            <span class="mx-2 reg-font">Changes to your shipping address will only apply to future orders and will not affect previous ones</span>
+            <span class="mx-2 reg-font">
+              Changes to your shipping address will only apply to future orders
+              and will not affect previous ones
+            </span>
           </div>
         </div>
       </div>
@@ -218,13 +256,20 @@ const MyOrders = () => {
               </tr>
             ) : (
               filteredData?.map((order) => (
-                <tr key={order.order_id} className="border-b [&>td]:px-3 [&>td]:py-3 [&>td]:whitespace-nowrap">
+                <tr
+                  key={order.order_id}
+                  className="border-b [&>td]:px-3 [&>td]:py-3 [&>td]:whitespace-nowrap"
+                >
                   <td>{order.order_id}</td>
                   <td>
-                    <span className="bg-blue-100 text-blue-800 text-xs reg-font px-2.5 py-0.5 rounded-full">{order.created_at}</span>
+                    <span className="bg-blue-100 text-blue-800 text-xs reg-font px-2.5 py-0.5 rounded-full">
+                      {order.created_at}
+                    </span>
                   </td>
                   <td>
-                    {Array.from(new Set(order.items.map((item) => item.product))).map((uniqueProduct, index) => (
+                    {Array.from(
+                      new Set(order.items.map((item) => item.product)),
+                    ).map((uniqueProduct, index) => (
                       <li className="list-none" key={index}>
                         {uniqueProduct}
                       </li>
@@ -253,12 +298,12 @@ const MyOrders = () => {
                         order.status === "Processing"
                           ? "bg-yellow-100 border-yellow-500 text-yellow-800"
                           : order.status === "Incomplete"
-                          ? "bg-orange-100 border-orange-500 text-orange-800"
-                          : order.status === "Cancelled"
-                          ? "bg-red-100 text-red-800"
-                          : order.status === "Approved"
-                          ? "bg-green-100 border-green-500 text-green-800"
-                          : "bg-gray-100 text-gray-800"
+                            ? "bg-orange-100 border-orange-500 text-orange-800"
+                            : order.status === "Cancelled"
+                              ? "bg-red-100 text-red-800"
+                              : order.status === "Approved"
+                                ? "bg-green-100 border-green-500 text-green-800"
+                                : "bg-gray-100 text-gray-800"
                       } text-xs reg-font px-2.5 py-0.5 rounded-full`}
                     >
                       {order.status}
@@ -268,8 +313,15 @@ const MyOrders = () => {
                   <td>
                     <div className="flex items-center gap-6 justify-around">
                       <div className="group relative">
-                        <button onClick={() => handleSendId(order?.id)} className="cursor-pointer">
-                          <IoEye size={20} color="#4565BF" className="group-hover:opacity-75" />
+                        <button
+                          onClick={() => handleSendId(order?.id)}
+                          className="cursor-pointer"
+                        >
+                          <IoEye
+                            size={20}
+                            color="#4565BF"
+                            className="group-hover:opacity-75"
+                          />
                         </button>
                         <div className="-top-8 hidden group-hover:block absolute bg-gray-800 text-white p-2 rounded shadow-lg text-xs left-1/2 transform -translate-x-1/2">
                           View

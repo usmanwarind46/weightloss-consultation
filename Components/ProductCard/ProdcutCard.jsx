@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useProductId from "@/store/useProductIdStore";
 import usePatientStatus from "@/store/useReorderStore";
+import { userConsultationApi } from "@/api/consultationApi";
 import { useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
@@ -19,7 +20,6 @@ import useLastBmi from "@/store/useLastBmiStore";
 import useCouponStore from "@/store/couponStore";
 import useSignupStore from "@/store/signupStore";
 import useReturning from "@/store/useReturningPatient";
-import { userConsultationApi } from "@/api/mergeRoute";
 
 const ProductCard = ({
   id,

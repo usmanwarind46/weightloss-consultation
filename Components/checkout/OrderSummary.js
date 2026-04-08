@@ -4,6 +4,7 @@ import SectionHeader from "./SectionHeader";
 import { useRouter } from "next/router";
 import useCartStore from "@/store/useCartStore";
 import toast from "react-hot-toast";
+import { CouponApi } from "@/api/couponApi";
 import useCouponStore from "@/store/couponStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { RxCross2 } from "react-icons/rx";
@@ -16,6 +17,7 @@ import useGpDetailsStore from "@/store/gpDetailStore";
 import useBmiStore from "@/store/bmiStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
 import PaymentPage from "../PaymentSection/PaymentPage";
+import { sendStepData } from "@/api/mergeRoutes";
 import { useMutation } from "@tanstack/react-query";
 import useSignupStore from "@/store/signupStore";
 import useProductId from "@/store/useProductIdStore";
@@ -29,7 +31,8 @@ import useLastBmi from "@/store/useLastBmiStore";
 import useUserDataStore from "@/store/userDataStore";
 import OrderSummaryHeader from "./OrderSummaryHeader";
 import useNeedleConsent from "@/store/needleConsent";
-import { CouponApi, sendStepData } from "@/api/mergeRoute";
+import useAbandonCardStore from "@/store/abandonCardStore";
+import lastOrderStore from "@/store/lastOrderStore";
 
 const OrderSummary = ({
   isConcentCheck,
@@ -58,9 +61,8 @@ const OrderSummary = ({
   const { confirmationInfo, clearConfirmationInfo } =
     useConfirmationInfoStore();
   const { email } = useSignupStore();
-
   const { productId, clearProductId } = useProductId();
-
+  const { abandonCard, clearAbandonCard } = useAbandonCardStore();
   // store addons or dose here 🔥🔥
   const { needleMessage } = useNeedleConsent();
 
@@ -69,8 +71,8 @@ const OrderSummary = ({
   const { clearCheckout } = useCheckoutStore();
   const { clearMedicalQuestions } = useMedicalQuestionsStore();
   const { clearConfirmationQuestions } = useConfirmationQuestionsStore();
-
-  const { clearToken } = useAuthStore();
+  const { clearLastOrder } = lastOrderStore();
+  const { clearToken, clearReview } = useAuthStore();
   const { setIsPasswordReset } = usePasswordReset();
   const { clearLastBmi } = useLastBmi();
   const { clearUserData } = useUserDataStore();
@@ -141,6 +143,8 @@ const OrderSummary = ({
         setPaymentData(data?.data?.paymentData);
         setOrderId(data?.data?.paymentData?.order_id);
         clearCoupon();
+        clearAbandonCard();
+        clearReview();
       }
     },
     onError: (error) => {
@@ -173,6 +177,8 @@ const OrderSummary = ({
         clearEmail();
         clearConfirmationEmail();
         setIsButtonLoading(false);
+        clearLastOrder();
+        clearAbandonCard();
         router.push("/login");
       } else if (errors && typeof errors === "object") {
         setIsButtonLoading(false);
@@ -235,6 +241,7 @@ const OrderSummary = ({
         type: Coupon?.Data?.type ? Coupon?.Data?.type : null,
         discount_value: discountAmount ? discountAmount : null,
       },
+      type: abandonCard?.type ? abandonCard?.type : null,
       subTotal: parseFloat(totalAmount),
       total: parseFloat(finalTotal),
       shipment: {
@@ -261,7 +268,7 @@ const OrderSummary = ({
         ...a,
         quantity: a.quantity || a.qty || 1,
       })),
-      pid: productId,
+      pid: productId || abandonCard?.productId,
       medicalInfo,
       gpdetails,
       bmi,

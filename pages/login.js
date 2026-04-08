@@ -24,17 +24,25 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import useReturning from "@/store/useReturningPatient";
+import useAbandonCardStore from "@/store/abandonCardStore";
+import useProductId from "@/store/useProductIdStore";
+import { useParams, useSearchParams } from "next/navigation";
+import useCartStore from "@/store/useCartStore";
 
 export default function LoginScreen() {
   const [showLoader, setShowLoader] = useState(false);
   const { userData, setUserData } = useUserDataStore();
   const { setLastName, setFirstName, setEmail } = useSignupStore();
-  const { token, setToken } = useAuthStore();
+  const { token, setToken, setReview, review, clearReview } = useAuthStore();
   const { setIsPasswordReset, setShowResetPassword } = usePasswordReset();
   const { setImpersonate } = useImpersonate();
   const router = useRouter();
   const { setAuthUserDetail } = useAuthUserDetailStore();
   const { setIsReturningPatient } = useReturning();
+  const { abandonCard, setAbandonCard, hasHydrated, clearAbandonCard } =
+    useAbandonCardStore();
+  const { setProductId } = useProductId();
+
   const {
     register,
     handleSubmit,
@@ -49,7 +57,25 @@ export default function LoginScreen() {
       password: "",
     },
   });
-  const { showLoginModal, closeLoginModal, openLoginModal } = useLoginModalStore();
+  const { showLoginModal, closeLoginModal, openLoginModal } =
+    useLoginModalStore();
+
+  const searchParams = useSearchParams();
+  const { setOrderId } = useCartStore();
+  const params = useParams();
+
+  useEffect(() => {
+    const orderId = searchParams.get("order_id");
+    const review = searchParams.get("review") === "true";
+    console.log(review, "review param");
+    if (orderId) setOrderId(orderId);
+    if (review) {
+      clearAbandonCard();
+      setReview(review);
+    }
+
+    console.log("review:", review);
+  }, [searchParams, params, setOrderId, setEmail]);
 
   const loginMutation = useMutation(Login, {
     onSuccess: (data) => {
@@ -65,12 +91,11 @@ export default function LoginScreen() {
         toast.success("Login Successfully");
         Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${user.token}`;
         setShowLoader(false);
-        setIsReturningPatient(user?.isReturning)
+        setIsReturningPatient(user?.isReturning);
 
         setIsPasswordReset(false);
         setShowResetPassword(user?.show_password_reset);
-        router.push("/dashboard");
-
+        // router.push("/dashboard");
       }
     },
     onError: (error) => {
@@ -91,11 +116,11 @@ export default function LoginScreen() {
     },
   });
 
-  useEffect(() => {
-    if (token) {
-      router.push("/dashboard");
-    }
-  }, [token])
+  // useEffect(() => {
+  //   if (token) {
+  //     router.push("/dashboard");
+  //   }
+  // }, [token]);
   // Impersonation login mutation
   const impersonateLoginMutation = useMutation(impersonateLogin, {
     onSuccess: (data) => {
@@ -114,7 +139,7 @@ export default function LoginScreen() {
         setShowLoader(false);
         setIsPasswordReset(false);
         setShowResetPassword(user?.show_password_reset);
-        setIsReturningPatient(user?.isReturning)
+        setIsReturningPatient(user?.isReturning);
         router.push("/dashboard");
       }
     },
@@ -154,7 +179,7 @@ export default function LoginScreen() {
         { impersonate_email: impersonateEmail, company_id: 2 },
         {
           onSettled: () => setShowLoader(false),
-        }
+        },
       );
     }
     // eslint-disable-next-line
@@ -171,6 +196,69 @@ export default function LoginScreen() {
     loginMutation.mutate(formData);
   };
 
+  // abandonCard get Url; ⚠️⚠️////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    const params = Object.fromEntries(searchParams.entries());
+
+    const productId = params.product_id ? Number(params.product_id) : null;
+    const fromEmail = params.fromemail;
+    const type = params.type;
+    const eid = params.eid ? Number(params.eid) : null;
+    setProductId(productId);
+    if (type == "abandoned-cart" && productId && !abandonCard) {
+      setAbandonCard({
+        productId,
+        fromEmail,
+        type,
+        eid,
+      });
+      // clearReview();
+    } else {
+      console.log("⛔ SKIPPED STORE UPDATE");
+    }
+  }, [searchParams, abandonCard]);
+
+  // herer i used ussEffect for if login or check abandonCard url direct
+
+  const typeFromUrl = searchParams.get("type");
+
+  useEffect(() => {
+    if (!hasHydrated || hasRedirected.current) return;
+
+    const isAbandoned =
+      abandonCard?.type == "abandoned-cart" || typeFromUrl == "abandoned-cart";
+
+    if (token && isAbandoned) {
+      hasRedirected.current = true;
+
+      router.replace("/gathering-data"); // 👈 better than push
+    }
+  }, [hasHydrated, token, abandonCard?.type, typeFromUrl]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    // 🔥 FIRST PRIORITY: abandoned cart
+    if (abandonCard) {
+      console.log("check1");
+
+      router.replace("/gathering-data");
+      return;
+    }
+
+    console.log(review, "reviewreview");
+
+    // ⏳ wait until review is known
+    if (review == null) return;
+
+    // ✅ NORMAL FLOW
+    if (review) {
+      router.replace("/review");
+    } else {
+      router.replace("/dashboard");
+    }
+  }, [token, review, abandonCard?.type]);
   return (
     <>
       <MetaLayout canonical={`${meta_url}login/`} />
@@ -185,33 +273,66 @@ export default function LoginScreen() {
         <div className="bg-white">
           <PageLoader />
         </div>
-
       ) : (
         <>
           <div className={`flex justify-center bg-[#E9F6FA] py-8 sm:py-16`}>
-            <div className={`bg-white rounded-xl shadow-md w-full max-w-lg p-8`}>
+            <div
+              className={`bg-white rounded-xl shadow-md w-full max-w-lg p-8`}
+            >
               {/* Title */}
               <h1 className="niba-reg-font heading mb-2">Login</h1>
 
               {/* Description */}
-              <p className="mb-6 reg-font paragraph">Returning patient? Login now to re-order your treatment.</p>
+              <p className="mb-6 reg-font paragraph">
+                Returning patient? Login now to re-order your treatment.
+              </p>
 
               <PageAnimationWrapper>
-                <div className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}>
+                <div
+                  className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
+                >
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <TextField label="Email Address" name="email" placeholder="Email Address" type="email" register={register} required errors={errors} />
+                    <TextField
+                      label="Email Address"
+                      name="email"
+                      placeholder="Email Address"
+                      type="email"
+                      register={register}
+                      required
+                      errors={errors}
+                    />
 
-                    <TextField label="Password" name="password" placeholder="Password" type="password" register={register} required errors={errors} />
-                    <NextButton label="Login" disabled={!isValid} type="submit" className="mb-5" />
+                    <TextField
+                      label="Password"
+                      name="password"
+                      placeholder="Password"
+                      type="password"
+                      register={register}
+                      required
+                      errors={errors}
+                    />
+                    <NextButton
+                      label="Login"
+                      disabled={!isValid}
+                      type="submit"
+                      className="mb-5"
+                    />
                     <p className="reg-font text-black text-sm text-center my-3">
                       Are you a new patient?{" "}
-                      <Link href={"/acknowledgment"} className="text-primary underline">
+                      <Link
+                        href={"/acknowledgment"}
+                        className="text-primary underline"
+                      >
                         Get started with the consultation
                       </Link>
                     </p>
                     {/* <BackButton onClick={startConsultation} label="Are you a new patient? Get started with the consultation." /> */}
                     <div className="flex justify-center mt-4">
-                      <button onClick={openLoginModal} label="" className="text-black underline text-sm reg-font cursor-pointer">
+                      <button
+                        onClick={openLoginModal}
+                        label=""
+                        className="text-black underline text-sm reg-font cursor-pointer"
+                      >
                         Forgot password
                       </button>
                     </div>
@@ -230,8 +351,6 @@ export default function LoginScreen() {
         </>
       )}
 
-
-
       <LoginModal
         modes="forgot"
         show={showLoginModal}
@@ -240,7 +359,10 @@ export default function LoginScreen() {
         onLogin={async (data) => {
           setShowLoader(true);
           try {
-            const response = await loginMutation.mutateAsync({ ...data, company_id: 2 });
+            const response = await loginMutation.mutateAsync({
+              ...data,
+              company_id: 2,
+            });
             const user = response?.data?.data;
             setIsPasswordReset(false);
             setUserData(user);
@@ -254,10 +376,18 @@ export default function LoginScreen() {
             closeLoginModal();
             setShowLoader(false);
 
-            router.push("/dashboard");
+            if (abandonCard) {
+              console.log("check2");
+              router.push("/gathering-data");
+            } else {
+              router.push("/dashboard");
+            }
           } catch (error) {
             const errorMsg = error?.response?.data?.errors;
-            const firstMsg = errorMsg && typeof errorMsg === "object" ? Object.values(errorMsg)[0] : "Something went wrong.";
+            const firstMsg =
+              errorMsg && typeof errorMsg === "object"
+                ? Object.values(errorMsg)[0]
+                : "Something went wrong.";
             toast.error(firstMsg);
             setShowLoader(false);
           }

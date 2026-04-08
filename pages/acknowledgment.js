@@ -151,7 +151,7 @@ export default function Acknowledgment() {
                     <ul className="list-disc list-outside pl-5 text-sm text-gray-700 space-y-2 reg-font paragraph">
                       <li>
                         You consent for your medical information to be assessed
-                        by the clinical team at Weight Loss Clinic and its
+                        by the clinical team at Online Weight Loss Clinic and its
                         pharmacy and to be prescribed medication.
                       </li>
                       <li>

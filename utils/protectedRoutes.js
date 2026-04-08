@@ -6,4 +6,6 @@ export const protectedRoutes = [
   "/address",
   "/change-password",
   "/photo-upload",
+  "/weight-loss-journey",
+  "/review",
 ];

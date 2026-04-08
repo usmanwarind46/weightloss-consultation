@@ -9,6 +9,7 @@ import useCartStore from "@/store/useCartStore";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import useReorder from "@/store/useReorderStore";
+import { abandonCart } from "@/api/mergeRoutes";
 import { useMutation } from "@tanstack/react-query";
 import useProductId from "@/store/useProductIdStore";
 import BackButton from "@/Components/BackButton/BackButton";
@@ -20,7 +21,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useNeedleConsent from "@/store/needleConsent";
 import { FaShoppingCart } from "react-icons/fa";
-import { abandonCart } from "@/api/mergeRoute";
+import useAbandonCardStore from "@/store/abandonCardStore";
 
 export default function DosageSelection() {
   const [shownDoseIds, setShownDoseIds] = useState([]);
@@ -45,7 +46,7 @@ export default function DosageSelection() {
     mode: "onChange",
   });
   const [isExpiryRequired, setIsExpiryRequired] = useState(false);
-
+  const { abandonCard, extra } = useAbandonCardStore();
   // Variation From zustand
   const { variation } = useVariationStore();
   const { removeItemCompletely } = useCartStore();
@@ -69,13 +70,13 @@ export default function DosageSelection() {
   const abandonCartMutation = useMutation(abandonCart, {
     onSuccess: (data) => {
       if (data) {
-        router.push("/checkout");
+        // router.push("/checkout");
         console.log(data, "This is Abandon Cart Data");
       }
     },
     onError: (error) => {
       if (error) {
-        router.push("/checkout");
+        // router.push("/checkout");
         console.log(error, "This is error");
       }
     },
@@ -94,6 +95,8 @@ export default function DosageSelection() {
     } else {
       setShowModalForManjaro(true);
     }
+
+    router.push("/checkout");
   };
 
   //Allowed checking here 🔥
@@ -154,13 +157,18 @@ export default function DosageSelection() {
         expiry: dose.expiry,
         isSelected: true,
       });
-      setAbandonData([
-        ...abandonData,
-        {
-          eid: dose.id,
-          pid: productId,
-        },
-      ]);
+      // setAbandonData([
+      //   ...abandonData,
+      //   {
+      //     eid: dose.id,
+      //     pid: productId,
+      //   },
+      // ]);
+
+      abandonCartMutation.mutate({
+        eid: dose.id,
+        pid: productId || abandonCard?.productId,
+      });
     } else {
       const productConcent = generateProductConcent(
         variation?.variations,
@@ -181,14 +189,17 @@ export default function DosageSelection() {
         isSelected: true,
       });
 
-      setAbandonData([
-        ...abandonData,
-        {
-          eid: dose.id,
-          pid: productId,
-        },
-      ]);
-
+      // setAbandonData([
+      //   ...abandonData,
+      //   {
+      //     eid: dose.id,
+      //     pid: productId,
+      //   },
+      // ]);
+      abandonCartMutation.mutate({
+        eid: dose.id,
+        pid: productId || abandonCard?.productId,
+      });
       // ✅ ✅ ✅ Check if modal was already shown for this dose
       if (!shownDoseIds.includes(dose.id)) {
         setSelectedDose({
@@ -236,6 +247,16 @@ export default function DosageSelection() {
       isSelected: true,
     });
   };
+
+  // 🔥⚠️⚠️⚠️⚠️⚠️Abandone card selected dose auto add krne k liye useEffect ⚠️⚠️⚠️⚠️⚠️
+  useEffect(() => {
+    if (!abandonCard || !extra) return;
+    if (!variation?.variations) return;
+
+    if (abandonCard?.type === "abandoned-cart") {
+      handleAddDose(extra);
+    }
+  }, [abandonCard, extra]);
   const Back = () => {
     router.push("/confirmation-summary");
   };

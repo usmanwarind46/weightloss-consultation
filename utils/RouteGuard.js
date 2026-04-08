@@ -18,7 +18,7 @@ export default function RouteGuard({ children }) {
       router.push("/login/");
     } else if (isLogin && token && review) {
       router.push("/review");
-    } else if (isLogin && token) {
+    } else if (isLogin && token && review == null) {
       router.push("/dashboard");
     } else {
       setLoading(false);

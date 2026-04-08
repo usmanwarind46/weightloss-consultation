@@ -5,7 +5,7 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import toast from "react-hot-toast";
 import useReorder from "@/store/useReorderStore";
 import useCartStore from "@/store/useCartStore";
-import GetImageIsUplaod from "@/api/GetImageIsUplaod";
+import { GetImageIsUplaod } from "@/api/mergeRoutes";
 import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import NextButton from "@/Components/NextButton/NextButton";

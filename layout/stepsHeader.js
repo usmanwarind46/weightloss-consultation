@@ -38,13 +38,17 @@ import useExplanationEvidenceStore from "@/pages/useExplanationEvidenceStore";
 import useReorder from "@/store/useReorderStore";
 import useImageUploadStore from "@/store/useImageUploadStore ";
 import { GetIdVerification } from "@/api/IdVerificationApi";
-import GetImageIsUplaod from "@/api/GetImageIsUplaod";
+import { GetImageIsUplaod } from "@/api/mergeRoutes";
 import { GetPrescriptionEvidence } from "@/api/PrescriptionEvidenceApi";
+import useAbandonCardStore from "@/store/abandonCardStore";
+import lastOrderStore from "@/store/lastOrderStore";
 
 const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { showLoginModal, closeLoginModal, openLoginModal } =
     useLoginModalStore();
+  const { clearLastOrder } = lastOrderStore();
+  const { abandonCard, clearAbandonCard } = useAbandonCardStore();
 
   const [showLoader, setShowLoader] = useState(false);
   const { setIsReturningPatient } = useReturning();
@@ -58,7 +62,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const { clearConfirmationQuestions } = useConfirmationQuestionsStore();
   const { authUserDetail, clearAuthUserDetail, setAuthUserDetail } =
     useAuthUserDetailStore();
-  const { token, clearToken, setToken, setIsImpersonationLogout } =
+  const { token, clearToken, setToken, setIsImpersonationLogout, clearReview } =
     useAuthStore();
   const { clearShipping, clearBilling } = useShippingOrBillingStore();
   const { clearProductId } = useProductId();
@@ -116,7 +120,9 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     setShowResetPassword(true);
     setImpersonate(false);
     setIsReturningPatient(false);
-
+    clearLastOrder();
+    clearAbandonCard();
+    clearReview();
     router.push("/login");
   };
 
@@ -126,7 +132,8 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     pathname === "/orders/" ||
     pathname === "/address/" ||
     pathname === "/change-password/" ||
-    pathname === "/order-detail/";
+    pathname === "/order-detail/" ||
+    pathname === "/weight-loss-journey/";
 
   const loginMutation = useMutation(Login, {
     onSuccess: (data) => {
@@ -141,7 +148,11 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
       setFirstName(data?.data?.data?.fname);
       setLastName(data?.data?.data?.lname);
       setEmail(data?.data?.data?.email);
-      router.push("/dashboard");
+      if (abandonCard?.type === "abandoned-cart") {
+        router.push("/gathering-data");
+      } else {
+        router.push("/dashboard");
+      }
       setIsPasswordReset(false);
       setShowResetPassword(data?.data?.data?.show_password_reset);
       setIsReturningPatient(user?.isReturning);
@@ -187,6 +198,9 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     clearToken();
     setIsImpersonationLogout(true);
     setImpersonate(false);
+    clearLastOrder();
+    clearAbandonCard();
+    clearReview();
     window.location.href = "https://app.onlineweightlossclinic.co.uk/dashboard";
   };
   const loginPath = pathname === "/login/";
@@ -198,6 +212,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     "/change-password/",
     "/order-detail/",
     "/profile/",
+    "/weight-loss-journey/",
   ];
   const redirectTo = specialRoutes.includes(pathname) ? "/dashboard" : "/";
 

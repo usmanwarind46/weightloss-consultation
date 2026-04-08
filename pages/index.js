@@ -67,6 +67,8 @@ export default function Index() {
     await new Promise((resolve) => setTimeout(resolve, 500));
   };
 
+  console.log("Comming from Vercel Consultation");
+
   return (
     <>
       <MetaLayout canonical={`${meta_url}`} />
@@ -79,7 +81,7 @@ export default function Index() {
           <div className="flex justify-center">
             <Image
               src="images/intro.svg"
-              alt="Weight Loss Icon"
+              alt="Online Weight Loss Icon"
               width={200}
               height={50}
               className="rounded-lg"
@@ -87,22 +89,36 @@ export default function Index() {
           </div>
 
           {/* Heading */}
-          <h2 className=" bold-font paragraph text-xl text-start mb-3 p-0">Let's get you started on your weight loss journey.</h2>
+          <h2 className=" bold-font paragraph text-xl text-start mb-3 p-0">
+            Let's get you started on your weight loss journey.
+          </h2>
 
-          <p className="reg-font text-start text-sm paragraph mb-8">We’ll now ask a few questions about you and your health.</p>
+          <p className="reg-font text-start text-sm paragraph mb-8">
+            We’ll now ask a few questions about you and your health.
+          </p>
 
           {/* Good to know */}
           <div className="mb-10">
             <p className="bold-font paragraph mb-4">Good to know:</p>
             <ul className="reg-font list-disc list-inside space-y-3 paragraph text-[15px] leading-relaxed">
-              <li>Your consultation will take about five minutes to complete.</li>
+              <li>
+                Your consultation will take about five minutes to complete.
+              </li>
               <li>All your responses are confidential and securely stored.</li>
-              <li>We’ll show suitable treatment options based on the information you provide.</li>
+              <li>
+                We’ll show suitable treatment options based on the information
+                you provide.
+              </li>
             </ul>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <NextButton type="submit" label="New Patient" disabled={!isValid} subLabel="Click here to start online consultation" />
+            <NextButton
+              type="submit"
+              label="New Patient"
+              disabled={!isValid}
+              subLabel="Click here to start online consultation"
+            />
 
             <button
               type="submit"
@@ -112,8 +128,6 @@ export default function Index() {
               className=" w-full px-12   bold-font text-sm border-in duration-150 ease-in-out hover:bg-primary  py-3 rounded-md bold-font  transition my-3 border-2 text-primary hover:text-white border-[#4565BF] cursor-pointer"
             >
               Returning Patient
-
-
               <p className="reg-font paragraph !text-[13px] text-primary">
                 Click here - your previous details will be saved
               </p>

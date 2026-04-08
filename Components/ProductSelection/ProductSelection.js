@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import FullScreenModal from "../FullScreenModal/FullScreenModal";
+import { GetProductsApi } from "@/api/mergeRoutes";
 import useProductId from "@/store/useProductIdStore";
 import { useMutation } from "@tanstack/react-query";
 import Product from "../ProductCard/Product";
 import { Skeleton } from "@mui/material";
+import { userConsultationApi } from "@/api/consultationApi";
 import useCheckoutStore from "@/store/checkoutStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
 import useGpDetailsStore from "@/store/gpDetailStore";
@@ -19,7 +21,6 @@ import Router from "next/router";
 import NextButton from "../NextButton/NextButton";
 import useReorderButtonStore from "@/store/useReorderButton";
 import useReorder from "@/store/useReorderStore";
-import { GetProductsApi } from "@/api/mergeRoute";
 
 const ProductSelection = ({ showProductSelection }) => {
   /* ───────────────  skeleton card ────────────── */

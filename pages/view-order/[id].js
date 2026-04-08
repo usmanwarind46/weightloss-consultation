@@ -10,10 +10,10 @@ import {
   Skeleton,
 } from "@mui/material";
 import moment from "moment";
+import { getOrderByIdApi } from "@/api/mergeRoutes";
 import { useRouter } from "next/router";
 import StepsHeader from "@/layout/stepsHeader";
 import Link from "next/link";
-import { getOrderByIdApi } from "@/api/mergeRoute";
 
 const OrderDetails = () => {
   const router = useRouter();

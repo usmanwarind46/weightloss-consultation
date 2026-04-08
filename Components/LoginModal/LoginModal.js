@@ -6,15 +6,21 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
 
-import { forgotPasswordLink } from "@/api/forgotPasswordLinkApi";
-import { forgotPassword } from "@/api/ChangePasswordApi";
+import { forgotPasswordLink } from "@/api/mergeRoutes";
+import { forgotPassword } from "@/api/mergeRoutes";
 import { passwordlink } from "@/config/constants";
 import ResetForm from "./ResetForm";
 import ForgotForm from "./ForgotForm";
 import LoginForm from "./LoginForm";
 import PageLoader from "../PageLoader/PageLoader";
 
-export default function LoginModal({ show = false, onClose = () => {}, onLogin = () => {}, isLoading = false, modes }) {
+export default function LoginModal({
+  show = false,
+  onClose = () => {},
+  onLogin = () => {},
+  isLoading = false,
+  modes,
+}) {
   const {
     register,
     handleSubmit,
@@ -122,7 +128,11 @@ export default function LoginModal({ show = false, onClose = () => {}, onLogin =
   const showModal = show || forceVisible || mode === "reset";
 
   const isFormLoading = useMemo(() => {
-    return (mode === "login" && isLoading) || (mode === "forgot" && forgotLinkMutation.isLoading) || (mode === "reset" && forgotMutation.isLoading);
+    return (
+      (mode === "login" && isLoading) ||
+      (mode === "forgot" && forgotLinkMutation.isLoading) ||
+      (mode === "reset" && forgotMutation.isLoading)
+    );
   }, [mode, isLoading, forgotLinkMutation.isLoading, forgotMutation.isLoading]);
 
   return (
@@ -141,18 +151,28 @@ export default function LoginModal({ show = false, onClose = () => {}, onLogin =
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {(mode === "login" || (mode === "forgot" && !forgotLinkMutation.isSuccess)) && (
-              <button onClick={onClose} className="cursor-pointer absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition">
+            {(mode === "login" ||
+              (mode === "forgot" && !forgotLinkMutation.isSuccess)) && (
+              <button
+                onClick={onClose}
+                className="cursor-pointer absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition"
+              >
                 <RxCross2 size={22} />
               </button>
             )}
 
             <h2 className="text-center text-2xl font-semibold text-gray-800 mb-4">
-              {mode === "login" ? "Login" : mode === "forgot" ? "Forgot Password?" : "Reset Password"}
+              {mode === "login"
+                ? "Login"
+                : mode === "forgot"
+                  ? "Forgot Password?"
+                  : "Reset Password"}
             </h2>
 
             {showLoginMsg && mode === "login" && (
-              <p className="text-green-600 text-center text-sm mb-4 reg-font">Your password was changed successfully. Please login below.</p>
+              <p className="text-green-600 text-center text-sm mb-4 reg-font">
+                Your password was changed successfully. Please login below.
+              </p>
             )}
 
             {mode === "reset" && (

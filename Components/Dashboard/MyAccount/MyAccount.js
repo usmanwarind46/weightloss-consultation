@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
-import { GetProductsApi } from "@/api/mergeRoute";
+import { GetProductsApi } from "@/api/mergeRoutes";
 
 const SkeletonCard = () => (
   <div className="p-4 my-3 bg-white rounded-lg shadow-md">

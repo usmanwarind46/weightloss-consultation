@@ -2,6 +2,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { userConsultationApi } from "@/api/consultationApi";
 import useBmiStore from "@/store/bmiStore";
 import useCheckoutStore from "@/store/checkoutStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
@@ -26,7 +27,7 @@ import StepsHeader from "@/layout/stepsHeader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReturning from "@/store/useReturningPatient";
-import { getMedicalQuestions, userConsultationApi } from "@/api/mergeRoute";
+import { getMedicalQuestions } from "@/api/mergeRoutes";
 
 export default function StepsInformation() {
   const [imageLoaded, setImageLoaded] = useState(false);

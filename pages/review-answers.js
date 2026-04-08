@@ -10,6 +10,7 @@ import useBmiStore from "@/store/bmiStore";
 import useMedicalInfoStore from "@/store/medicalInfoStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
 import useGpDetailsStore from "@/store/gpDetailStore";
+import { sendStepData } from "@/api/mergeRoutes";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useProductId from "@/store/useProductIdStore";
@@ -26,7 +27,6 @@ import useSignupStore from "@/store/signupStore";
 import PageLoader from "@/Components/PageLoader/PageLoader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
-import { sendStepData } from "@/api/mergeRoute";
 
 const ReviewAnswers = () => {
   const router = useRouter();

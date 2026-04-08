@@ -6,10 +6,10 @@ import { FiCheck, FiX, FiEye, FiEyeOff } from "react-icons/fi";
 import useSignupStore from "@/store/signupStore";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { UpdatePassword } from "@/api/mergeRoutes";
 import usePasswordReset from "@/store/usePasswordReset";
 import { RiLockPasswordLine } from "react-icons/ri";
 import NextButton from "../NextButton/NextButton";
-import { UpdatePassword } from "@/api/mergeRoute";
 
 const SetAPassword = ({ isCompleted, onComplete }) => {
   const [showPassword, setShowPassword] = useState(false);

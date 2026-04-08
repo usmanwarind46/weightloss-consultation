@@ -120,7 +120,7 @@ const Step6 = () => {
 
                     <ul className="list-disc list-inside text-sm text-gray-700 space-y-2">
                       <li>
-                        You consent for your medical information to be assessed by the clinical team at Weight Loss Clinic and its pharmacy
+                        You consent for your medical information to be assessed by the clinical team at Online Weight Loss Clinic and its pharmacy
                         and to be prescribed medication.
                       </li>
                       <li>You consent to an age and ID check when placing your first order.</li>

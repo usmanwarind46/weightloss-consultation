@@ -1,13 +1,30 @@
 import React from "react";
 import toast from "react-hot-toast";
-import { FaMinus, FaPlus, FaRegCircle, FaDotCircle, FaCheck, FaInfoCircle, FaSpinner } from "react-icons/fa";
+import {
+  FaMinus,
+  FaPlus,
+  FaRegCircle,
+  FaDotCircle,
+  FaCheck,
+  FaInfoCircle,
+  FaSpinner,
+} from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import moment from "moment/moment";
 import ConfirmationModal from "../Modal/ConfirmationModal";
 import useCartStore from "@/store/useCartStore";
-import { getNotified } from "@/api/GetNotified";
+import { getNotified } from "@/api/mergeRoutes";
 
-const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allow, totalSelectedQty }) => {
+const Dose = ({
+  doseData,
+  onAdd,
+  onIncrement,
+  onDecrement,
+  isSelected,
+  qty,
+  allow,
+  totalSelectedQty,
+}) => {
   const [showModal, setShowModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const { removeItemCompletely } = useCartStore();
@@ -43,7 +60,9 @@ const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allo
 
     // Check if this product's qty exceeded allowed
     if (qty >= allowed) {
-      toast.error(`You cannot select more than ${allowed} units for this option.`);
+      toast.error(
+        `You cannot select more than ${allowed} units for this option.`,
+      );
       return;
     }
 
@@ -74,14 +93,16 @@ const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allo
         pid: dose.pivot?.pid,
       });
 
-
       console.log(response, "response from get notified");
 
       if (response?.data?.status === true) {
         toast.success(response?.data?.message);
       }
     } catch (err) {
-      toast.error(err?.response?.data?.errors?.Notification || "Something went wrong. Please try again.");
+      toast.error(
+        err?.response?.data?.errors?.Notification ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +114,6 @@ const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allo
         <div className="relative p-2 z-20">
           {doseStatus === 0 && (
             <div className="absolute left-2 sm:left-auto sm:right-4 top-28 sm:top-5 group inline-block">
-
               <button
                 type="button"
                 onClick={(e) => {
@@ -111,11 +131,12 @@ const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allo
                 ) : (
                   <>
                     <FaInfoCircle className="text-white text-xs reg-font" />
-                    <span className="text-white text-sm med-font">Get Notified</span>
+                    <span className="text-white text-sm med-font">
+                      Get Notified
+                    </span>
                   </>
                 )}
               </button>
-
 
               <div className="absolute left-1/2 bottom-full mb-2 transform -translate-x-1/2 px-3 py-1.5 bg-secondary text-xs text-white rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
                 You'll be notified when this item is back in stock.
@@ -126,14 +147,15 @@ const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allo
         <div
           onClick={isOutOfStock || isAllowExceeded ? undefined : handleAdd}
           className={`flex flex-col sm:flex-row items-start sm:items-center justify-between w-full p-4 border-2 mt-3 transition-all duration-300 ease-in-out relative rounded-md border-[#4565BF] gap-4 sm:gap-0
-    ${isOutOfStock
-              ? "opacity-50 cursor-not-allowed bg-white border-gray-400"
-              : isSelected
-                ? "border-[#4565BF] bg-blue-100 cursor-pointer"
-                : isAllowExceeded
-                  ? "border-gray-200 bg-white cursor-not-allowed opacity-60"
-                  : "border-gray-300 bg-white hover:bg-gray-50 cursor-pointer"
-            }`}
+    ${
+      isOutOfStock
+        ? "opacity-50 cursor-not-allowed bg-white border-gray-400"
+        : isSelected
+          ? "border-[#4565BF] bg-blue-100 cursor-pointer"
+          : isAllowExceeded
+            ? "border-gray-200 bg-white cursor-not-allowed opacity-60"
+            : "border-gray-300 bg-white hover:bg-gray-50 cursor-pointer"
+    }`}
         >
           {/* Overlay when out of stock */}
           {isOutOfStock && (
@@ -160,35 +182,56 @@ const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allo
 
           {/* Left Side - Product Details */}
           <div className="flex items-start sm:items-center gap-3 w-full sm:w-auto">
-            {isSelected ? <FaDotCircle className="text-primary w-4 h-4 mt-1" /> : <FaRegCircle className="text-gray-800 w-4 h-4 mt-1" />}
+            {isSelected ? (
+              <FaDotCircle className="text-primary w-4 h-4 mt-1" />
+            ) : (
+              <FaRegCircle className="text-gray-800 w-4 h-4 mt-1" />
+            )}
 
             <div className="text-sm sm:text-base text-gray-800">
-              <div className="capitalize font-bold text-sm  text-black">{doseData?.product_name}</div>
+              <div className="capitalize font-bold text-sm  text-black">
+                {doseData?.product_name}
+              </div>
               <div className="text-sm text-gray-700">{doseData.name}</div>
-              {doseData?.expiry && <div className="text-xs text-gray-500 mt-1">Expiry: {moment(doseData?.expiry).format("DD/MM/YYYY")}</div>}
+              {doseData?.expiry && (
+                <div className="text-xs text-gray-500 mt-1">
+                  Expiry: {moment(doseData?.expiry).format("DD/MM/YYYY")}
+                </div>
+              )}
             </div>
           </div>
 
           {/* Right Side - Price and Quantity */}
           <div className="flex items-center justify-end gap-3 w-full sm:w-auto">
-            <span className={`font-semibold text-md ${isSelected ? "text-black" : "text-gray-700"}`}>
+            <span
+              className={`font-semibold text-md ${isSelected ? "text-black" : "text-gray-700"}`}
+            >
               £{parseFloat(doseData?.price).toFixed(2)}
             </span>
 
             {isSelected && (
               <>
                 <div className="flex items-center space-x-2 bg-white rounded-full px-2 py-1 shadow-md">
-                  <button type="button" onClick={handleDecrement} className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={handleDecrement}
+                    className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full cursor-pointer"
+                  >
                     <FaMinus size={10} className="text-black" />
                   </button>
 
-                  <span className="px-2 text-sm font-bold text-black">{qty}</span>
+                  <span className="px-2 text-sm font-bold text-black">
+                    {qty}
+                  </span>
 
                   <button
                     type="button"
                     onClick={handleIncrement}
-                    className={`p-2 rounded-full ${qty >= allowed ? "cursor-not-allowed bg-gray-100 opacity-50" : "bg-gray-100 hover:bg-gray-200 cursor-pointer"
-                      }`}
+                    className={`p-2 rounded-full ${
+                      qty >= allowed
+                        ? "cursor-not-allowed bg-gray-100 opacity-50"
+                        : "bg-gray-100 hover:bg-gray-200 cursor-pointer"
+                    }`}
                   >
                     <FaPlus size={10} className="text-black" />
                   </button>
@@ -209,7 +252,11 @@ const Dose = ({ doseData, onAdd, onIncrement, onDecrement, isSelected, qty, allo
           </div>
         </div>
       </div>
-      <ConfirmationModal showModal={showModal} onConfirm={handleDelete} onCancel={() => setShowModal(false)} />
+      <ConfirmationModal
+        showModal={showModal}
+        onConfirm={handleDelete}
+        onCancel={() => setShowModal(false)}
+      />
     </>
   );
 };
