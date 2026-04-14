@@ -215,7 +215,6 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     "/profile/",
     "/weight-loss-journey/",
   ];
-  const redirectTo = specialRoutes.includes(pathname) ? "/dashboard" : "/";
 
   useEffect(() => {
     const fetchImageStatus = async () => {
@@ -262,7 +261,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   // if user click the logo modal open
   const handleConfirmNavigation = () => {
     setShowConfirmModal(false);
-    router.push("https://www.onlineweightlossclinic.co.uk/"); // go to home
+    router.push("https://www.onlineweightlossclinic.co.uk/");
   };
 
   const handleCancelNavigation = () => {
@@ -344,12 +343,10 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
           </div> */}
           <div
-            className="w-32 sm:w-auto"
+            className="w-32 sm:w-auto cursor-pointer"
             onClick={() => setShowConfirmModal(true)}
           >
-            <Link href={redirectTo}>
-              <ApplicationLogo width={140} height={120} />
-            </Link>
+            <ApplicationLogo width={140} height={120} />
           </div>
 
           {/* User Info or Login CTA */}
