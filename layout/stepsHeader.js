@@ -257,7 +257,14 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   useEffect(() => {
     GetEvidence();
   }, []);
-
+  const handleLogoClick = () => {
+    if (specialRoutes.includes(pathname)) {
+      setShowConfirmModal(false);
+      window.location.href = "https://www.onlineweightlossclinic.co.uk/";
+    } else {
+      setShowConfirmModal(true);
+    }
+  };
   // if user click the logo modal open
   const handleConfirmNavigation = () => {
     setShowConfirmModal(false);
@@ -344,7 +351,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
           </div> */}
           <div
             className="w-32 sm:w-auto cursor-pointer"
-            onClick={() => setShowConfirmModal(true)}
+            onClick={handleLogoClick}
           >
             <ApplicationLogo width={140} height={120} />
           </div>
