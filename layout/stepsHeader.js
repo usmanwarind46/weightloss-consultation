@@ -435,7 +435,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
       />
 
       <ConfirmationModal
-        label="Are you sure? This will restart your consultation process."
+        label="Are you sure you want to leave this consultation? You’ll need to restart the process."
         showModal={showConfirmModal}
         onConfirm={handleConfirmNavigation}
         onCancel={handleCancelNavigation}
