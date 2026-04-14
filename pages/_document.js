@@ -1,6 +1,5 @@
 // pages/_document.js
 import { Html, Head, Main, NextScript } from "next/document";
-
 export default function Document() {
   return (
     <Html>
@@ -31,7 +30,7 @@ export default function Document() {
             fbq('track', 'PageView');`,
           }}
         />
-        <link rel="icon" href="../favicon.ico" />
+        <link rel="icon" href="./favicon.ico" sizes="any" />
 
         {/* Meta Pixel noscript */}
         <noscript>

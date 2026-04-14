@@ -8,4 +8,5 @@ export const protectedRoutes = [
   "/photo-upload",
   "/weight-loss-journey",
   "/review",
+  "/",
 ];

@@ -1,7 +1,13 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const ConfirmationModal = ({ showModal, onConfirm, onCancel, removeItem }) => {
+const ConfirmationModal = ({
+  showModal,
+  onConfirm,
+  onCancel,
+  removeItem,
+  label = "Are you sure you want to remove?",
+}) => {
   if (!showModal) return null; // Don't render if modal isn't visible
 
   return (
@@ -24,7 +30,7 @@ const ConfirmationModal = ({ showModal, onConfirm, onCancel, removeItem }) => {
             </div>
 
             {/* Text */}
-            <p className="text-center text-gray-800 font-med mb-6">Are you sure you want to remove?</p>
+            <p className="text-center text-gray-800 font-med mb-6">{label}</p>
 
             {/* Buttons */}
             <div className="flex justify-center gap-4">

@@ -42,6 +42,7 @@ import { GetImageIsUplaod } from "@/api/mergeRoutes";
 import { GetPrescriptionEvidence } from "@/api/PrescriptionEvidenceApi";
 import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
+import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
 
 const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -94,7 +95,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
   const router = useRouter();
   const { setIsPasswordReset, setShowResetPassword } = usePasswordReset();
-
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const handleLogout = () => {
     setAnchorEl(null);
     clearBmi();
@@ -258,6 +259,16 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     GetEvidence();
   }, []);
 
+  // if user click the logo modal open
+  const handleConfirmNavigation = () => {
+    setShowConfirmModal(false);
+    router.push("https://www.onlineweightlossclinic.co.uk/"); // go to home
+  };
+
+  const handleCancelNavigation = () => {
+    setShowConfirmModal(false);
+  };
+
   return (
     <>
       {(!imageUploaded || !idVerificationUpload) &&
@@ -332,7 +343,10 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
 
           </div> */}
-          <div className="w-32 sm:w-auto">
+          <div
+            className="w-32 sm:w-auto"
+            onClick={() => setShowConfirmModal(true)}
+          >
             <Link href={redirectTo}>
               <ApplicationLogo width={140} height={120} />
             </Link>
@@ -421,6 +435,13 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
           loginMutation.mutate({ ...data, company_id: 2 });
         }}
         isLoading={showLoader}
+      />
+
+      <ConfirmationModal
+        label="Are you sure? This will restart your consultation process."
+        showModal={showConfirmModal}
+        onConfirm={handleConfirmNavigation}
+        onCancel={handleCancelNavigation}
       />
     </>
   );
