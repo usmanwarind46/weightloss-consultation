@@ -261,7 +261,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   // if user click the logo modal open
   const handleConfirmNavigation = () => {
     setShowConfirmModal(false);
-    router.push("https://www.onlineweightlossclinic.co.uk/");
+    window.location.href = "https://www.onlineweightlossclinic.co.uk/";
   };
 
   const handleCancelNavigation = () => {
