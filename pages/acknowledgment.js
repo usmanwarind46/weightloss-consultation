@@ -16,6 +16,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderButtonStore from "@/store/useReorderButton";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
+import { BASE_PATH } from "@/library/basePath";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export default function Acknowledgment() {
@@ -54,7 +55,7 @@ export default function Acknowledgment() {
     setShowLoader(true);
     setIsFromReorder(false);
     await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 2s
-    router.push("/signup");
+    router.push(`${BASE_PATH}/signup`);
   };
 
   const renderYesNo = (fieldName, value) => {
@@ -66,11 +67,12 @@ export default function Acknowledgment() {
             <label
               key={option}
               className={`reg-font flex items-center px-4 py-4 rounded-md border justify-start cursor-pointer transition-all duration-200 flex-1
-                ${isSelected
-                  ? option === "yes"
-                    ? "bg-violet-100 border-[#4565BF] text-primary"
-                    : "bg-red-100 border-red-600 text-red-700"
-                  : "bg-white border-gray-300 hover:border-gray-400 text-gray-800"
+                ${
+                  isSelected
+                    ? option === "yes"
+                      ? "bg-violet-100 border-[#4565BF] text-primary"
+                      : "bg-red-100 border-red-600 text-red-700"
+                    : "bg-white border-gray-300 hover:border-gray-400 text-gray-800"
                 }`}
             >
               <input
@@ -81,11 +83,12 @@ export default function Acknowledgment() {
               />
               <div
                 className={`w-5 h-5 mr-2 rounded-md border flex items-center justify-start
-                  ${isSelected
-                    ? option === "yes"
-                      ? "bg-primary border-[#4565BF] text-white"
-                      : "bg-red-600 border-red-600 text-white"
-                    : "border-gray-400 bg-white"
+                  ${
+                    isSelected
+                      ? option === "yes"
+                        ? "bg-primary border-[#4565BF] text-white"
+                        : "bg-red-600 border-red-600 text-white"
+                      : "border-gray-400 bg-white"
                   }`}
               >
                 {isSelected && <FiCheck className="text-md" />}
@@ -138,9 +141,10 @@ export default function Acknowledgment() {
                       />
                       <div
                         className={`w-5 h-5 rounded-sm flex items-center justify-center border transition-all duration-200
-                          ${confirmConsent
-                            ? "bg-primary border-[#4565BF] text-white"
-                            : "bg-white border-gray-400"
+                          ${
+                            confirmConsent
+                              ? "bg-primary border-[#4565BF] text-white"
+                              : "bg-white border-gray-400"
                           }`}
                       >
                         {confirmConsent && <FiCheck className="w-3 h-3" />}
@@ -151,8 +155,8 @@ export default function Acknowledgment() {
                     <ul className="list-disc list-outside pl-5 text-sm text-gray-700 space-y-2 reg-font paragraph">
                       <li>
                         You consent for your medical information to be assessed
-                        by the clinical team at Online Weight Loss Clinic and its
-                        pharmacy and to be prescribed medication.
+                        by the clinical team at Online Weight Loss Clinic and
+                        its pharmacy and to be prescribed medication.
                       </li>
                       <li>
                         You consent to an age and ID check when placing your

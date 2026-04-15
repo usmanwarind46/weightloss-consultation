@@ -43,6 +43,7 @@ import { GetPrescriptionEvidence } from "@/api/PrescriptionEvidenceApi";
 import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
 import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
+import { BASE_PATH } from "@/library/basePath";
 
 const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -124,7 +125,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     clearLastOrder();
     clearAbandonCard();
     clearReview();
-    router.push("/login");
+    router.push(`${BASE_PATH}/login`);
   };
 
   const validPathDashboard =
@@ -150,9 +151,9 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
       setLastName(data?.data?.data?.lname);
       setEmail(data?.data?.data?.email);
       if (abandonCard?.type === "abandoned-cart") {
-        router.push("/gathering-data");
+        router.push(`${BASE_PATH}/gathering-data`);
       } else {
-        router.push("/dashboard");
+        router.push(`${BASE_PATH}/dashboard`);
       }
       setIsPasswordReset(false);
       setShowResetPassword(data?.data?.data?.show_password_reset);
@@ -386,7 +387,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
                 >
                   <MenuItem
                     onClick={() => {
-                      router.push("/dashboard");
+                      router.push(`${BASE_PATH}/dashboard`);
                       setAnchorEl(null);
                     }}
                     className="reg-font"
@@ -395,7 +396,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      router.push("/orders");
+                      router.push(`${BASE_PATH}/orders`);
                       setAnchorEl(null);
                     }}
                     className="reg-font"
