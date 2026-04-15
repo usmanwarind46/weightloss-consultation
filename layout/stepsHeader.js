@@ -207,13 +207,13 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const loginPath = pathname === "/login/";
 
   const specialRoutes = [
-    "/dashboard/",
-    "/orders/",
-    "/address/",
-    "/change-password/",
-    "/order-detail/",
-    "/profile/",
-    "/weight-loss-journey/",
+    "/dashboard",
+    "/orders",
+    "/address",
+    "/change-password",
+    "/order-detail",
+    "/profile",
+    "/weight-loss-journey",
   ];
 
   useEffect(() => {
