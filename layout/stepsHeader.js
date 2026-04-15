@@ -128,14 +128,19 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     router.push(`${BASE_PATH}/login`);
   };
 
-  const validPathDashboard =
-    pathname === "/dashboard/" ||
-    pathname === "/profile/" ||
-    pathname === "/orders/" ||
-    pathname === "/address/" ||
-    pathname === "/change-password/" ||
-    pathname === "/order-detail/" ||
-    pathname === "/weight-loss-journey/";
+  const dashboardRoutes = [
+    "dashboard",
+    "profile",
+    "orders",
+    "address",
+    "change-password",
+    "order-detail",
+    "weight-loss-journey",
+  ];
+
+  const validPathDashboard = dashboardRoutes.some((route) =>
+    pathname.includes(`/${route}`),
+  );
 
   const loginMutation = useMutation(Login, {
     onSuccess: (data) => {
@@ -205,17 +210,21 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     clearReview();
     window.location.href = "https://app.onlineweightlossclinic.co.uk/dashboard";
   };
-  const loginPath = pathname === "/login/";
+  const loginPath = pathname.includes("/login");
 
-  const specialRoutes = [
-    "/dashboard/",
-    "/orders/",
-    "/address/",
-    "/change-password/",
-    "/order-detail/",
-    "/profile/",
-    "/weight-loss-journey/",
+  const routeList = [
+    "dashboard",
+    "orders",
+    "address",
+    "change-password",
+    "order-detail",
+    "profile",
+    "weight-loss-journey",
   ];
+
+  const specialRoutes = routeList.some((route) =>
+    pathname.includes(`/${route}`),
+  );
 
   useEffect(() => {
     const fetchImageStatus = async () => {
@@ -259,7 +268,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     GetEvidence();
   }, []);
   const handleLogoClick = () => {
-    if (specialRoutes.includes(pathname)) {
+    if (specialRoutes) {
       setShowConfirmModal(false);
       window.location.href = "https://www.onlineweightlossclinic.co.uk/";
     } else {
@@ -278,8 +287,9 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
   return (
     <>
-      {(!imageUploaded || !idVerificationUpload) &&
-        specialRoutes.includes(pathname) && <UploadTopPrompt />}
+      {(!imageUploaded || !idVerificationUpload) && specialRoutes && (
+        <UploadTopPrompt />
+      )}
 
       {impersonate && (
         <div className="bg-gray-100">
@@ -359,7 +369,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
           {/* User Info or Login CTA */}
           <div className="relative">
-            {!pathname?.startsWith("/login") && token && (
+            {!pathname?.includes("/login") && token && (
               <>
                 <div
                   className="flex items-center space-x-2 cursor-pointer"
@@ -410,7 +420,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
               </>
             )}
 
-            {!pathname?.startsWith("/login") && !token && (
+            {!pathname?.includes("/login") && !token && (
               <div className="w-1/2 items-center justify-end lg:w-[100%] sm:flex mt-2">
                 <p className="md:block text-black reg-font lg:w-[100%] sm:flex hidden">
                   Already have an account?
