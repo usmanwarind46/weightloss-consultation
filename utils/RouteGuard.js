@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { loginRoute, publicRoutes } from "./routes";
 import useAuthStore from "@/store/authStore";
 import PageLoader from "@/Components/PageLoader/PageLoader";
-import { BASE_PATH } from "@/library/basePath";
 
 export default function RouteGuard({ children }) {
   const router = useRouter();
@@ -11,22 +10,20 @@ export default function RouteGuard({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const path = router.asPath;
-
-    const isPublic = publicRoutes.some((route) => path.includes(route));
-
-    const isLogin = path.includes(loginRoute);
+    const path = router.pathname;
+    const isPublic = publicRoutes.includes(path);
+    const isLogin = path === loginRoute;
 
     if (!isPublic && !token) {
-      router.push(`${BASE_PATH}/login`);
+      router.push("/login/");
     } else if (isLogin && token && review) {
-      router.push(`${BASE_PATH}/review`);
+      router.push("/review");
     } else if (isLogin && token && review == null) {
-      router.push(`${BASE_PATH}/dashboard`);
+      router.push("/dashboard");
     } else {
       setLoading(false);
     }
-  }, [router.asPath, token]);
+  }, [router.pathname, token, loginRoute]);
 
   if (loading)
     return (

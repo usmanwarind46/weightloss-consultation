@@ -43,7 +43,6 @@ import { GetPrescriptionEvidence } from "@/api/PrescriptionEvidenceApi";
 import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
 import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
-import { BASE_PATH } from "@/library/basePath";
 
 const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -125,22 +124,17 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     clearLastOrder();
     clearAbandonCard();
     clearReview();
-    router.push(`${BASE_PATH}/login`);
+    router.push("/login");
   };
 
-  const dashboardRoutes = [
-    "dashboard",
-    "profile",
-    "orders",
-    "address",
-    "change-password",
-    "order-detail",
-    "weight-loss-journey",
-  ];
-
-  const validPathDashboard = dashboardRoutes.some((route) =>
-    pathname.includes(`/${route}`),
-  );
+  const validPathDashboard =
+    pathname === "/dashboard/" ||
+    pathname === "/profile/" ||
+    pathname === "/orders/" ||
+    pathname === "/address/" ||
+    pathname === "/change-password/" ||
+    pathname === "/order-detail/" ||
+    pathname === "/weight-loss-journey/";
 
   const loginMutation = useMutation(Login, {
     onSuccess: (data) => {
@@ -156,9 +150,9 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
       setLastName(data?.data?.data?.lname);
       setEmail(data?.data?.data?.email);
       if (abandonCard?.type === "abandoned-cart") {
-        router.push(`${BASE_PATH}/gathering-data`);
+        router.push("/gathering-data");
       } else {
-        router.push(`${BASE_PATH}/dashboard`);
+        router.push("/dashboard");
       }
       setIsPasswordReset(false);
       setShowResetPassword(data?.data?.data?.show_password_reset);
@@ -210,21 +204,17 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     clearReview();
     window.location.href = "https://app.onlineweightlossclinic.co.uk/dashboard";
   };
-  const loginPath = pathname.includes("/login");
+  const loginPath = pathname === "/login/";
 
-  const routeList = [
-    "dashboard",
-    "orders",
-    "address",
-    "change-password",
-    "order-detail",
-    "profile",
-    "weight-loss-journey",
+  const specialRoutes = [
+    "/dashboard/",
+    "/orders/",
+    "/address/",
+    "/change-password/",
+    "/order-detail/",
+    "/profile/",
+    "/weight-loss-journey/",
   ];
-
-  const specialRoutes = routeList.some((route) =>
-    pathname.includes(`/${route}`),
-  );
 
   useEffect(() => {
     const fetchImageStatus = async () => {
@@ -268,7 +258,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
     GetEvidence();
   }, []);
   const handleLogoClick = () => {
-    if (specialRoutes) {
+    if (specialRoutes.includes(pathname)) {
       setShowConfirmModal(false);
       window.location.href = "https://www.onlineweightlossclinic.co.uk/";
     } else {
@@ -287,9 +277,8 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
   return (
     <>
-      {(!imageUploaded || !idVerificationUpload) && specialRoutes && (
-        <UploadTopPrompt />
-      )}
+      {(!imageUploaded || !idVerificationUpload) &&
+        specialRoutes.includes(pathname) && <UploadTopPrompt />}
 
       {impersonate && (
         <div className="bg-gray-100">
@@ -369,7 +358,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
           {/* User Info or Login CTA */}
           <div className="relative">
-            {!pathname?.includes("/login") && token && (
+            {!pathname?.startsWith("/login") && token && (
               <>
                 <div
                   className="flex items-center space-x-2 cursor-pointer"
@@ -397,7 +386,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
                 >
                   <MenuItem
                     onClick={() => {
-                      router.push(`${BASE_PATH}/dashboard`);
+                      router.push("/dashboard");
                       setAnchorEl(null);
                     }}
                     className="reg-font"
@@ -406,7 +395,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      router.push(`${BASE_PATH}/orders`);
+                      router.push("/orders");
                       setAnchorEl(null);
                     }}
                     className="reg-font"
@@ -420,7 +409,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
               </>
             )}
 
-            {!pathname?.includes("/login") && !token && (
+            {!pathname?.startsWith("/login") && !token && (
               <div className="w-1/2 items-center justify-end lg:w-[100%] sm:flex mt-2">
                 <p className="md:block text-black reg-font lg:w-[100%] sm:flex hidden">
                   Already have an account?

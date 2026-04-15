@@ -16,7 +16,6 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderButtonStore from "@/store/useReorderButton";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
-import { BASE_PATH } from "@/library/basePath";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export default function Acknowledgment() {
@@ -55,7 +54,7 @@ export default function Acknowledgment() {
     setShowLoader(true);
     setIsFromReorder(false);
     await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 2s
-    router.push(`${BASE_PATH}/signup`);
+    router.push("/signup");
   };
 
   const renderYesNo = (fieldName, value) => {
