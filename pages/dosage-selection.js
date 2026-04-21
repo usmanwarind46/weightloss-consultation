@@ -83,17 +83,42 @@ export default function DosageSelection() {
   });
 
   //Handle Submit Button
+  // const onSubmit = () => {
+  //   setIsButtonLoading(true);
+  //   if (
+  //     productId == 4 &&
+  //     items?.addons?.find((addon) => addon.name === "Box of 5 Needles")
+  //   ) {
+  //     abandonCartMutation.mutate(abandonData);
+  //   } else if (productId == 1) {
+  //     abandonCartMutation.mutate(abandonData);
+  //   } else {
+  //     setShowModalForManjaro(true);
+  //   }
+
+  //   router.push("/checkout");
+  // };
+
   const onSubmit = () => {
     setIsButtonLoading(true);
-    if (
-      productId == 4 &&
-      items?.addons?.find((addon) => addon.name === "Box of 5 Needles")
-    ) {
+
+    const hasNeedles = items?.addons?.find(
+      (addon) => addon.name === "Box of 5 Needles",
+    );
+
+    // Product ID 4 = Mounjaro
+    // If no needles selected, show popup and stop checkout
+    if (productId == 4 && !hasNeedles) {
+      setShowModalForManjaro(true);
+      setIsButtonLoading(false);
+      return;
+    }
+
+    // Normal abandon cart logic
+    if (productId == 4 && hasNeedles) {
       abandonCartMutation.mutate(abandonData);
     } else if (productId == 1) {
       abandonCartMutation.mutate(abandonData);
-    } else {
-      setShowModalForManjaro(true);
     }
 
     router.push("/checkout");
