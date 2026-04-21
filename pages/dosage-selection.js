@@ -290,6 +290,7 @@ export default function DosageSelection() {
       "Free needles are not included with Mounjaro. If you'd like to buy needles, add them manually. If you've already have them, please confirm to continue..",
     );
     abandonCartMutation.mutate(abandonData);
+    router.push("/checkout");
     setShowModalForManjaro(false);
   };
 
