@@ -43,6 +43,7 @@ import { GetPrescriptionEvidence } from "@/api/PrescriptionEvidenceApi";
 import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
 import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
+import ConfirmationModal2 from "@/Components/Modal/ConfirmationModal2";
 
 const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -441,7 +442,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
         isLoading={showLoader}
       />
 
-      <ConfirmationModal
+      <ConfirmationModal2
         label="Are you sure you want to leave this consultation? You’ll need to restart the process."
         showModal={showConfirmModal}
         onConfirm={handleConfirmNavigation}
