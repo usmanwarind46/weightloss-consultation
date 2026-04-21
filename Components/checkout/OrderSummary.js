@@ -43,7 +43,7 @@ const OrderSummary = ({
 }) => {
   const router = useRouter();
   const [discountCode, setDiscountCode] = useState("");
-  // Get some data to store✌✌
+  // Get some data to store✌✌###
   const { items, totalAmount, setCheckOut, setOrderId } = useCartStore();
   const { Coupon, setCoupon, clearCoupon } = useCouponStore();
   const {
