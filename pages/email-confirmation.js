@@ -74,7 +74,7 @@ export default function EmailConfirmation() {
       setUserData(user);
       setToken(user?.token);
       setIsPasswordReset(true);
-      setIsReturningPatient(user?.isReturning)
+      setIsReturningPatient(user?.isReturning);
       Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${user?.token}`;
       router.push("/steps-information");
     },
@@ -111,7 +111,6 @@ export default function EmailConfirmation() {
         onClose={closeLoginModal}
         isLoading={showLoader}
         onLogin={async (data) => {
-          console.log(data, "dfkjdskjjkffskj");
           setShowLoader(true);
           try {
             const response = await loginMutation.mutateAsync({
@@ -156,8 +155,9 @@ export default function EmailConfirmation() {
       >
         <PageAnimationWrapper>
           <div
-            className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""
-              }`}
+            className={`relative ${
+              showLoader ? "pointer-events-none cursor-not-allowed" : ""
+            }`}
           >
             <form
               onSubmit={handleSubmit(handleSignupSubmit)}

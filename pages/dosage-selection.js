@@ -138,9 +138,11 @@ export default function DosageSelection() {
     });
 
     const lowestDose = sortedVariations[0]?.name;
+
     const selectedIndex = sortedVariations.findIndex(
       (v) => v.name === selectedDoseName,
     );
+
     const previousDose =
       selectedIndex > 0 ? sortedVariations[selectedIndex - 1]?.name : null;
 
@@ -282,9 +284,11 @@ export default function DosageSelection() {
       handleAddDose(extra);
     }
   }, [abandonCard, extra]);
+
   const Back = () => {
     router.push("/confirmation-summary");
   };
+
   const handleConfirmForManjaro = () => {
     setNeedleMessage(
       "Free needles are not included with Mounjaro. If you'd like to buy needles, add them manually. If you've already have them, please confirm to continue..",
