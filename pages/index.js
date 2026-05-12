@@ -13,6 +13,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import useReorderButtonStore from "@/store/useReorderButton";
+import IntroSvg from "@/public/images/intro.svg";
 
 export default function Index() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function Index() {
           {/* Icon */}
           <div className="flex justify-center">
             <Image
-              src="images/intro.svg"
+              src={IntroSvg}
               alt="Online Weight Loss Icon"
               width={200}
               height={50}
