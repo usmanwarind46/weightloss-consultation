@@ -290,9 +290,7 @@ export default function DosageSelection() {
   };
 
   const handleConfirmForManjaro = () => {
-    setNeedleMessage(
-      "I confirm that I do not require needles to be added to this order.",
-    );
+    setNeedleMessage("I confirm that I do not require needles");
     abandonCartMutation.mutate(abandonData);
     router.push("/checkout");
     setShowModalForManjaro(false);
