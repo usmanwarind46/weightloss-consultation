@@ -291,7 +291,7 @@ export default function DosageSelection() {
 
   const handleConfirmForManjaro = () => {
     setNeedleMessage(
-      "Free needles are not included with Mounjaro. If you'd like to buy needles, add them manually. If you've already have them, please confirm to continue..",
+      "I confirm that I do not require needles to be added to this order.",
     );
     abandonCartMutation.mutate(abandonData);
     router.push("/checkout");
