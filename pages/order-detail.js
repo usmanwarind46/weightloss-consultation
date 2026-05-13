@@ -9,7 +9,6 @@ import {
   TableHead,
 } from "@mui/material";
 import moment from "moment";
-import getOrderByIdApi from "@/api/mergeRoutes";
 import { motion } from "framer-motion";
 import StepsHeader from "@/layout/stepsHeader";
 import Link from "next/link";
@@ -19,6 +18,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import ProtectedPage from "@/Components/ProtectedPage/ProtectedPage";
 import DashBoardLayout from "@/Components/Dashboard/DashboardLayout/DashBoardLayout";
+import { getOrderByIdApi } from "@/api/mergeRoutes";
 
 const OrderDetail = () => {
   const [order, setOrder] = useState(null);
