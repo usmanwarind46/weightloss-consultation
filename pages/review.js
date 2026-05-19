@@ -115,7 +115,7 @@ export default function ReviewScreen() {
         renderer: "svg",
         loop: true,
         autoplay: true,
-        path: "../images/smiley-emoji.json",
+        path: "./images/smiley-emoji.json",
       });
     }
 
@@ -126,7 +126,7 @@ export default function ReviewScreen() {
         renderer: "svg",
         loop: true,
         autoplay: true,
-        path: "../images/sad-emoji.json",
+        path: "./images/sad-emoji.json",
       });
     }
   }, [mode]);
