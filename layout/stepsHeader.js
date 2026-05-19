@@ -130,12 +130,19 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
   const validPathDashboard =
     pathname === "/dashboard/" ||
+    pathname === "/dashboard" ||
     pathname === "/profile/" ||
+    pathname === "/profile" ||
     pathname === "/orders/" ||
+    pathname === "/orders" ||
     pathname === "/address/" ||
+    pathname === "/address" ||
     pathname === "/change-password/" ||
+    pathname === "/change-password" ||
     pathname === "/order-detail/" ||
-    pathname === "/weight-loss-journey/";
+    pathname === "/order-detail" ||
+    pathname === "/weight-loss-journey/" ||
+    pathname === "/weight-loss-journey";
 
   const loginMutation = useMutation(Login, {
     onSuccess: (data) => {
