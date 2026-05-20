@@ -55,7 +55,8 @@ export default function GpDetail() {
   const addressLine1 = watch("addressLine1");
   const city = watch("city");
 
-  const isManualAddressRequired = gpDetails === "yes" && gepTreatMent === "yes" && manual;
+  const isManualAddressRequired =
+    gpDetails === "yes" && gepTreatMent === "yes" && manual;
   const isNextEnabled = (() => {
     if (gpDetails === "no") return true; // ✅ Allow next if GP not registered
     if (gpDetails === "yes" && gepTreatMent === "no") return true; // ✅ Allow next if patient will inform GP
@@ -78,7 +79,13 @@ export default function GpDetail() {
       setValue("city", gpdetails.city || "");
       setValue("gpName", gpdetails.gpName || "");
 
-      if (gpdetails.zipcode || gpdetails.addressLine1 || gpdetails.addressLine2 || gpdetails.city || gpdetails.gpName) {
+      if (
+        gpdetails.zipcode ||
+        gpdetails.addressLine1 ||
+        gpdetails.addressLine2 ||
+        gpdetails.city ||
+        gpdetails.gpName
+      ) {
         setManual(true);
       }
     }
@@ -125,7 +132,8 @@ export default function GpDetail() {
       const response = await axios.post(
         apiUrl,
         {
-          filter: "(OrganisationTypeID eq 'GPB') or (OrganisationTypeID eq 'GPP')",
+          filter:
+            "(OrganisationTypeID eq 'GPB') or (OrganisationTypeID eq 'GPP')",
           top: 25,
           skip: 0,
           count: true,
@@ -135,7 +143,7 @@ export default function GpDetail() {
             "subscription-key": apiKey,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (response.status === 200 && response.data) {
@@ -183,22 +191,37 @@ export default function GpDetail() {
       <MetaLayout canonical={`${meta_url}gp-details/`} />
 
       <StepsHeader percentage={"90"} />
-      <FormWrapper heading={"GP Details"} description="" >
+      <FormWrapper heading={"GP Details"} description="">
         <PageAnimationWrapper>
-          <div className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}>
+          <div
+            className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
+          >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <h1 className="text-gray-500 reg-font">Are you registered with a GP in the UK?</h1>
+              <h1 className="text-gray-500 reg-font">
+                Are you registered with a GP in the UK?
+              </h1>
               <div className="flex mt-4 gap-2">
                 {["yes", "no"].map((option) => (
                   <label
                     key={option}
-                    className={`cursor-pointer w-1/2 flex items-center gap-3 px-4 py-3 border rounded-lg text-black ${gpDetails === option ? "bg-[#E9F6FA] border-[#4565BF]" : "border-gray-300 hover:bg-gray-50"
-                      }`}
+                    className={`cursor-pointer w-1/2 flex items-center gap-3 px-4 py-3 border rounded-lg text-black ${
+                      gpDetails === option
+                        ? "bg-[#E9F6FA] border-[#4565BF]"
+                        : "border-gray-300 hover:bg-gray-50"
+                    }`}
                   >
-                    <input type="radio" value={option} {...register("gpDetails", { required: true })} className="hidden" />
+                    <input
+                      type="radio"
+                      value={option}
+                      {...register("gpDetails", { required: true })}
+                      className="hidden"
+                    />
                     <div
-                      className={`w-5 h-5 rounded-sm flex items-center justify-center border ${gpDetails === option ? "bg-primary border-[#4565BF] text-white" : "border-gray-400"
-                        }`}
+                      className={`w-5 h-5 rounded-sm flex items-center justify-center border ${
+                        gpDetails === option
+                          ? "bg-primary border-[#4565BF] text-white"
+                          : "border-gray-400"
+                      }`}
                     >
                       {gpDetails === option && <FiCheck />}
                     </div>
@@ -210,30 +233,55 @@ export default function GpDetail() {
               {/* This was missing (✅ FIXED now) */}
               {gpDetails === "no" && (
                 <div className="bg-[#FFF3CD] px-4 py-4 mt-6 text-gray-700 rounded shadow-md">
-                  <p>You should inform your doctor of any medication you take. Contact us if you want us to email a letter for your doctor.</p>
+                  <p>
+                    You should inform your doctor of any medication you take.
+                    Contact us if you want us to email a letter for your doctor.
+                  </p>
                 </div>
               )}
 
               {gpDetails === "yes" && (
                 <>
-                  <p className="text-gray-500 mt-6 mb-3">If you are registered with a GP in the UK then we can inform them on your behalf.</p>
-                  <p className="text-gray-500 mt-0">Do you consent for us to inform your GP about the treatment?</p>
+                  <p className="text-gray-500 mt-6 mb-3">
+                    If you are registered with a GP in the UK then we can inform
+                    them on your behalf.
+                  </p>
+                  <p className="text-gray-500 mt-0">
+                    Do you consent for us to inform your GP about the treatment?
+                  </p>
                   <div className="mt-4 flex flex-col sm:flex-row sm:gap-4">
                     {[
                       { value: "yes", label: "Yes – Please inform my GP" },
-                      { value: "no", label: "No – I will inform my GP prior to starting treatment" },
+                      {
+                        value: "no",
+                        label:
+                          "No – I will inform my GP prior to starting treatment",
+                      },
                     ].map((option) => (
                       <label
                         key={option.value}
-                        className={`cursor-pointer flex-1 flex items-center gap-3 px-4 sm:my-0 my-2 py-3 border rounded-lg text-black ${gepTreatMent === option.value ? "bg-[#E9F6FA] border-[#4565BF]" : "border-gray-300 hover:bg-gray-50"
-                          }`}
+                        className={`cursor-pointer flex-1 flex items-center gap-3 px-4 sm:my-0 my-2 py-3 border rounded-lg text-black ${
+                          gepTreatMent === option.value
+                            ? "bg-[#E9F6FA] border-[#4565BF]"
+                            : "border-gray-300 hover:bg-gray-50"
+                        }`}
                       >
-                        <input type="radio" value={option.value} {...register("gepTreatMent", { required: true })} className="hidden" />
+                        <input
+                          type="radio"
+                          value={option.value}
+                          {...register("gepTreatMent", { required: true })}
+                          className="hidden"
+                        />
                         <div
-                          className={`min-w-5 h-5 rounded-sm flex items-center justify-center border ${gepTreatMent === option.value ? "bg-primary border-[#4565BF] text-white" : "border-gray-400"
-                            }`}
+                          className={`min-w-5 h-5 rounded-sm flex items-center justify-center border ${
+                            gepTreatMent === option.value
+                              ? "bg-primary border-[#4565BF] text-white"
+                              : "border-gray-400"
+                          }`}
                         >
-                          {gepTreatMent === option.value && <FiCheck size={16} />}
+                          {gepTreatMent === option.value && (
+                            <FiCheck size={16} />
+                          )}
                         </div>
 
                         <span className="text-sm">{option.label}</span>
@@ -245,10 +293,22 @@ export default function GpDetail() {
 
               {gpDetails === "yes" && gepTreatMent === "yes" && (
                 <>
-                  <TextField label="Email" name="email" type="email"  register={register} errors={errors} />
+                  <TextField
+                    label="GP Email"
+                    name="email"
+                    type="email"
+                    register={register}
+                    errors={errors}
+                  />
 
                   <div className="relative">
-                    <TextField label="Post code" name="postalCode" register={register} required errors={errors} />
+                    <TextField
+                      label="Post code"
+                      name="postalCode"
+                      register={register}
+                      required
+                      errors={errors}
+                    />
                     <button
                       type="button"
                       onClick={handleAddressFetch}
@@ -286,10 +346,18 @@ export default function GpDetail() {
                           setSelectedIndex(idx);
 
                           // Fill form with selected address
-                          setValue("gpName", selected.OrganisationName || "", { shouldValidate: true });
-                          setValue("addressLine1", selected.Address1 || "", { shouldValidate: true });
-                          setValue("addressLine2", selected.Address2 || "", { shouldValidate: true });
-                          setValue("city", selected.City || "", { shouldValidate: true });
+                          setValue("gpName", selected.OrganisationName || "", {
+                            shouldValidate: true,
+                          });
+                          setValue("addressLine1", selected.Address1 || "", {
+                            shouldValidate: true,
+                          });
+                          setValue("addressLine2", selected.Address2 || "", {
+                            shouldValidate: true,
+                          });
+                          setValue("city", selected.City || "", {
+                            shouldValidate: true,
+                          });
 
                           setManual(true); // force manual section open so user sees populated fields
                         }}
@@ -302,25 +370,61 @@ export default function GpDetail() {
                   )}
 
                   <div className="text-sm  text-center sm:text-right mt-4">
-                    <button type="button" onClick={() => setManual(!manual)} className="text-black font-bold underline cursor-pointer">
-                      {manual ? "Hide manual address entry" : "Enter your address manually"}
+                    <button
+                      type="button"
+                      onClick={() => setManual(!manual)}
+                      className="text-black font-bold underline cursor-pointer"
+                    >
+                      {manual
+                        ? "Hide manual address entry"
+                        : "Enter your address manually"}
                     </button>
                   </div>
 
                   {manual && (
                     <div className="space-y-4 mt-4">
-                      <TextField label="GP Name" name="gpName"  register={register} required errors={errors} />
-                      <TextField label="Address" name="addressLine1" register={register} required errors={errors} />
-                      <TextField label="Address 2" name="addressLine2"  register={register} errors={errors} />
-                      <TextField label="Town / City" name="city" register={register} required errors={errors} />
+                      <TextField
+                        label="GP Name"
+                        name="gpName"
+                        register={register}
+                        required
+                        errors={errors}
+                      />
+                      <TextField
+                        label="Address"
+                        name="addressLine1"
+                        register={register}
+                        required
+                        errors={errors}
+                      />
+                      <TextField
+                        label="Address 2"
+                        name="addressLine2"
+                        register={register}
+                        errors={errors}
+                      />
+                      <TextField
+                        label="Town / City"
+                        name="city"
+                        register={register}
+                        required
+                        errors={errors}
+                      />
                     </div>
                   )}
                 </>
               )}
 
               <div className="flex justify-between items-center mt-6">
-                <BackButton label="Back" onClick={() => router.push("/patient-consent")} />
-                <NextButton label="Next" disabled={!isNextEnabled} className="mt-5" />
+                <BackButton
+                  label="Back"
+                  onClick={() => router.push("/patient-consent")}
+                />
+                <NextButton
+                  label="Next"
+                  disabled={!isNextEnabled}
+                  className="mt-5"
+                />
               </div>
             </form>
 

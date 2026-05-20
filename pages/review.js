@@ -232,7 +232,7 @@ export default function ReviewScreen() {
                         placeholder="Tell us what went wrong..."
                         value={feedback}
                         onChange={(e) => setFeedback(e.target.value)}
-                        className="w-full h-[150px] textArea rounded-3xl px-6 py-5 bg-white/75 backdrop-blur-xl border border-white/60 text-[15px] text-black shadow-[inset_0_1px_2px_rgba(255,255,255,0.6),0_22px_44px_rgba(0,0,0,0.18)] focus:outline-none focus:ring-2 focus:ring-[#5b45a7]/50 placeholder:text-black/40 resize-none mont-reg-font"
+                        className="w-full h-[150px] textArea rounded-3xl px-6 py-5 bg-white/75 backdrop-blur-xl border border-white/60 text-[15px] text-black shadow-[inset_0_1px_2px_rgba(255,255,255,0.6),0_22px_44px_rgba(0,0,0,0.18)] focus:outline-none focus:ring-2 focus:ring-[#6987DB]/50 placeholder:text-black/40 resize-none mont-reg-font"
                       />
                     </div>
 
