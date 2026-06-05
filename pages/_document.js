@@ -4,6 +4,8 @@ export default function Document() {
   return (
     <Html>
       <Head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+
         {/* Google Tag Manager */}
         {/* <script
           dangerouslySetInnerHTML={{
@@ -46,7 +48,6 @@ export default function Document() {
             fbq('track', 'PageView');`,
           }}
         />
-        <link rel="icon" href="./favicon.ico" sizes="any" />
 
         {/* Meta Pixel noscript */}
         <noscript>
