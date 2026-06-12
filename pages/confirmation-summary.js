@@ -68,6 +68,15 @@ const ConfirmationSummary = () => {
 
   console.log(bmi);
 
+  const getProductNameById = (id) => {
+    const normalizedId = String(id || "");
+
+    if (normalizedId === "1") return "Wegovy";
+    if (normalizedId === "4") return "Mounjaro";
+
+    return "Weight Loss Treatment";
+  };
+
   const trackCustomerLabsConsultationSubmit = (responseData) => {
     console.log("CustomerLabs: function called");
 
