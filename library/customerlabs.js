@@ -20,7 +20,7 @@
 //       treatment_name: productName,
 //       event_source: "confirmation_summary_success",
 //     },
-//   });
+//   });;
 
 /** Wrap a primitive value in CustomerLabs' { t, v } descriptor. */
 const str = (value) => ({ t: "string", v: value == null ? "" : String(value) });
