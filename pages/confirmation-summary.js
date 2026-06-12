@@ -68,6 +68,157 @@ const ConfirmationSummary = () => {
 
   console.log(bmi);
 
+  const trackCustomerLabsConsultationSubmit = (responseData) => {
+    console.log("CustomerLabs: function called");
+
+    if (typeof window === "undefined") return;
+
+    if (!window._cl) {
+      console.log("CustomerLabs: _cl not loaded");
+      return;
+    }
+
+    const consultationId = responseData?.data?.lastConsultation?.id || "";
+
+    const selectedProductId = productId || "";
+    const selectedProductName = getProductNameById(selectedProductId);
+
+    const fname = userData?.fname || firstName || patientInfo?.firstName || "";
+    const lname = userData?.lname || lastName || patientInfo?.lastName || "";
+    const email = userData?.email || "";
+    const phone = userData?.phone || patientInfo?.phoneNo || "";
+    const userId = userData?.id || "";
+
+    const uniqueKey = consultationId
+      ? `customerlabs_lead_${consultationId}`
+      : null;
+
+    if (uniqueKey && localStorage.getItem(uniqueKey)) {
+      console.log("CustomerLabs: duplicate event stopped", uniqueKey);
+      return;
+    }
+
+    const userTraits = {
+      first_name: {
+        t: "string",
+        v: fname,
+      },
+      last_name: {
+        t: "string",
+        v: lname,
+      },
+    };
+
+    if (email) {
+      userTraits.email = {
+        t: "string",
+        v: email,
+      };
+    }
+
+    if (phone) {
+      userTraits.phone = {
+        t: "string",
+        v: String(phone),
+      };
+    }
+
+    if (userId) {
+      userTraits.user_id = {
+        t: "string",
+        v: String(userId),
+      };
+    }
+
+    const customProperties = {
+      user_traits: {
+        t: "Object",
+        v: userTraits,
+      },
+
+      form_name: {
+        t: "string",
+        v: "Consultation Form",
+      },
+
+      form_id: {
+        t: "string",
+        v: "mayfair_consultation_form",
+      },
+
+      page_url: {
+        t: "string",
+        v: window.location.href,
+      },
+
+      consultation_id: {
+        t: "string",
+        v: String(consultationId),
+      },
+
+      user_id: {
+        t: "string",
+        v: String(userId),
+      },
+
+      product_id: {
+        t: "string",
+        v: String(selectedProductId),
+      },
+
+      product_name: {
+        t: "string",
+        v: selectedProductName,
+      },
+
+      treatment_name: {
+        t: "string",
+        v: selectedProductName,
+      },
+
+      event_source: {
+        t: "string",
+        v: "confirmation_summary_success",
+      },
+    };
+
+    if (email) {
+      customProperties.identify_by_email = {
+        t: "string",
+        v: email,
+        ib: true,
+      };
+    }
+
+    if (phone) {
+      customProperties.external_ids = {
+        t: "Object",
+        v: {
+          identify_by_phone: {
+            t: "string",
+            v: String(phone),
+          },
+        },
+      };
+    }
+
+    const properties = {
+      customProperties,
+    };
+
+    if (email || phone) {
+      window._cl.identify(properties);
+      console.log("CustomerLabs: identify fired", properties);
+    }
+
+    window._cl.trackSubmit("Lead", properties);
+    console.log("CustomerLabs: Lead fired", properties);
+
+    if (uniqueKey) {
+      localStorage.setItem(uniqueKey, "true");
+    }
+  };
+
   const stepsDataMutation = useMutation(sendStepData, {
     onSuccess: (data) => {
       console.log(data, "dataaaaaaaaaaaaaa");
@@ -84,46 +235,7 @@ const ConfirmationSummary = () => {
         setLastBmi(data?.data?.lastConsultation?.fields?.bmi);
       }
 
-      const productMap = { 1: "Wegovy", 4: "Mounjaro" };
-
-      if (typeof window !== "undefined" && window._cl) {
-        console.log("User data check:", {
-          fname: userData?.fname,
-          lname: userData?.lname,
-          email: userData?.email,
-          phone: patientInfo?.phoneNo,
-        });
-
-        window._cl.identify(String(userData?.id), {
-          first_name: userData?.fname,
-          last_name: userData?.lname,
-          email: userData?.email,
-          phone: patientInfo?.phoneNo,
-        });
-
-        console.log(":white_check_mark: _cl.identify fired", {
-          first_name: userData?.fname,
-          last_name: userData?.lname,
-          email: userData?.email,
-          phone: patientInfo?.phoneNo,
-        });
-
-        window._cl.track("Lead", {
-          form_name: "Consultation Form",
-          form_id: "consultation-form",
-          page_url: window.location.href,
-          product: productMap[productId] || productId,
-        });
-
-        console.log(":white_check_mark: _cl.track fired", {
-          form_name: "Consultation Form",
-          form_id: "consultation-form",
-          page_url: window.location.href,
-          product: productMap[productId] || productId,
-        });
-      } else {
-        console.warn(":x: CustomerLabs (_cl) not found on window");
-      }
+      trackCustomerLabsConsultationSubmit(data);
 
       router.push("/gathering-data");
       return;
