@@ -245,7 +245,7 @@ const ConfirmationSummary = () => {
         setLastBmi(data?.data?.lastConsultation?.fields?.bmi);
       }
 
-      // trackCustomerLabsConsultationSubmit(data);
+      // trackCustomerLabsConsultationSubmit(data);s
 
       trackCustomerLabsLead({
         formName: "Consultation Form",
