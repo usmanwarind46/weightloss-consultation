@@ -100,7 +100,7 @@ export function trackCustomerLabsLead({
 
   // --- Fire --------------------------------------------------------------
   window._cl.identify(payload);
-  window._cl.trackSubmit(eventName, payload);
+  window._cl.trackClick(eventName, payload);
 
   if (dedupeKey) {
     localStorage.setItem(dedupeKey, "true");
