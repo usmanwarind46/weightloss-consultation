@@ -51,7 +51,7 @@ const ReviewAnswers = () => {
   const { setIsPasswordReset } = usePasswordReset();
   const { productId, clearProductId } = useProductId();
   const { setLastBmi, clearLastBmi } = useLastBmi();
-  const { clearUserData } = useUserDataStore();
+  const { clearUserData, userData } = useUserDataStore();
 
   const { clearFirstName, clearLastName, clearEmail, clearConfirmationEmail } =
     useSignupStore();
@@ -73,6 +73,40 @@ const ReviewAnswers = () => {
         setMedicalInfo(data?.data?.lastConsultation?.fields?.medicalInfo);
         setPatientInfo(data?.data?.lastConsultation?.fields?.patientInfo);
         setLastBmi(data?.data?.lastConsultation?.fields?.bmi);
+      }
+
+      const productMap = { 1: "Wegovy", 4: "Mounjaro" };
+
+      if (typeof window !== "undefined" && window._cl) {
+        console.log("✅ CustomerLabs loaded, firing events...");
+
+        window._cl.identify({
+          first_name: userData?.fname,
+          last_name: userData?.lname,
+          email: userData?.email,
+          phone: patientInfo?.phoneNo,
+        });
+        console.log("✅ _cl.identify fired", {
+          first_name: userData?.fname,
+          last_name: userData?.lname,
+          email: userData?.email,
+          phone: patientInfo?.phoneNo,
+        });
+
+        window._cl.track("Lead", {
+          form_name: "Consultation Form",
+          form_id: "consultation-form",
+          page_url: window.location.href,
+          product: productMap[productId] || productId,
+        });
+        console.log("✅ _cl.track fired", {
+          form_name: "Consultation Form",
+          form_id: "consultation-form",
+          page_url: window.location.href,
+          product: productMap[productId] || productId,
+        });
+      } else {
+        console.warn("❌ CustomerLabs (_cl) not found on window");
       }
 
       router.push("/gathering-data");
