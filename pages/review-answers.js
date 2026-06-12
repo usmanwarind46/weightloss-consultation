@@ -27,6 +27,7 @@ import useSignupStore from "@/store/signupStore";
 import PageLoader from "@/Components/PageLoader/PageLoader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
+import { trackCustomerLabsLead } from "@/config/CustomerLabs";
 
 const ReviewAnswers = () => {
   const router = useRouter();
@@ -75,39 +76,31 @@ const ReviewAnswers = () => {
         setLastBmi(data?.data?.lastConsultation?.fields?.bmi);
       }
 
-      const productMap = { 1: "Wegovy", 4: "Mounjaro" };
-
-      if (typeof window !== "undefined" && window._cl) {
-        console.log("✅ CustomerLabs loaded, firing events...");
-
-        window._cl.identify({
-          first_name: userData?.fname,
-          last_name: userData?.lname,
+      trackCustomerLabsLead({
+        formName: "Consultation Form",
+        formId: "mayfair_consultation_form",
+        dedupeKey: data?.data?.lastConsultation?.id
+          ? `customerlabs_lead_${data.data.lastConsultation.id}`
+          : null,
+        identity: {
+          firstName: userData?.fname || firstName || patientInfo?.firstName,
+          lastName: userData?.lname || lastName || patientInfo?.lastName,
           email: userData?.email,
-          phone: patientInfo?.phoneNo,
-        });
-        console.log("✅ _cl.identify fired", {
-          first_name: userData?.fname,
-          last_name: userData?.lname,
-          email: userData?.email,
-          phone: patientInfo?.phoneNo,
-        });
-
-        window._cl.track("Lead", {
-          form_name: "Consultation Form",
-          form_id: "consultation-form",
-          page_url: window.location.href,
-          product: productMap[productId] || productId,
-        });
-        console.log("✅ _cl.track fired", {
-          form_name: "Consultation Form",
-          form_id: "consultation-form",
-          page_url: window.location.href,
-          product: productMap[productId] || productId,
-        });
-      } else {
-        console.warn("❌ CustomerLabs (_cl) not found on window");
-      }
+          phone: userData?.phone || patientInfo?.phoneNo,
+          userId: userData?.id,
+        },
+        properties: {
+          consultation_id: data?.data?.lastConsultation?.id || "",
+          product_id: productId || "",
+          product_name:
+            { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
+            "Weight Loss Treatment",
+          treatment_name:
+            { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
+            "Weight Loss Treatment",
+          event_source: "confirmation_summary_success",
+        },
+      });
 
       router.push("/gathering-data");
       return;
