@@ -28,7 +28,7 @@ import useCheckoutStore from "@/store/checkoutStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
-import { trackCustomerLabsLead } from "@/library/CustomerLabs";
+import { trackCustomerLabsLead } from "@/config/CustomerLabs";
 
 const ConfirmationSummary = () => {
   const router = useRouter();
