@@ -87,15 +87,28 @@ const ConfirmationSummary = () => {
       const productMap = { 1: "Wegovy", 4: "Mounjaro" };
 
       if (typeof window !== "undefined" && window._cl) {
-        console.log("✅ CustomerLabs loaded, firing events...");
-
-        window._cl.identify({
-          first_name: userData?.fname,
-          last_name: userData?.lname,
+        console.log("User data check:", {
+          fname: userData?.fname,
+          lname: userData?.lname,
           email: userData?.email,
           phone: patientInfo?.phoneNo,
         });
-        console.log("✅ _cl.identify fired", {
+
+        window._cl.identify({
+          user_traits: {
+            email: userData?.email,
+            first_name: userData?.fname,
+            last_name: userData?.lname,
+            phone: patientInfo?.phoneNo,
+          },
+          external_ids: [
+            {
+              type: "email",
+              id: userData?.email,
+            },
+          ],
+        });
+        console.log(":white_check_mark: _cl.identify fired", {
           first_name: userData?.fname,
           last_name: userData?.lname,
           email: userData?.email,
@@ -108,14 +121,14 @@ const ConfirmationSummary = () => {
           page_url: window.location.href,
           product: productMap[productId] || productId,
         });
-        console.log("✅ _cl.track fired", {
+        console.log(":white_check_mark: _cl.track fired", {
           form_name: "Consultation Form",
           form_id: "consultation-form",
           page_url: window.location.href,
           product: productMap[productId] || productId,
         });
       } else {
-        console.warn("❌ CustomerLabs (_cl) not found on window");
+        console.warn(":x: CustomerLabs (_cl) not found on window");
       }
 
       router.push("/gathering-data");
