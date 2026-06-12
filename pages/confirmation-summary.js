@@ -78,7 +78,7 @@ const ConfirmationSummary = () => {
   };
 
   const trackCustomerLabsConsultationSubmit = (responseData) => {
-    console.log("CustomerLabs: function called");
+    console.log("CustomerLabs: function calledd");
 
     if (typeof window === "undefined") return;
 
