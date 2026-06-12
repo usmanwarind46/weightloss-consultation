@@ -94,20 +94,13 @@ const ConfirmationSummary = () => {
           phone: patientInfo?.phoneNo,
         });
 
-        window._cl.identify({
-          user_traits: {
-            email: userData?.email,
-            first_name: userData?.fname,
-            last_name: userData?.lname,
-            phone: patientInfo?.phoneNo,
-          },
-          external_ids: [
-            {
-              type: "email",
-              id: userData?.email,
-            },
-          ],
+        window._cl.identify(String(userData?.id), {
+          first_name: userData?.fname,
+          last_name: userData?.lname,
+          email: userData?.email,
+          phone: patientInfo?.phoneNo,
         });
+
         console.log(":white_check_mark: _cl.identify fired", {
           first_name: userData?.fname,
           last_name: userData?.lname,
@@ -121,6 +114,7 @@ const ConfirmationSummary = () => {
           page_url: window.location.href,
           product: productMap[productId] || productId,
         });
+
         console.log(":white_check_mark: _cl.track fired", {
           form_name: "Consultation Form",
           form_id: "consultation-form",
