@@ -27,7 +27,6 @@ import useSignupStore from "@/store/signupStore";
 import PageLoader from "@/Components/PageLoader/PageLoader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
-import { trackCustomerLabsLead } from "@/config/CustomerLabs";
 
 const ReviewAnswers = () => {
   const router = useRouter();
@@ -75,32 +74,6 @@ const ReviewAnswers = () => {
         setPatientInfo(data?.data?.lastConsultation?.fields?.patientInfo);
         setLastBmi(data?.data?.lastConsultation?.fields?.bmi);
       }
-
-      trackCustomerLabsLead({
-        formName: "Consultation Form",
-        formId: "onlineweightlossclinic_consultation_form",
-        dedupeKey: data?.data?.lastConsultation?.id
-          ? `customerlabs_lead_${data.data.lastConsultation.id}`
-          : null,
-        identity: {
-          firstName: userData?.fname || firstName || patientInfo?.firstName,
-          lastName: userData?.lname || lastName || patientInfo?.lastName,
-          email: userData?.email,
-          phone: userData?.phone || patientInfo?.phoneNo,
-          userId: userData?.id,
-        },
-        properties: {
-          consultation_id: data?.data?.lastConsultation?.id || "",
-          product_id: productId || "",
-          product_name:
-            { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
-            "Weight Loss Treatment",
-          treatment_name:
-            { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
-            "Weight Loss Treatment",
-          event_source: "confirmation_summary_success",
-        },
-      });
 
       router.push("/gathering-data");
       return;
