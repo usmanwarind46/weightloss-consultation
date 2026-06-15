@@ -416,7 +416,8 @@ export default function DosageSelection() {
                 </p>
               )}
               <NextButton
-                label=" I Confirm"
+                label="I agree"
+                className="normal-case"
                 onClick={() => {
                   setShowDoseModal(false);
                 }}
