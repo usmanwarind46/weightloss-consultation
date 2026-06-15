@@ -10,9 +10,16 @@ import useAuthStore from "@/store/authStore";
 import Fetcher from "@/library/Fetcher";
 import toast from "react-hot-toast";
 import { GetUserOrderApi } from "@/api/mergeRoutes";
+import { trackCustomerLabsLead } from "@/config/CustomerLabs";
+import useUserDataStore from "@/store/userDataStore";
+import usePatientInfoStore from "@/store/patientInfoStore";
+import useProductId from "@/store/useProductIdStore";
 
 const ThankYou = () => {
   const { orderId, checkOut, setOrderId, setCheckOut } = useCartStore();
+  const { userData } = useUserDataStore();
+  const { patientInfo } = usePatientInfoStore();
+  const { productId } = useProductId();
   const { token } = useAuthStore();
   const router = useRouter();
   const [items, setItems] = useState(null);
@@ -60,6 +67,46 @@ const ThankYou = () => {
         setOrderId(res?.data?.id);
         setItems(res?.data?.items);
         setCheckOut(res?.data?.consultation?.fields?.checkout);
+
+        // CustomerLabs — fire Lead event on successful order
+        const clOrderId = res?.data?.id;
+        const clItems = res?.data?.items;
+        const clCheckout = res?.data?.consultation?.fields?.checkout;
+
+        const itemsSummary = clItems
+          ?.map(
+            (item) =>
+              `${item?.label || item?.product || "Item"} x${item?.quantity || 1}`,
+          )
+          .join(", ");
+
+        trackCustomerLabsLead({
+          formName: "Thank You - Order Placed",
+          formId: "mayfair_thankyou_order",
+          dedupeKey: clOrderId
+            ? `customerlabs_lead_thankyou_${clOrderId}`
+            : null,
+          identity: {
+            firstName: userData?.fname || patientInfo?.firstName || "",
+            lastName: userData?.lname || patientInfo?.lastName || "",
+            email: userData?.email || "",
+            phone: userData?.phone || patientInfo?.phoneNo || "",
+            userId: userData?.id || "",
+          },
+          properties: {
+            order_id: String(clOrderId || ""),
+            product_id: String(productId || ""),
+            product_name:
+              { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
+              "Weight Loss Treatment",
+            treatment_name:
+              { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
+              "Weight Loss Treatment",
+            order_items: itemsSummary || "",
+            order_total: String(clCheckout?.total || ""),
+            event_source: "thank_you_page",
+          },
+        });
       } catch (error) {
         toast.error(
           error?.response?.data?.errors?.Order || "An error occurred",

@@ -28,7 +28,6 @@ import useCheckoutStore from "@/store/checkoutStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
-import { trackCustomerLabsLead } from "@/config/CustomerLabs";
 
 const ConfirmationSummary = () => {
   const router = useRouter();
@@ -246,32 +245,6 @@ const ConfirmationSummary = () => {
       }
 
       // trackCustomerLabsConsultationSubmit(data);s
-
-      trackCustomerLabsLead({
-        formName: "Consultation Form",
-        formId: "mayfair_consultation_form",
-        dedupeKey: data?.data?.lastConsultation?.id
-          ? `customerlabs_lead_${data.data.lastConsultation.id}`
-          : null,
-        identity: {
-          firstName: userData?.fname || firstName || patientInfo?.firstName,
-          lastName: userData?.lname || lastName || patientInfo?.lastName,
-          email: userData?.email,
-          phone: userData?.phone || patientInfo?.phoneNo,
-          userId: userData?.id,
-        },
-        properties: {
-          consultation_id: data?.data?.lastConsultation?.id || "",
-          product_id: productId || "",
-          product_name:
-            { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
-            "Weight Loss Treatment",
-          treatment_name:
-            { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
-            "Weight Loss Treatment",
-          event_source: "confirmation_summary_success",
-        },
-      });
 
       router.push("/gathering-data");
       return;
