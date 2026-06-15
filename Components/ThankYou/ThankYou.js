@@ -82,7 +82,7 @@ const ThankYou = () => {
 
         trackCustomerLabsLead({
           formName: "Thank You - Order Placed",
-          formId: "mayfair_thankyou_order",
+          formId: "onlineweightlossclinic-purchase-data",
           dedupeKey: clOrderId
             ? `customerlabs_lead_thankyou_${clOrderId}`
             : null,
