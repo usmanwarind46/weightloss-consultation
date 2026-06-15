@@ -105,6 +105,7 @@ const ThankYou = () => {
             userId: userData?.id || "",
           },
           properties: {
+            event_source: "thank_you_page",
             order_id: String(clOrderId || ""),
             product_id: String(productId || ""),
             product_name: productName,
@@ -112,7 +113,6 @@ const ThankYou = () => {
             dose: `${doseName} x${doseQuantity}`,
             addons: addonsString,
             order_total: String(clCheckout?.total || ""),
-            event_source: "thank_you_page",
           },
         });
       } catch (error) {
