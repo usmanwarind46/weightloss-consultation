@@ -22,6 +22,13 @@ export default function Document() {
           src="https://www.googletagmanager.com/gtag/js?id=G-GB2G3KMRVD"
         />
 
+        {/* CustomerLabs */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `!function(t,e,r,c,a,n,s){t.ClAnalyticsObject=a,t[a]=t[a]||[],t[a].methods=["trackSubmit","trackClick","pageview","identify","track", "trackConsent"],t[a].factory=function(e){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(e),t[a].push(r),t[a]}};for(var i=0;i<t[a].methods.length;i++){var o=t[a].methods[i];t[a][o]=t[a].factory(o)};n=e.createElement(r),s=e.getElementsByTagName(r)[0],n.async=1,n.crossOrigin="anonymous",n.src=c,s.parentNode.insertBefore(n,s)}(window,document,"script","https://cdn.js.customerlabs.co/cl8602w8wtgm8u.js","_cl");_cl.SNIPPET_VERSION="2.0.0"`,
+          }}
+        />
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
