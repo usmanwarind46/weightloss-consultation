@@ -64,6 +64,7 @@ const ThankYou = () => {
         Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         const res = await GetUserOrderApi();
+        console.log(res?.data?.items, "Thankyou-itemssss");
         setOrderId(res?.data?.id);
         setItems(res?.data?.items);
         setCheckOut(res?.data?.consultation?.fields?.checkout);
