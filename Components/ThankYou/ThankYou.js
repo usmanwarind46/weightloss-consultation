@@ -64,26 +64,36 @@ const ThankYou = () => {
         Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         const res = await GetUserOrderApi();
-        console.log(res?.data?.items, "Thankyou-itemssss");
         setOrderId(res?.data?.id);
         setItems(res?.data?.items);
         setCheckOut(res?.data?.consultation?.fields?.checkout);
 
         // CustomerLabs — fire Lead event on successful order
         const clOrderId = res?.data?.id;
-        const clItems = res?.data?.items;
+        const clItems = res?.data?.items || [];
         const clCheckout = res?.data?.consultation?.fields?.checkout;
 
-        const itemsSummary = clItems
-          ?.map(
-            (item) =>
-              `${item?.label || item?.product || "Item"} x${item?.quantity || 1}`,
-          )
-          .join(", ");
+        // Main product = item where product and name are different (dose item)
+        // Addon = item where product and name are the same
+        const mainItem = clItems.find((item) => item?.product !== item?.name);
+        const addonItems = clItems.filter(
+          (item) => item?.product === item?.name,
+        );
+
+        const productName = mainItem?.product || "Weight Loss Treatment";
+        const doseName = mainItem?.name || "";
+        const doseQuantity = mainItem?.quantity || 1;
+
+        const addonsString =
+          addonItems.length > 0
+            ? addonItems
+                .map((item) => `${item?.name} x${item?.quantity || 1}`)
+                .join(", ")
+            : "None";
 
         trackCustomerLabsLead({
           formName: "Thank You - Order Placed",
-          formId: "onlineweightlossclinic-purchase-data",
+          formId: "mayfair_thankyou_order",
           dedupeKey: clOrderId
             ? `customerlabs_lead_thankyou_${clOrderId}`
             : null,
@@ -97,13 +107,10 @@ const ThankYou = () => {
           properties: {
             order_id: String(clOrderId || ""),
             product_id: String(productId || ""),
-            product_name:
-              { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
-              "Weight Loss Treatment",
-            treatment_name:
-              { 1: "Wegovy", 4: "Mounjaro" }[productId] ||
-              "Weight Loss Treatment",
-            order_items: itemsSummary || "",
+            product_name: productName,
+            treatment_name: productName,
+            dose: `${doseName} x${doseQuantity}`,
+            addons: addonsString,
             order_total: String(clCheckout?.total || ""),
             event_source: "thank_you_page",
           },
