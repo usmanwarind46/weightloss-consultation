@@ -1,4 +1,3 @@
-import useExplanationEvidenceStore from "@/store/useExplanationEvidenceStore";
 import React, { useState } from "react";
 import { FiAlertCircle, FiUpload, FiX, FiFileText } from "react-icons/fi";
 import { AiOutlineCheckCircle } from "react-icons/ai";
@@ -15,6 +14,7 @@ import {
   PostPrescriptionEvidence,
 } from "@/api/PrescriptionEvidenceApi";
 import useAuthStore from "@/store/authStore";
+import useExplanationEvidenceStore from "@/pages/useExplanationEvidenceStore";
 
 const TopToastExplanation = () => {
   const MAX_SIZE_MB = 5;
@@ -179,7 +179,7 @@ const TopToastExplanation = () => {
 
   const getMessage = () => {
     if (explainenationEvidenceDetails.patient_type === "new") {
-      return `To complete your order for Mounjaro <span class="medium-font">${explainenationEvidenceDetails?.product_name} ${explainenationEvidenceDetails.latest_dose}</span>, please provide details about your previous treatment. As a new patient ordering a higher dose, we require confirmation that you have completed prior dose progression with another healthcare provider, or clinical justification for starting at this level. Please explain your treatment history and upload any supporting documentation from your previous provider. Our clinical team reviews each order to ensure safe and appropriate prescribing.`;
+      return `To complete your order for <span class="medium-font">${explainenationEvidenceDetails?.product_name} ${explainenationEvidenceDetails.latest_dose}</span>, please provide details about your previous treatment. As a new patient ordering a higher dose, we require confirmation that you have completed prior dose progression with another healthcare provider, or clinical justification for starting at this level. Please explain your treatment history and upload any supporting documentation from your previous provider. Our clinical team reviews each order to ensure safe and appropriate prescribing.`;
     } else {
       return `To complete your order for  <span class="medium-font">${explainenationEvidenceDetails?.product_name} ${explainenationEvidenceDetails.latest_dose}</span>, please provide details regarding your dose progression. As you are ordering a higher dose, we require confirmation that you are currently taking <span class="medium-font">${explainenationEvidenceDetails.next_allowed_dose}</span>  mg or above, or clinical justification for this dose escalation. Please explain your treatment history and upload any supporting documentation from your healthcare provider. Our clinical team reviews each order to ensure safe and appropriate prescribing.`;
     }

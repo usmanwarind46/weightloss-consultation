@@ -33,8 +33,8 @@ import useImpersonate from "@/store/useImpersonateStore";
 import ProgressBar from "@/Components/ProgressBar/ProgressBar";
 import useReturning from "@/store/useReturningPatient";
 import UploadTopPrompt from "@/Components/UploadTopPrompt/UploadTopPrompt";
+import TopToastExplanation from "@/Components/UploadTopPrompt/TopToastExplainenation";
 import useIdVerificationUploadStore from "@/store/useIdVerificationUploadStore";
-import useExplanationEvidenceStore from "@/pages/useExplanationEvidenceStore";
 import useReorder from "@/store/useReorderStore";
 import useImageUploadStore from "@/store/useImageUploadStore ";
 import { GetIdVerification } from "@/api/IdVerificationApi";
@@ -44,6 +44,7 @@ import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
 import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
 import ConfirmationModal2 from "@/Components/Modal/ConfirmationModal2";
+import useExplanationEvidenceStore from "@/pages/useExplanationEvidenceStore";
 
 const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -285,8 +286,15 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
 
   return (
     <>
-      {(!imageUploaded || !idVerificationUpload) &&
-        specialRoutes.includes(pathname) && <UploadTopPrompt />}
+      {specialRoutes.includes(pathname) && (
+        <>
+          {explainenationEvidence ? (
+            <TopToastExplanation />
+          ) : (
+            (!imageUploaded || !idVerificationUpload) && <UploadTopPrompt />
+          )}
+        </>
+      )}
 
       {impersonate && (
         <div className="bg-gray-100">

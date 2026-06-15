@@ -20,6 +20,7 @@ import useLastBmi from "@/store/useLastBmiStore";
 import useCouponStore from "@/store/couponStore";
 import useSignupStore from "@/store/signupStore";
 import useReturning from "@/store/useReturningPatient";
+import lastOrderStore from "@/store/lastOrderStore";
 
 const ProductCard = ({
   id,
@@ -46,6 +47,7 @@ const ProductCard = ({
   const { setMedicalInfo, clearMedicalInfo } = useMedicalInfoStore();
   const { setPatientInfo, clearPatientInfo } = usePatientInfoStore();
   const { setAuthUserDetail, clearAuthUserDetail } = useAuthUserDetailStore();
+  const { setLastOrder, clearLastOrder } = lastOrderStore();
   const {
     billing,
     setBilling,
@@ -76,6 +78,7 @@ const ProductCard = ({
         clearBilling();
         clearShipping();
         clearAuthUserDetail();
+        clearLastOrder();
       } else if (data?.data) {
         setBmi(data?.data?.data?.bmi);
         setCheckout(data?.data?.data?.checkout);
@@ -93,6 +96,7 @@ const ProductCard = ({
         setLastName(data?.data?.data?.patientInfo?.lastName);
 
         setIsReturningPatient(data?.data?.data?.isReturning);
+        setLastOrder(data?.data?.data?.last_order);
       }
 
       if (reorder) {

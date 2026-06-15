@@ -22,6 +22,8 @@ import { meta_url } from "@/config/constants";
 import useNeedleConsent from "@/store/needleConsent";
 import { FaShoppingCart } from "react-icons/fa";
 import useAbandonCardStore from "@/store/abandonCardStore";
+import lastOrderStore from "@/store/lastOrderStore";
+import useExplanationEvidenceStore from "./useExplanationEvidenceStore";
 
 export default function DosageSelection() {
   const [shownDoseIds, setShownDoseIds] = useState([]);
@@ -47,6 +49,8 @@ export default function DosageSelection() {
   });
   const [isExpiryRequired, setIsExpiryRequired] = useState(false);
   const { abandonCard, extra } = useAbandonCardStore();
+  const { lastOrder } = lastOrderStore();
+  const { setExplainenationEvidence } = useExplanationEvidenceStore();
   // Variation From zustand
   const { variation } = useVariationStore();
   const { removeItemCompletely } = useCartStore();
@@ -129,24 +133,21 @@ export default function DosageSelection() {
     items?.doses.reduce((total, v) => total + v.qty, 0);
 
   // ✅ Put here → outside your component or at the top inside your component file
-  const generateProductConcent = (variations, selectedDoseName) => {
-    const sortedVariations = [...variations].sort((a, b) => {
-      console.log(a, b, "sfkjefjfsj");
-      const aMg = parseFloat(a.name);
-      const bMg = parseFloat(b.name);
-      return aMg - bMg;
-    });
+  const generateProductConcent = (
+    variations,
+    selectedDoseName,
+    productName,
+  ) => {
+    // Get the starting dose (first dose in variations)
+    const startingDose = variations?.[0]?.name || "lowest";
 
-    const lowestDose = sortedVariations[0]?.name;
+    // Get the second highest dose for reference
+    const alternativeDoses = variations
+      ?.slice(0, 2)
+      .map((v) => v.name)
+      .join(" or ");
 
-    const selectedIndex = sortedVariations.findIndex(
-      (v) => v.name === selectedDoseName,
-    );
-
-    const previousDose =
-      selectedIndex > 0 ? sortedVariations[selectedIndex - 1]?.name : null;
-
-    return `If you are taking for the first time, you will need to start the treatment on the ${lowestDose} dose. If you start on the higher doses, the risk of side effects (e.g., nausea) will be very high. Please confirm that you are currently taking either the ${previousDose} or ${selectedDoseName} dose from a different provider.`;
+    return `You have selected ${productName} ${selectedDoseName}. If you are taking ${productName} for the first time, you will need to start the treatment on the ${startingDose} dose. As a new patient ordering a higher dose, please confirm that you have previously taken either the ${alternativeDoses} dose from a different provider. Following payment, you will be required to provide this evidence and upload any supporting documentation of this. Our clinical team reviews each order to ensure safe and appropriate prescribing.`;
   };
 
   const handleAddDose = (dose) => {
@@ -170,7 +171,25 @@ export default function DosageSelection() {
     const firstTwoDoses = variation?.variations?.slice(0, 1).map((v) => v.name);
     const isFirstTwoDose = firstTwoDoses.includes(dose?.name);
 
-    if ((isFirstTwoDose && !isFiveMg) || reorder == true) {
+    if (reorder == true) {
+      // ── RETURNING PATIENT ──────────────────────────────────────────────
+      const sortedVariations = [...(variation?.variations || [])].sort(
+        (a, b) => parseFloat(a.name) - parseFloat(b.name),
+      );
+
+      const lastDoseName = lastOrder?.last_order_items?.[0]?.item_name;
+      const lastDoseIndex = sortedVariations.findIndex(
+        (v) => v.name === lastDoseName,
+      );
+      const selectedDoseIndex = sortedVariations.findIndex(
+        (v) => v.name === dose?.name,
+      );
+      const nextValidDose = sortedVariations[lastDoseIndex + 1]?.name;
+
+      // Skipping = selected is more than one step ahead of last ordered dose
+      const isSkippingDose =
+        lastDoseIndex !== -1 && selectedDoseIndex > lastDoseIndex + 1;
+
       addToCart({
         id: dose.id,
         type: "dose",
@@ -184,22 +203,47 @@ export default function DosageSelection() {
         expiry: dose.expiry,
         isSelected: true,
       });
-      // setAbandonData([
-      //   ...abandonData,
-      //   {
-      //     eid: dose.id,
-      //     pid: productId,
-      //   },
-      // ]);
+
+      abandonCartMutation.mutate({
+        eid: dose.id,
+        pid: productId || abandonCard?.productId,
+      });
+
+      // Show skipping warning — no evidence for returning patients
+      if (isSkippingDose && !shownDoseIds.includes(dose.id)) {
+        setSelectedDose({
+          ...dose,
+          productConcent: `Your last order was for ${lastDoseName}. You have selected ${dose?.name}, but the recommended next dose is ${nextValidDose}. Please make sure you are selecting the correct dose for safe treatment progression.`,
+        });
+        setShowDoseModal(true);
+        setShownDoseIds((prev) => [...prev, dose.id]);
+      }
+    } else if (isFirstTwoDose && !isFiveMg) {
+      // ── NEW PATIENT — lowest dose, no warning ──────────────────────────
+      addToCart({
+        id: dose.id,
+        type: "dose",
+        name: dose.name,
+        price: parseFloat(dose.price),
+        allowed: parseInt(dose.allowed),
+        item_id: dose.id,
+        product: dose?.product_name || "Dose Product",
+        product_concent: null,
+        label: `${dose?.product_name} ${dose?.name}`,
+        expiry: dose.expiry,
+        isSelected: true,
+      });
 
       abandonCartMutation.mutate({
         eid: dose.id,
         pid: productId || abandonCard?.productId,
       });
     } else {
+      // ── NEW PATIENT — high dose, evidence required ─────────────────────
       const productConcent = generateProductConcent(
         variation?.variations,
         dose?.name,
+        dose?.product_name,
       );
 
       addToCart({
@@ -216,26 +260,18 @@ export default function DosageSelection() {
         isSelected: true,
       });
 
-      // setAbandonData([
-      //   ...abandonData,
-      //   {
-      //     eid: dose.id,
-      //     pid: productId,
-      //   },
-      // ]);
       abandonCartMutation.mutate({
         eid: dose.id,
         pid: productId || abandonCard?.productId,
       });
-      // ✅ ✅ ✅ Check if modal was already shown for this dose
-      if (!shownDoseIds.includes(dose.id)) {
-        setSelectedDose({
-          ...dose,
-          productConcent: productConcent,
-        });
-        setShowDoseModal(true);
 
-        // ✅ ✅ ✅ Mark this dose as shown
+      // Flag evidence required so header banner shows after order
+      setExplainenationEvidence(true);
+
+      // Show modal only once per dose
+      if (!shownDoseIds.includes(dose.id)) {
+        setSelectedDose({ ...dose, productConcent });
+        setShowDoseModal(true);
         setShownDoseIds((prev) => [...prev, dose.id]);
       }
     }
