@@ -34,6 +34,7 @@ export function trackCustomerLabsLead({
   formId,
   identity = {},
   properties = {},
+  productProperties = [],
   dedupeKey = null,
   eventName = "Lead",
 } = {}) {
@@ -100,7 +101,7 @@ export function trackCustomerLabsLead({
 
   // --- Fire --------------------------------------------------------------
   window._cl.identify(payload);
-  window._cl.trackClick(eventName, payload);
+  window._cl.trackClick(eventName, payload, productProperties);
 
   if (dedupeKey) {
     localStorage.setItem(dedupeKey, "true");
