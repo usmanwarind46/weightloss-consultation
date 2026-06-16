@@ -97,11 +97,14 @@ export function trackCustomerLabsLead({
     };
   }
 
-  const payload = { customProperties };
+  const payload = {
+    customProperties,
+    ...(productProperties.length > 0 && { productProperties }),
+  };
 
   // --- Fire --------------------------------------------------------------
-  window._cl.identify(payload);
-  window._cl.trackClick(eventName, payload, productProperties);
+  window._cl.identify({ customProperties });
+  window._cl.trackClick(eventName, payload);
 
   if (dedupeKey) {
     localStorage.setItem(dedupeKey, "true");
