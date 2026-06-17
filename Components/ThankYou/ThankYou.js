@@ -10,7 +10,7 @@ import useAuthStore from "@/store/authStore";
 import Fetcher from "@/library/Fetcher";
 import toast from "react-hot-toast";
 import { GetUserOrderApi } from "@/api/mergeRoutes";
-import { trackCustomerLabsLead } from "@/config/CustomerLabs";
+import { trackCustomerLabsPurchased } from "@/config/CustomerLabs";
 import useUserDataStore from "@/store/userDataStore";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import useProductId from "@/store/useProductIdStore";
@@ -107,11 +107,11 @@ const ThankYou = () => {
           };
         });
 
-        trackCustomerLabsLead({
+        trackCustomerLabsPurchased({
           formName: "Thank You - Order Placed",
           formId: "onlineweightlossclinic_thankyou_order",
           dedupeKey: clOrderId
-            ? `customerlabs_lead_thankyou_${clOrderId}`
+            ? `customerlabs_purchased_thankyou_${clOrderId}`
             : null,
           identity: {
             firstName: userData?.fname || patientInfo?.firstName || "",
@@ -122,13 +122,14 @@ const ThankYou = () => {
           },
           properties: {
             event_source: "thank_you_page",
+            currency: "GBP",
+            value: clCheckout?.total || 0,
+            transaction_id: String(clOrderId || ""),
             order_id: String(clOrderId || ""),
-            product_id: String(productId || ""),
             product_name: productName,
             treatment_name: productName,
             dose: `${doseName} x${doseQuantity}`,
             addons: addonsString,
-            order_total: String(clCheckout?.total || ""),
           },
           productProperties,
         });

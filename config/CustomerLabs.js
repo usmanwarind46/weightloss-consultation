@@ -1,42 +1,44 @@
 // lib/customerlabs.js
 //
-// Reusable CustomerLabs lead tracking helper.
+// Reusable CustomerLabs Purchased event tracking helper.
 // Wraps the CustomerLabs JS API quirks (typed { t, v } wrappers, the `ib: true`
 // identify flag, external_ids) in one place so components stay clean.
 //
 // Usage from any form's success handler:
 //
-//   import { trackCustomerLabsLead } from "@/lib/customerlabs";
+//   import { trackCustomerLabsPurchased } from "@/config/CustomerLabs";
 //
-//   trackCustomerLabsLead({
-//     formName: "Consultation Form",
-//     formId: "onlineweightlossclinic_consultation_form",
-//     dedupeKey: `lead_${consultationId}`,        // optional, prevents double-fire
+//   trackCustomerLabsPurchased({
+//     formName: "Thank You - Order Placed",
+//     formId: "onlineweightlossclinic_thankyou_order",
+//     dedupeKey: `customerlabs_purchased_thankyou_${orderId}`,
 //     identity: { firstName, lastName, email, phone, userId },
-//     properties: {                                // optional extra event data
-//       consultation_id: consultationId,
-//       product_id: productId,
-//       product_name: productName,
-//       treatment_name: productName,
-//       event_source: "confirmation_summary_success",
+//     properties: {
+//       currency: "GBP",
+//       value: orderTotal,
+//       transaction_id: orderId,
+//       order_id: orderId,
+//       event_source: "thank_you_page",
 //     },
-//   });;
+//     productProperties: [ ... ],
+//   });
 
-/** Wrap a primitive value in CustomerLabs' { t, v } descriptor.. */
+/** Wrap a primitive value in CustomerLabs' { t, v } descriptor. */
 const str = (value) => ({ t: "string", v: value == null ? "" : String(value) });
+const num = (value) => ({ t: "number", v: parseFloat(value) || 0 });
 
 /**
- * Fire a CustomerLabs identify + Lead submit event.
+ * Fire a CustomerLabs identify + Purchased event.
  * Safe to call anywhere — no-ops on the server or if the script isn't loaded.
  */
-export function trackCustomerLabsLead({
+export function trackCustomerLabsPurchased({
   formName,
   formId,
   identity = {},
   properties = {},
   productProperties = [],
   dedupeKey = null,
-  eventName = "Lead",
+  eventName = "Purchased",
 } = {}) {
   // Guard: server-side render or script not ready.
   if (typeof window === "undefined") return;
@@ -45,7 +47,7 @@ export function trackCustomerLabsLead({
     return;
   }
 
-  // Guard: avoid firing the same lead twice (refresh / re-submit).
+  // Guard: avoid firing the same event twice (refresh / re-submit).
   if (dedupeKey && localStorage.getItem(dedupeKey)) {
     return;
   }
@@ -58,7 +60,7 @@ export function trackCustomerLabsLead({
     userId = "",
   } = identity;
 
-  // Need at least one identifier for CustomerLabs to tie the lead to a profile.
+  // Need at least one identifier for CustomerLabs to tie the event to a profile.
   if (!email && !phone) {
     console.warn("CustomerLabs: no email or phone — event skipped");
     return;
@@ -81,9 +83,14 @@ export function trackCustomerLabsLead({
     page_url: str(window.location.href),
   };
 
-  // Merge any caller-supplied extra properties (product, ids, source, etc.).
+  // Merge caller-supplied extra properties.
+  // "value" must be number type per CL docs, everything else is string.
   for (const [key, value] of Object.entries(properties)) {
-    customProperties[key] = str(value);
+    if (key === "value") {
+      customProperties[key] = num(value);
+    } else {
+      customProperties[key] = str(value);
+    }
   }
 
   // Identifiers CustomerLabs uses to resolve the profile.
@@ -103,8 +110,13 @@ export function trackCustomerLabsLead({
   };
 
   // --- Fire --------------------------------------------------------------
-  window._cl.identify({ customProperties });
+  // Per CL docs: Purchased event fires trackClick first, then identify
+  // with the full payload containing both customProperties and productProperties.
   window._cl.trackClick(eventName, payload);
+
+  if (email) {
+    window._cl.identify(payload);
+  }
 
   if (dedupeKey) {
     localStorage.setItem(dedupeKey, "true");
