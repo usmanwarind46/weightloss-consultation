@@ -34,7 +34,7 @@ export default function Document() {
         />
 
         {/* Meta Pixel */}
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `!function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -47,17 +47,17 @@ export default function Document() {
             fbq('init', '1333513215275270');
             fbq('track', 'PageView');`,
           }}
-        />
+        /> */}
 
         {/* Meta Pixel noscript */}
-        <noscript>
+        {/* <noscript>
           <img
             height="1"
             width="1"
             style={{ display: "none" }}
             src="https://www.facebook.com/tr?id=1333513215275270&ev=PageView&noscript=1"
           />
-        </noscript>
+        </noscript> */}
       </Head>
 
       <body>
