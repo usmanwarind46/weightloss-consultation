@@ -457,18 +457,54 @@ export default function DosageSelection() {
                       );
                       const cartQty = cartDose?.qty || 0;
 
+                      const is72mgWegovy =
+                        dose?.name === "7.2mg" && productId == 1;
+                      const is72mgSelected = is72mgWegovy && cartQty > 0;
+
                       return (
-                        <Dose
-                          key={index}
-                          doseData={dose}
-                          allow={allowed}
-                          qty={cartQty}
-                          totalSelectedQty={totalSelectedQty}
-                          isSelected={cartQty > 0}
-                          onAdd={() => handleAddDose(dose)}
-                          onIncrement={() => increaseQuantity(dose.id, "dose")}
-                          onDecrement={() => decreaseQuantity(dose.id, "dose")}
-                        />
+                        <React.Fragment key={index}>
+                          <Dose
+                            doseData={dose}
+                            allow={allowed}
+                            qty={cartQty}
+                            totalSelectedQty={totalSelectedQty}
+                            isSelected={cartQty > 0}
+                            onAdd={() => handleAddDose(dose)}
+                            onIncrement={() =>
+                              increaseQuantity(dose.id, "dose")
+                            }
+                            onDecrement={() =>
+                              decreaseQuantity(dose.id, "dose")
+                            }
+                          />
+
+                          <AnimatePresence>
+                            {is72mgSelected && (
+                              <motion.div
+                                initial={{ opacity: 0, y: -8, height: 0 }}
+                                animate={{ opacity: 1, y: 0, height: "auto" }}
+                                exit={{ opacity: 0, y: -8, height: 0 }}
+                                transition={{ duration: 0.3, ease: "easeOut" }}
+                                className="overflow-hidden"
+                              >
+                                <div className="flex items-start gap-3 bg-amber-50 border border-amber-300 rounded-md px-4 py-3 mt-1 mb-1">
+                                  <span className="text-amber-500 mt-0.5 text-lg leading-none">
+                                    ℹ️
+                                  </span>
+                                  <p className="text-amber-800 text-sm reg-font leading-relaxed">
+                                    <span className="bold-font">
+                                      Please note:
+                                    </span>{" "}
+                                    The 7.2mg pack is supplied as four
+                                    single-dose pens. Other strengths are
+                                    supplied as a single FlexTouch pen
+                                    containing four doses.
+                                  </p>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </React.Fragment>
                       );
                     })}
 
