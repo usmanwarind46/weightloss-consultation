@@ -132,6 +132,7 @@ const TopToastExplanation = () => {
     reset();
     setPreviewUrl(null);
   };
+
   const GetEvidence = async () => {
     try {
       const res = await GetPrescriptionEvidence({ token });
@@ -142,6 +143,7 @@ const TopToastExplanation = () => {
       console.error("Failed to fetch prescription evidence status:", error);
     }
   };
+
   const onSubmit = async (data) => {
     if (!data.description) {
       toast.error("Explanation is required.");
@@ -177,11 +179,14 @@ const TopToastExplanation = () => {
     }
   };
 
+  // OWLC copy — professional clinical tone, distinct wording from Mayfair
   const getMessage = () => {
     if (explainenationEvidenceDetails.patient_type === "new") {
-      return `To complete your order for <span class="medium-font">${explainenationEvidenceDetails?.product_name} ${explainenationEvidenceDetails.latest_dose}</span>, please provide details about your previous treatment. As a new patient ordering a higher dose, we require confirmation that you have completed prior dose progression with another healthcare provider, or clinical justification for starting at this level. Please explain your treatment history and upload any supporting documentation from your previous provider. Our clinical team reviews each order to ensure safe and appropriate prescribing.`;
+      return `Before this order for <span class="med-font">${explainenationEvidenceDetails?.product_name} ${explainenationEvidenceDetails.latest_dose}</span> can be approved, our clinical team requires additional information regarding your treatment history. <br/> <br/>
+       As you are a new patient requesting a higher starting dose, we are required to confirm that you have previously undergone an appropriate dose titration under the care of another healthcare provider, or to obtain a clinical rationale for initiating treatment at this dose. <br/> <br/> Where available, please attach supporting documentation such as a prescription label, pharmacy packaging, or correspondence from your previous provider. This is not mandatory, but may assist in the review of your order. <br/> <br/> All orders are subject to clinical review prior to dispensing.`;
     } else {
-      return `To complete your order for  <span class="medium-font">${explainenationEvidenceDetails?.product_name} ${explainenationEvidenceDetails.latest_dose}</span>, please provide details regarding your dose progression. As you are ordering a higher dose, we require confirmation that you are currently taking <span class="medium-font">${explainenationEvidenceDetails.next_allowed_dose}</span>  mg or above, or clinical justification for this dose escalation. Please explain your treatment history and upload any supporting documentation from your healthcare provider. Our clinical team reviews each order to ensure safe and appropriate prescribing.`;
+      return `Before this order for <span class="med-font">${explainenationEvidenceDetails?.product_name} ${explainenationEvidenceDetails.latest_dose}</span> can be approved, our clinical team requires confirmation of your current treatment plan. <br/> <br/>
+       As this order increases your dose, we are required to confirm that you are currently taking <span class="med-font">${explainenationEvidenceDetails.next_allowed_dose}mg</span> or above, or to obtain a clinical rationale for this dose escalation. <br/> <br/> Where available, please attach supporting documentation such as a prescription label, pharmacy packaging, or correspondence from your provider. This is not mandatory, but may assist in the review of your order. <br/> <br/> All orders are subject to clinical review prior to dispensing.`;
     }
   };
 
@@ -288,252 +293,199 @@ const TopToastExplanation = () => {
               Continue
             </motion.button>
           </div>
-
-          {/* Progress Bar Animation */}
-          {/* <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 5, ease: "linear" }}
-            className="absolute bottom-0 left-0 right-0 h-0.5 sm:h-1 bg-gradient-to-r from-white/40 via-white/60 to-white/40 origin-left"
-          /> */}
         </motion.div>
       </motion.div>
 
-      {/* Enhanced Modal */}
+      {/* Modal — modern centered card, no sidebar/stepper */}
       <AnimatePresence>
         {showModal && (
           <>
-            {/* Backdrop with Blur */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               onClick={handleCloseModal}
-              className="fixed inset-0 bg-black/70 z-[60] backdrop-blur-md"
+              className="fixed inset-0 bg-[#0b1f3a]/60 z-[60] backdrop-blur-sm"
             />
 
-            {/* Modal Container */}
             <div className="fixed inset-0 z-[70] overflow-y-auto flex items-center justify-center p-4">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 50 }}
+                initial={{ opacity: 0, scale: 0.96, y: 16 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 50 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                }}
-                className="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-2xl relative my-8 border border-purple-100"
+                exit={{ opacity: 0, scale: 0.96, y: 16 }}
+                transition={{ type: "spring", stiffness: 340, damping: 32 }}
+                className="bg-white rounded-[28px] w-full max-w-[520px] relative my-8 overflow-hidden shadow-[0_24px_70px_-12px_rgba(20,30,60,0.35)]"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Decorative Elements */}
-
-                <motion.div
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.05, 0.1, 0.05],
+                {/* Ambient glow accent, signature element */}
+                <div
+                  className="absolute -top-24 -right-24 w-64 h-64 rounded-full opacity-[0.12] pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, #4565bf, transparent 70%)",
                   }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
+                />
+                <div
+                  className="absolute -bottom-20 -left-16 w-48 h-48 rounded-full opacity-[0.10] pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, #4db581, transparent 70%)",
                   }}
-                  className="absolute top-10 right-10 w-40 h-40 bg-purple-500 rounded-full blur-3xl pointer-events-none"
                 />
 
                 {/* Close Button */}
                 <motion.button
                   onClick={handleCloseModal}
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition cursor-pointer bg-gray-100 rounded-full p-2 hover:bg-gray-200"
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
+                  className="absolute top-5 right-5 z-10 text-gray-400 hover:text-gray-600 transition cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full p-2"
                 >
-                  <FiX className="w-5 h-5" />
+                  <FiX className="w-4 h-4" />
                 </motion.button>
 
-                {/* Header with Icon */}
-                <div className="text-center mb-6">
-                  {/* <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
+                <div className="relative p-7 sm:p-9 [@media(max-height:800px)]:p-5 [@media(max-height:800px)]:sm:p-6">
+                  {/* Icon badge */}
+                  <motion.div
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
                     transition={{
                       type: "spring",
-                      stiffness: 260,
-                      damping: 20,
-                      delay: 0.1,
+                      stiffness: 300,
+                      damping: 22,
+                      delay: 0.05,
                     }}
-                    className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-500 to-violet-500 rounded-full mb-4 shadow-lg"
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 [@media(max-height:800px)]:w-10 [@media(max-height:800px)]:h-10 [@media(max-height:800px)]:rounded-xl [@media(max-height:800px)]:mb-3"
+                    style={{
+                      background: "linear-gradient(135deg, #4565bf, #5a78d1)",
+                    }}
                   >
-                    <FiFileText className="text-3xl text-white" />
-                  </motion.div> */}
-                  <h2 className="text-2xl sm:text-3xl bold-font text-gray-800 mb-2">
-                    Dose Verification Required
-                  </h2>
-                  <p className="text-gray-600 text-sm thin-font">
-                    <div dangerouslySetInnerHTML={{ __html: getMessage() }} />
-                  </p>
-                </div>
-
-                {/* Form */}
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  className="space-y-6 relative"
-                >
-                  {/* Explanation Field */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <label className="flex items-center gap-2 mb-3 text-gray-700 bold-font">
-                      <FiFileText className="text-purple-500" />
-                      Treatment Details
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <Controller
-                      name="description"
-                      control={control}
-                      defaultValue=""
-                      render={({ field }) => (
-                        <textarea
-                          {...field}
-                          placeholder="Please describe your current dosage, treatment timeline, and reason for selecting this dose..."
-                          className="w-full p-4 border-2 rounded-sm border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y h-26 reg-font text-gray-700 transition-all duration-300 hover:border-purple-300 bg-gradient-to-br from-white to-purple-50/30"
-                        />
-                      )}
-                    />
+                    <FiFileText className="text-white text-xl [@media(max-height:800px)]:text-lg" />
                   </motion.div>
 
-                  {/* File Upload */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
+                  <h2 className="text-[22px] sm:text-2xl bold-font text-gray-900 mb-2 tracking-tight [@media(max-height:800px)]:text-[19px] [@media(max-height:800px)]:sm:text-xl [@media(max-height:800px)]:mb-1.5">
+                    Dose Verification Required
+                  </h2>
+
+                  <div
+                    className="text-gray-500 text-[13.5px] leading-relaxed reg-font mb-7 [&_.med-font]:font-semibold [&_.med-font]:text-gray-800 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [@media(max-height:800px)]:text-[13px] [@media(max-height:800px)]:leading-snug [@media(max-height:800px)]:mb-4 [@media(max-height:800px)]:max-h-[100px] [@media(max-height:800px)]:overflow-y-auto [@media(max-height:800px)]:pr-2"
+                    dangerouslySetInnerHTML={{ __html: getMessage() }}
+                  />
+
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-5 [@media(max-height:800px)]:space-y-3"
                   >
-                    <label className="flex items-center gap-2 mb-3 text-gray-700 bold-font">
-                      <FiUpload className="text-purple-500" />
-                      Upload Attachment
-                      <span className="text-gray-400 text-xs font-normal">
-                        (Optional)
-                      </span>
-                    </label>
-                    <Controller
-                      name="evidence"
-                      control={control}
-                      render={() => (
-                        <label className="block cursor-pointer group">
-                          <input
-                            type="file"
-                            className="hidden"
-                            accept=".png,.jpeg,.jpg,.webp,.pdf"
-                            onChange={handleUpload}
-                          />
-                          <motion.div
-                            whileHover={{ scale: 1.02 }}
-                            className="w-full min-h-[100px] border-2 border-dashed rounded-sm flex flex-col items-center justify-center border-purple-300 transition-all p-4 bg-gradient-to-br from-purple-50 to-pink-50 group-hover:border-purple-500 group-hover:shadow-lg"
-                          >
+                    {/* File Upload — modern compact dropzone */}
+                    <div>
+                      <label className="flex items-center gap-1.5 mb-1 text-gray-700 bold-font text-[13px] [@media(max-height:800px)]:mb-1.5">
+                        Supporting Documentation
+                        <span className="text-gray-400 text-[11px] font-normal normal-case">
+                          optional
+                        </span>
+                      </label>
+                      <p className="flex items-start gap-1.5 text-gray-500 text-[12px] leading-snug mb-3 reg-font">
+                        <FiAlertCircle className="w-3.5 h-3.5 text-[#4565bf]/60 flex-shrink-0 mt-[1px]" />
+                        Please upload any supporting documentation relating to
+                        your previous treatment.
+                      </p>
+                      <Controller
+                        name="evidence"
+                        control={control}
+                        render={() => (
+                          <label className="block cursor-pointer group">
+                            <input
+                              type="file"
+                              className="hidden"
+                              accept=".png,.jpeg,.jpg,.webp,.pdf"
+                              onChange={handleUpload}
+                            />
                             {evidence ? (
                               <motion.div
-                                initial={{ scale: 0.8, opacity: 0 }}
+                                initial={{ scale: 0.96, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="relative w-full h-36"
+                                className="relative w-full rounded-2xl border border-gray-200 bg-gray-50/60 p-3 flex items-center gap-3 hover:border-[#4565bf]/40 transition-colors [@media(max-height:800px)]:p-2"
                               >
                                 {evidence.type === "application/pdf" ? (
-                                  <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-inner border border-red-100">
-                                    <motion.svg
-                                      // animate={{ y: [0, -5, 0] }}
-                                      // transition={{
-                                      //   duration: 2,
-                                      //   repeat: Infinity,
-                                      // }}
-                                      className="w-14 h-14 text-red-600 mb-2"
+                                  <div className="w-12 h-12 rounded-xl bg-[#4565bf]/10 flex items-center justify-center flex-shrink-0 [@media(max-height:800px)]:w-9 [@media(max-height:800px)]:h-9">
+                                    <svg
+                                      className="w-5 h-5 text-[#4565bf] [@media(max-height:800px)]:w-4 [@media(max-height:800px)]:h-4"
                                       fill="currentColor"
                                       viewBox="0 0 20 20"
                                     >
                                       <path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z" />
-                                    </motion.svg>
-                                    <span className="text-sm text-gray-700 medium-font truncate max-w-[200px] px-2">
-                                      {evidence.name}
-                                    </span>
-                                    <motion.div
-                                      initial={{ scale: 0 }}
-                                      animate={{ scale: 1 }}
-                                      transition={{ type: "spring" }}
-                                    >
-                                      <AiOutlineCheckCircle className="absolute top-2 right-2 w-8 h-8 text-green-600 bg-white rounded-full p-1 shadow-lg" />
-                                    </motion.div>
+                                    </svg>
                                   </div>
                                 ) : (
-                                  <>
-                                    <img
-                                      src={previewUrl}
-                                      alt="Evidence preview"
-                                      className="w-full h-full object-contain rounded-xl shadow-md"
-                                    />
-                                    <motion.div
-                                      initial={{ scale: 0 }}
-                                      animate={{ scale: 1 }}
-                                      transition={{ type: "spring" }}
-                                    >
-                                      <AiOutlineCheckCircle className="absolute top-2 right-2 w-8 h-8 text-green-600 bg-white rounded-full p-1 shadow-lg" />
-                                    </motion.div>
-                                  </>
+                                  <img
+                                    src={previewUrl}
+                                    alt="Evidence preview"
+                                    className="w-12 h-12 object-cover rounded-xl flex-shrink-0 [@media(max-height:800px)]:w-9 [@media(max-height:800px)]:h-9"
+                                  />
                                 )}
+                                <span className="text-[13px] text-gray-700 medium-font truncate flex-1">
+                                  {evidence.name}
+                                </span>
+                                <AiOutlineCheckCircle className="w-5 h-5 text-[#4db581] flex-shrink-0" />
                               </motion.div>
                             ) : (
                               <motion.div
-                                animate={{ y: [0, -5, 0] }}
-                                // transition={{
-                                //   duration: 2,
-                                //   repeat: Infinity,
-                                //   ease: "easeInOut",
-                                // }}
-                                className="flex flex-col items-center justify-center text-purple-400"
+                                whileHover={{ scale: 1.005 }}
+                                className="w-full rounded-2xl border border-dashed border-gray-300 group-hover:border-[#4565bf]/50 group-hover:bg-[#4565bf]/[0.03] transition-all duration-200 p-4 flex items-center gap-3 [@media(max-height:800px)]:p-2.5"
                               >
-                                <div className="relative mb-3">
-                                  <FiUpload className="w-8 h-8" />
-                                  <motion.div
-                                    animate={{
-                                      scale: [1, 1.2, 1],
-                                      opacity: [0.3, 0, 0.3],
-                                    }}
-                                    transition={{
-                                      duration: 2,
-                                      repeat: Infinity,
-                                    }}
-                                    className="absolute inset-0 bg-purple-500 rounded-full blur-lg"
-                                  />
+                                <div className="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-[#4565bf]/10 flex items-center justify-center flex-shrink-0 transition-colors [@media(max-height:800px)]:w-9 [@media(max-height:800px)]:h-9">
+                                  <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#4565bf] transition-colors" />
                                 </div>
-                                <span className="text-sm font-medium medium-font mb-1">
-                                  Click to upload document
-                                </span>
-                                <span className="text-xs text-gray-400 reg-font lowercase">
-                                  PNG, JPEG, WEBP or PDF (Max 5MB)
-                                </span>
+                                <div>
+                                  <p className="text-[13px] medium-font text-gray-600">
+                                    Click to upload a document
+                                  </p>
+                                  <p className="text-[11px] text-gray-400 reg-font">
+                                    PNG, JPEG, WEBP or PDF · max 5MB
+                                  </p>
+                                </div>
                               </motion.div>
                             )}
-                          </motion.div>
-                        </label>
-                      )}
-                    />
-                  </motion.div>
+                          </label>
+                        )}
+                      />
+                      <p className="flex items-start gap-1.5 text-gray-500 text-[12px] leading-snug mt-2.5 reg-font border-l-2 border-[#4565bf]/20 pl-2.5">
+                        If you are unable to provide the evidence, please
+                        provide a clinical explanation for why you are starting
+                        at this dose.
+                      </p>
+                    </div>
 
-                  {/* Submit Button */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
+                    {/* Treatment details */}
+                    <div>
+                      <label className="block mb-2 text-gray-700 bold-font text-[13px] [@media(max-height:800px)]:mb-1.5">
+                        Treatment History
+                        <span className="text-[#4565bf] ml-1">*</span>
+                      </label>
+                      <Controller
+                        name="description"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <textarea
+                            {...field}
+                            placeholder="Please describe your current dose, the duration of treatment, and the clinical reason for this dose selection..."
+                            className="w-full p-3.5 border rounded-2xl border-gray-200 focus:outline-none focus:ring-[3px] focus:ring-[#4565bf]/15 focus:border-[#4565bf] resize-none h-28 reg-font text-[13.5px] text-gray-700 transition-all duration-200 bg-gray-50/60 placeholder:text-gray-400 [@media(max-height:800px)]:p-3 [@media(max-height:800px)]:h-16 [@media(max-height:800px)]:text-[13px]"
+                          />
+                        )}
+                      />
+                    </div>
+
+                    {/* Submit Button */}
                     <motion.button
                       type="submit"
                       disabled={loading || !description}
-                      whileHover={{ scale: loading || !description ? 1 : 1.02 }}
+                      whileHover={{ scale: loading || !description ? 1 : 1.01 }}
                       whileTap={{ scale: loading || !description ? 1 : 0.98 }}
-                      className={`w-full py-4  rounded-2xl text-white font-bold bold-font text-lg transition-all duration-300 shadow-lg ${
+                      className={`w-full py-3.5 rounded-2xl text-white font-bold bold-font text-[15px] transition-all duration-200 [@media(max-height:800px)]:py-2.5 [@media(max-height:800px)]:text-[14px] ${
                         loading || !description
-                          ? "bg-gray-300 cursor-not-allowed"
-                          : "cursor-pointer bg-[#47317c] hover:bg-purple-800 hover:shadow-xl"
+                          ? "bg-gray-200 cursor-not-allowed"
+                          : "cursor-pointer bg-[#4565bf] hover:bg-[#37549c] shadow-[0_8px_20px_-6px_rgba(69,101,191,0.5)]"
                       }`}
                     >
                       {loading ? (
@@ -541,22 +493,25 @@ const TopToastExplanation = () => {
                           <motion.div
                             animate={{ rotate: 360 }}
                             transition={{
-                              duration: 1,
+                              duration: 0.8,
                               repeat: Infinity,
                               ease: "linear",
                             }}
-                            className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                            className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
                           />
                           Submitting...
                         </span>
                       ) : (
-                        <span className="flex items-center justify-center gap-2">
-                          Submit
-                        </span>
+                        "Submit"
                       )}
                     </motion.button>
-                  </motion.div>
-                </form>
+
+                    <p className="text-center text-[11px] text-gray-400 reg-font !mt-3 [@media(max-height:800px)]:!mt-2">
+                      All information submitted is reviewed by our clinical team
+                      prior to approval.
+                    </p>
+                  </form>
+                </div>
               </motion.div>
             </div>
           </>
