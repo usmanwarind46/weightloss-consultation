@@ -60,8 +60,8 @@ export const forgotPasswordLink = async ({
   }); // Update endpoint as needed
 };
 
-export const getMedicalQuestions = async (data) => {
-  return Fetcher.get("/GetQuestions");
+export const postMedicalQuestions = async (data) => {
+  return Fetcher.post("/GetQuestions", data);
 };
 
 export const ChangePassword = async ({
@@ -119,7 +119,7 @@ export default {
   GetUserOrderApi,
   getNotified,
   forgotPasswordLink,
-  getMedicalQuestions,
+  postMedicalQuestions,
   ChangePassword,
   forgotPassword,
   getOrderByIdApi,

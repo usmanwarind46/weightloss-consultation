@@ -27,7 +27,7 @@ import StepsHeader from "@/layout/stepsHeader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReturning from "@/store/useReturningPatient";
-import { getMedicalQuestions } from "@/api/mergeRoutes";
+import { postMedicalQuestions } from "@/api/mergeRoutes";
 
 export default function StepsInformation() {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -148,7 +148,7 @@ export default function StepsInformation() {
   console.log(showProductSelection, "showProductSelection");
 
   /* ───────────────  medical questions mutation ────────────── */
-  const medicalQuestionsMutation = useMutation(getMedicalQuestions, {
+  const medicalQuestionsMutation = useMutation(postMedicalQuestions, {
     onSuccess: (data) => {
       console.log(data, "Medical Questions");
 
@@ -174,11 +174,13 @@ export default function StepsInformation() {
     setShowLoader(true);
     if (productId != null) {
       consultationMutation.mutate(formData);
-      medicalQuestionsMutation.mutate();
+      if (productId == 7) {
+        medicalQuestionsMutation.mutate(formData);
+      } else {
+        medicalQuestionsMutation.mutate();
+      }
     }
   }, [productId]);
-
-  useEffect(() => {}, []);
 
   //   setTimeout(() => {
   //     router.push("/step1");

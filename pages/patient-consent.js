@@ -34,24 +34,23 @@ export default function PatientConsent() {
 
   // Load questions → prefer confirmationInfo
   useEffect(() => {
-    if (confirmationInfo && confirmationInfo.length) {
-      console.log("✅ Loading from confirmationInfo (user answers)");
-      setQuestions(confirmationInfo);
-    } else if (confirmationQuestions && confirmationQuestions.length) {
-      console.log("🟡 Loading from confirmationQuestions (API fallback)");
-      const initialized = confirmationQuestions.map((q) => ({
-        ...q,
-        answer: false, // default unchecked
-        has_check_list: true, // <-- hardcoded
-        has_checklist: true, // <-- hardcoded
-      }));
+    if (confirmationQuestions?.length) {
+      const initialized = confirmationQuestions.map((q) => {
+        const existingAnswer = confirmationInfo?.find(
+          (item) => item.id === q.id,
+        );
 
-      console.log(initialized, "initialized");
+        return {
+          ...q,
+          answer: existingAnswer?.answer ?? false,
+        };
+      });
+
       setQuestions(initialized);
     } else {
-      console.log("❌ No questions found");
+      setQuestions([]);
     }
-  }, [confirmationInfo, confirmationQuestions]);
+  }, [confirmationQuestions]);
 
   // Prefill form fields
   useEffect(() => {
@@ -64,7 +63,7 @@ export default function PatientConsent() {
     const updated = questions.map((q) =>
       q.id === id
         ? { ...q, answer: value, has_check_list: true, has_checklist: true }
-        : q
+        : q,
     );
 
     setQuestions(updated);
@@ -72,7 +71,7 @@ export default function PatientConsent() {
   };
 
   const isNextEnabled = questions.every(
-    (q) => watch(`responses[${q.id}].answer`) === true
+    (q) => watch(`responses[${q.id}].answer`) === true,
   );
 
   console.log(questions, "questions");
@@ -140,10 +139,10 @@ export default function PatientConsent() {
                             <MdCheckBoxOutlineBlank className="text-[#4565BF] sm:w-9 sm:h-9 w-18 h-18 mt-1" />
                           )}
                           <span className="bold-font text-gray-700 sm:text-lg text-sm">
-                            {q.question
-                              .replace("I confirm and understand that:", "")
-                              .replace("below", "above")
-                              .trim()}
+                            {q?.question
+                              ?.replace("I confirm and understand that:", "")
+                              ?.replace("below", "above")
+                              ?.trim()}
                           </span>
                         </label>
                       </div>
