@@ -174,7 +174,11 @@ export default function StepsInformation() {
     setShowLoader(true);
     if (productId != null) {
       consultationMutation.mutate(formData);
-      medicalQuestionsMutation.mutate();
+      if (productId == 7) {
+        medicalQuestionsMutation.mutate(formData);
+      } else {
+        medicalQuestionsMutation.mutate();
+      }
     }
   }, [productId]);
 
