@@ -37,7 +37,7 @@ export default function StepsInformation() {
 
   const router = useRouter();
 
-  //calling from zustand Store
+  //calling from zustand Storee
   const { setBmi, clearBmi } = useBmiStore();
   const { isFromReorder } = useReorderButtonStore();
   const { setCheckout, clearCheckout } = useCheckoutStore();
@@ -174,7 +174,11 @@ export default function StepsInformation() {
     setShowLoader(true);
     if (productId != null) {
       consultationMutation.mutate(formData);
-      medicalQuestionsMutation.mutate();
+      if (productId == 7) {
+        medicalQuestionsMutation.mutate(formData);
+      } else {
+        medicalQuestionsMutation.mutate();
+      }
     }
   }, [productId]);
 

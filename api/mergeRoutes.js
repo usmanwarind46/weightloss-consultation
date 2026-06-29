@@ -61,7 +61,7 @@ export const forgotPasswordLink = async ({
 };
 
 export const getMedicalQuestions = async (data) => {
-  return Fetcher.get("/GetQuestions");
+  return Fetcher.post("/GetQuestions", data);
 };
 
 export const ChangePassword = async ({

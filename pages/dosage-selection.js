@@ -549,7 +549,8 @@ export default function DosageSelection() {
                   )}
 
                   {Array.isArray(variation?.addons) &&
-                    variation?.addons.length > 0 && (
+                    variation?.addons.length > 0 &&
+                    productId != 7 && (
                       <div className="mt-6">
                         <h1 className="mb-4 niba-reg-font text-lg sm:text-xl text-gray-800">
                           Select{" "}
