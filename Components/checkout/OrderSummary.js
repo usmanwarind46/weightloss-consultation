@@ -88,6 +88,7 @@ const OrderSummary = ({
   const [paymentData, setPaymentData] = useState(null);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
 
+  // Coupon Api
   const handleApplyCoupon = async () => {
     setCouponLoading(true);
     try {
