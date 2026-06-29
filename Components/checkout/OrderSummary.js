@@ -91,7 +91,11 @@ const OrderSummary = ({
   const handleApplyCoupon = async () => {
     setCouponLoading(true);
     try {
-      const res = await CouponApi({ coupon_code: discountCode });
+      const res = await CouponApi({
+        coupon_code: discountCode,
+        product_id: productId,
+        variant_ids: items?.doses?.map((item) => item?.item_id),
+      });
       if (res?.data?.status === true) {
         toast.success("Coupon applied successfully!");
         console.log(res, "coupon");
