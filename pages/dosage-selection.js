@@ -170,7 +170,7 @@ export default function DosageSelection() {
     const firstTwoDoses = variation?.variations?.slice(0, 1).map((v) => v.name);
     const isFirstTwoDose = firstTwoDoses.includes(dose?.name);
 
-    if ((isFirstTwoDose && !isFiveMg) || reorder == true) {
+    if ((isFirstTwoDose && !isFiveMg) || reorder == true || productId == 7) {
       addToCart({
         id: dose.id,
         type: "dose",
