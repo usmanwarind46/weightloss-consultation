@@ -33,25 +33,48 @@ export default function PatientConsent() {
   });
 
   // Load questions → prefer confirmationInfo
-  useEffect(() => {
-    if (confirmationInfo && confirmationInfo.length) {
-      console.log("✅ Loading from confirmationInfo (user answers)");
-      setQuestions(confirmationInfo);
-    } else if (confirmationQuestions && confirmationQuestions.length) {
-      console.log("🟡 Loading from confirmationQuestions (API fallback)");
-      const initialized = confirmationQuestions.map((q) => ({
-        ...q,
-        answer: false, // default unchecked
-        has_check_list: true, // <-- hardcoded
-        has_checklist: true, // <-- hardcoded
-      }));
+  // useEffect(() => {
+  //   if (confirmationInfo && confirmationInfo.length) {
+  //     console.log("✅ Loading from confirmationInfo (user answers)");
+  //     setQuestions(confirmationInfo);
+  //   } else if (confirmationQuestions && confirmationQuestions.length) {
+  //     console.log("🟡 Loading from confirmationQuestions (API fallback)");
+  //     const initialized = confirmationQuestions.map((q) => ({
+  //       ...q,
+  //       answer: false, // default unchecked
+  //       has_check_list: true, // <-- hardcoded
+  //       has_checklist: true, // <-- hardcoded
+  //     }));
 
-      console.log(initialized, "initialized");
+  //     console.log(initialized, "initialized");
+  //     setQuestions(initialized);
+  //   } else {
+  //     console.log("❌ No questions found");
+  //   }
+  // }, [confirmationInfo, confirmationQuestions]);
+
+  useEffect(() => {
+    if (confirmationQuestions && confirmationQuestions.length) {
+      // confirmationQuestions reliable hai — hamesha question field hota hai
+      const initialized = confirmationQuestions.map((q) => {
+        const savedAnswer = confirmationInfo?.find((ci) => ci.id === q.id);
+        return {
+          ...q,
+          answer: savedAnswer?.answer ?? false,
+          has_check_list: true,
+          has_checklist: true,
+        };
+      });
       setQuestions(initialized);
+    } else if (confirmationInfo && confirmationInfo.length) {
+      const valid = confirmationInfo.filter((q) => q?.question);
+      setQuestions(valid.map((q) => ({ ...q, answer: q.answer ?? false })));
     } else {
       console.log("❌ No questions found");
     }
   }, [confirmationInfo, confirmationQuestions]);
+
+  console.log("questions state:", questions);
 
   // Prefill form fields
   useEffect(() => {
@@ -64,7 +87,7 @@ export default function PatientConsent() {
     const updated = questions.map((q) =>
       q.id === id
         ? { ...q, answer: value, has_check_list: true, has_checklist: true }
-        : q
+        : q,
     );
 
     setQuestions(updated);
@@ -72,7 +95,7 @@ export default function PatientConsent() {
   };
 
   const isNextEnabled = questions.every(
-    (q) => watch(`responses[${q.id}].answer`) === true
+    (q) => watch(`responses[${q.id}].answer`) === true,
   );
 
   console.log(questions, "questions");
