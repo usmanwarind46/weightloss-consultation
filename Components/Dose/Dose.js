@@ -14,6 +14,7 @@ import moment from "moment/moment";
 import ConfirmationModal from "../Modal/ConfirmationModal";
 import useCartStore from "@/store/useCartStore";
 import { getNotified } from "@/api/mergeRoutes";
+import useProductId from "@/store/useProductIdStore";
 
 const Dose = ({
   doseData,
@@ -33,6 +34,7 @@ const Dose = ({
   const doseStatus = doseData?.stock?.status;
   const isOutOfStock = doseStatus === 0 || doseData?.stock?.quantity === 0;
   const isAllowExceeded = totalSelectedQty() >= allowed;
+  const { productId } = useProductId();
 
   const handleAdd = (e) => {
     e.stopPropagation();
@@ -108,11 +110,19 @@ const Dose = ({
     }
   };
 
+  const isWegovyPill =
+    doseData?.product_name?.toLowerCase().trim() === "wegovy pill" ||
+    doseData?.name?.toLowerCase().trim() === "wegovy pill";
+
+  const price = Number(doseData?.price || 0);
+
+  const isPriceComingSoon = isWegovyPill && price == 0;
+
   return (
     <>
       <div className="">
         <div className="relative p-2 z-20">
-          {doseStatus === 0 && (
+          {doseStatus === 0 && Number(productId) !== 7 && (
             <div className="absolute left-2 sm:left-auto sm:right-4 top-28 sm:top-5 group inline-block">
               <button
                 type="button"
@@ -165,7 +175,7 @@ const Dose = ({
 
               {/* Out of stock badge */}
               <div className="absolute left-[14px] top-[-10px] bg-primary text-white px-3 py-0.5 text-xs font-semibold rounded z-20">
-                Out of stock
+                {Number(productId) == 7 ? "Coming Soon" : "Out of stock"}
               </div>
             </>
           )}
@@ -206,7 +216,13 @@ const Dose = ({
             <span
               className={`font-semibold text-md ${isSelected ? "text-black" : "text-gray-700"}`}
             >
-              £{parseFloat(doseData?.price).toFixed(2)}
+              {isPriceComingSoon ? (
+                <span className="text-primary text-sm font-semibold">
+                  Price coming soon
+                </span>
+              ) : (
+                <span>£{parseFloat(doseData?.price).toFixed(2)}</span>
+              )}
             </span>
 
             {isSelected && (
