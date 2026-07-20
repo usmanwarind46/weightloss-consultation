@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Script from "next/script";
 
+// ─────────────────────────────────────────────
+// CONSTANTS — same domain, same storage key
+// ─────────────────────────────────────────────
 const ATTRIBUTION_STORAGE_KEY = "owlc_attribution";
 const ROOT_DOMAIN = "onlineweightlossclinic.co.uk";
 
@@ -57,12 +60,16 @@ const SOCIAL_SOURCES = [
   "linkedin",
   "tiktok",
   "twitter",
+  "x",
   "youtube",
   "pinterest",
   "snapchat",
   "reddit",
 ];
 
+// ─────────────────────────────────────────────
+// HELPERS — website se same
+// ─────────────────────────────────────────────
 function normalizeValue(value) {
   return String(value || "")
     .trim()
@@ -72,7 +79,6 @@ function normalizeValue(value) {
 
 function includesSource(value, sources) {
   const normalized = normalizeValue(value);
-
   return sources.some(
     (source) =>
       normalized === source ||
@@ -84,7 +90,6 @@ function includesSource(value, sources) {
 
 function getHostname(url) {
   if (!url) return "";
-
   try {
     return new URL(url).hostname.toLowerCase().replace(/^www\./, "");
   } catch {
@@ -96,64 +101,40 @@ function isInternalHostname(hostname) {
   const normalized = String(hostname || "")
     .toLowerCase()
     .replace(/^www\./, "");
-
   return normalized === ROOT_DOMAIN || normalized.endsWith(`.${ROOT_DOMAIN}`);
 }
 
 function isSearchSource(value) {
   return includesSource(value, SEARCH_SOURCES);
 }
-
 function isSocialSource(value) {
   return includesSource(value, SOCIAL_SOURCES);
 }
 
 function getSearchEngine(value) {
-  const normalized = normalizeValue(value);
-
-  if (normalized.includes("google")) return "google";
-  if (normalized.includes("bing")) return "bing";
-  if (normalized.includes("yahoo")) return "yahoo";
-  if (normalized.includes("duckduckgo")) return "duckduckgo";
-  if (normalized.includes("baidu")) return "baidu";
-  if (normalized.includes("yandex")) return "yandex";
-  if (normalized.includes("ecosia")) return "ecosia";
-
+  const n = normalizeValue(value);
+  if (n.includes("google")) return "google";
+  if (n.includes("bing")) return "bing";
+  if (n.includes("yahoo")) return "yahoo";
+  if (n.includes("duckduckgo")) return "duckduckgo";
+  if (n.includes("baidu")) return "baidu";
+  if (n.includes("yandex")) return "yandex";
+  if (n.includes("ecosia")) return "ecosia";
   return "search_engine";
 }
 
 function getSocialPlatform(value) {
-  const normalized = normalizeValue(value);
-
-  if (
-    normalized.includes("facebook") ||
-    normalized === "fb" ||
-    normalized.includes("l.facebook") ||
-    normalized.includes("lm.facebook")
-  ) {
+  const n = normalizeValue(value);
+  if (n.includes("facebook") || n === "fb" || n.includes("l.facebook"))
     return "facebook";
-  }
-
-  if (normalized.includes("instagram") || normalized === "ig") {
-    return "instagram";
-  }
-
-  if (normalized.includes("linkedin")) return "linkedin";
-  if (normalized.includes("tiktok")) return "tiktok";
-
-  if (
-    normalized === "x" ||
-    normalized.includes("twitter") ||
-    normalized.includes("t.co")
-  ) {
-    return "x";
-  }
-
-  if (normalized.includes("youtube")) return "youtube";
-  if (normalized.includes("pinterest")) return "pinterest";
-  if (normalized.includes("snapchat")) return "snapchat";
-  if (normalized.includes("reddit")) return "reddit";
-
+  if (n.includes("instagram") || n === "ig") return "instagram";
+  if (n.includes("linkedin")) return "linkedin";
+  if (n.includes("tiktok")) return "tiktok";
+  if (n === "x" || n.includes("twitter") || n.includes("t.co")) return "x";
+  if (n.includes("youtube")) return "youtube";
+  if (n.includes("pinterest")) return "pinterest";
+  if (n.includes("snapchat")) return "snapchat";
+  if (n.includes("reddit")) return "reddit";
   return "social";
 }
 
@@ -169,24 +150,16 @@ function readStoredAttribution() {
 function saveStoredAttribution(attribution) {
   try {
     localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(attribution));
-
-    /*
-     * Existing forms ke liye purani UTM keys maintain rakhi hain.
-     * In keys mein First Touch attribution save hogi.
-     */
     const firstTouch = attribution.first_touch;
-
     if (firstTouch) {
       localStorage.setItem(
         "utm_source",
         firstTouch.utm_source || firstTouch.source || "direct",
       );
-
       localStorage.setItem(
         "utm_medium",
         firstTouch.utm_medium || firstTouch.medium || "none",
       );
-
       localStorage.setItem("utm_campaign", firstTouch.utm_campaign || "none");
     }
   } catch (error) {
@@ -194,9 +167,52 @@ function saveStoredAttribution(attribution) {
   }
 }
 
+// ─────────────────────────────────────────────
+// CLEAR ATTRIBUTION — order k baad call karo
+// ─────────────────────────────────────────────
+export function clearAttribution() {
+  try {
+    localStorage.removeItem(ATTRIBUTION_STORAGE_KEY);
+    localStorage.removeItem("utm_source");
+    localStorage.removeItem("utm_medium");
+    localStorage.removeItem("utm_campaign");
+  } catch (error) {
+    console.error("Unable to clear attribution:", error);
+  }
+}
+
+// ─────────────────────────────────────────────
+// GET ATTRIBUTION — order API mein use karo
+// ─────────────────────────────────────────────
+export function getAttribution() {
+  try {
+    const stored = readStoredAttribution();
+    if (!stored) return null;
+
+    return {
+      first_touch_source: stored.first_touch?.source || "direct",
+      first_touch_medium: stored.first_touch?.medium || "none",
+      first_touch_channel: stored.first_touch?.channel || "Direct",
+      first_touch_campaign: stored.first_touch?.utm_campaign || "none",
+      first_touch_paid: stored.first_touch?.paid_status || "unknown",
+
+      last_touch_source: stored.last_touch?.source || "direct",
+      last_touch_medium: stored.last_touch?.medium || "none",
+      last_touch_channel: stored.last_touch?.channel || "Direct",
+      last_touch_campaign: stored.last_touch?.utm_campaign || "none",
+      last_touch_paid: stored.last_touch?.paid_status || "unknown",
+
+      click_ids: stored.first_touch?.click_ids || {},
+      landing_page: stored.first_touch?.landing_page || "",
+      captured_at: stored.first_touch?.captured_at || "",
+    };
+  } catch {
+    return null;
+  }
+}
+
 function detectAttribution() {
   const params = new URLSearchParams(window.location.search);
-
   const referrer = document.referrer || "";
   const referrerHostname = getHostname(referrer);
   const isInternalReferrer = isInternalHostname(referrerHostname);
@@ -214,20 +230,16 @@ function detectAttribution() {
   const dclid = params.get("dclid") || "";
   const gadSource = params.get("gad_source") || "";
   const gadCampaignId = params.get("gad_campaignid") || "";
-
   const msclkid = params.get("msclkid") || "";
-
   const fbclid = params.get("fbclid") || "";
   const ttclid = params.get("ttclid") || "";
   const linkedInClickId = params.get("li_fat_id") || "";
   const twitterClickId = params.get("twclid") || "";
 
   const normalizedMedium = normalizeValue(utmMedium);
-
   const hasGooglePaidIdentifier = Boolean(
     gclid || gbraid || wbraid || gadSource || gadCampaignId,
   );
-
   const hasAnyTrackingSignal = Boolean(
     utmSource ||
     utmMedium ||
@@ -255,16 +267,12 @@ function detectAttribution() {
   let confidence = "medium";
   let evidence = ["no_external_referrer_or_tracking_parameter"];
 
-  /*
-   * Google Ads
-   */
   if (hasGooglePaidIdentifier) {
     source = "google";
     medium = "cpc";
     channel = "Paid Search";
     paidStatus = "paid";
     confidence = "high";
-
     evidence = [
       gclid && "gclid",
       gbraid && "gbraid",
@@ -273,10 +281,6 @@ function detectAttribution() {
       gadCampaignId && "gad_campaignid",
     ].filter(Boolean);
   } else if (dclid) {
-
-  /*
-   * Google Display
-   */
     source = "google";
     medium = "display";
     channel = "Display";
@@ -284,10 +288,6 @@ function detectAttribution() {
     confidence = "high";
     evidence = ["dclid"];
   } else if (msclkid) {
-
-  /*
-   * Microsoft/Bing Ads
-   */
     source = "bing";
     medium = "cpc";
     channel = "Paid Search";
@@ -295,45 +295,25 @@ function detectAttribution() {
     confidence = "high";
     evidence = ["msclkid"];
   } else if (utmMedium && PAID_MEDIUMS.has(normalizedMedium)) {
-
-  /*
-   * Paid UTM traffic
-   */
     source = normalizeValue(utmSource) || "unknown";
     medium = normalizedMedium;
     paidStatus = "paid";
     confidence = "high";
     evidence = ["paid_utm_medium"];
-
-    if (isSocialSource(source)) {
-      channel = "Paid Social";
-    } else if (isSearchSource(source)) {
-      channel = "Paid Search";
-    } else if (normalizedMedium === "display") {
-      channel = "Display";
-    } else {
-      channel = "Paid Other";
-    }
+    if (isSocialSource(source)) channel = "Paid Social";
+    else if (isSearchSource(source)) channel = "Paid Search";
+    else if (normalizedMedium === "display") channel = "Display";
+    else channel = "Paid Other";
   } else if (utmSource || utmMedium) {
-
-  /*
-   * Other manually tagged UTM traffic
-   */
     source = normalizeValue(utmSource) || "unknown";
     medium = normalizedMedium || "unknown";
     confidence = "high";
     evidence = ["manual_utm"];
-
     if (ORGANIC_MEDIUMS.has(normalizedMedium)) {
       paidStatus = "organic";
-
-      if (isSocialSource(source)) {
-        channel = "Organic Social";
-      } else if (isSearchSource(source)) {
-        channel = "Organic Search";
-      } else {
-        channel = "Organic";
-      }
+      if (isSocialSource(source)) channel = "Organic Social";
+      else if (isSearchSource(source)) channel = "Organic Search";
+      else channel = "Organic";
     } else if (normalizedMedium === "email") {
       channel = "Email";
       paidStatus = "unknown";
@@ -351,60 +331,36 @@ function detectAttribution() {
       paidStatus = "unknown";
     }
   } else if (fbclid) {
-
-  /*
-   * Meta click
-   *
-   * fbclid Facebook/Instagram click confirm karta hai,
-   * lekin paid ad vs organic post guaranteed nahi.
-   */
     source = isSocialSource(referrerHostname)
       ? getSocialPlatform(referrerHostname)
       : "meta";
-
     medium = "social";
-    channel = "Organic Social";
+    channel = "Social";
     paidStatus = "unknown";
     confidence = "medium";
     evidence = ["fbclid"];
   } else if (ttclid) {
-
-  /*
-   * TikTok click
-   */
     source = "tiktok";
     medium = "social";
-    channel = "Organic Social";
+    channel = "Social";
     paidStatus = "unknown";
     confidence = "medium";
     evidence = ["ttclid"];
   } else if (linkedInClickId) {
-
-  /*
-   * LinkedIn click
-   */
     source = "linkedin";
     medium = "social";
-    channel = "Organic Social";
+    channel = "Social";
     paidStatus = "unknown";
     confidence = "medium";
     evidence = ["li_fat_id"];
   } else if (twitterClickId) {
-
-  /*
-   * X/Twitter click
-   */
     source = "x";
     medium = "social";
-    channel = "Organic Social";
+    channel = "Social";
     paidStatus = "unknown";
     confidence = "medium";
     evidence = ["twclid"];
   } else if (!isInternalReferrer && isSearchSource(referrerHostname)) {
-
-  /*
-   * Organic Search
-   */
     source = getSearchEngine(referrerHostname);
     medium = "organic";
     channel = "Organic Search";
@@ -412,10 +368,6 @@ function detectAttribution() {
     confidence = "medium";
     evidence = ["search_engine_referrer"];
   } else if (!isInternalReferrer && isSocialSource(referrerHostname)) {
-
-  /*
-   * Organic Social
-   */
     source = getSocialPlatform(referrerHostname);
     medium = "social";
     channel = "Organic Social";
@@ -423,10 +375,6 @@ function detectAttribution() {
     confidence = "medium";
     evidence = ["social_referrer"];
   } else if (referrerHostname && !isInternalReferrer) {
-
-  /*
-   * Other external website
-   */
     source = referrerHostname;
     medium = "referral";
     channel = "Referral";
@@ -434,12 +382,6 @@ function detectAttribution() {
     confidence = "medium";
     evidence = ["external_referrer"];
   } else if (isInternalReferrer) {
-
-  /*
-   * Main website → Consultation
-   *
-   * Isko new attribution nahi samjhenge.
-   */
     source = "internal";
     medium = "internal";
     channel = "Internal";
@@ -455,14 +397,12 @@ function detectAttribution() {
     paid_status: paidStatus,
     confidence,
     evidence,
-
     utm_source: utmSource,
     utm_medium: utmMedium,
     utm_campaign: utmCampaign,
     utm_term: utmTerm,
     utm_content: utmContent,
     utm_id: utmId,
-
     click_ids: {
       gclid,
       gbraid,
@@ -474,18 +414,12 @@ function detectAttribution() {
       li_fat_id: linkedInClickId,
       twclid: twitterClickId,
     },
-
-    google_ads: {
-      gad_source: gadSource,
-      gad_campaign_id: gadCampaignId,
-    },
-
+    google_ads: { gad_source: gadSource, gad_campaign_id: gadCampaignId },
     landing_page: `${window.location.pathname}${window.location.search}`,
     landing_url: window.location.href,
     referrer,
     referrer_hostname: referrerHostname || null,
     captured_at: new Date().toISOString(),
-
     has_tracking_signal: hasAnyTrackingSignal,
     is_internal_referrer: isInternalReferrer,
   };
@@ -495,21 +429,14 @@ function initializeAttribution() {
   const currentTouch = detectAttribution();
   const storedAttribution = readStoredAttribution();
 
-  /*
-   * User directly consultation par first time aya.
-   */
   if (!storedAttribution?.first_touch) {
     saveStoredAttribution({
       first_touch: currentTouch,
       last_touch: currentTouch,
     });
-
     return;
   }
 
-  /*
-   * New external source ya tracking parameter mila.
-   */
   const hasExternalReferrer =
     Boolean(currentTouch.referrer_hostname) &&
     !currentTouch.is_internal_referrer;
@@ -517,39 +444,26 @@ function initializeAttribution() {
   const shouldUpdateLastTouch =
     currentTouch.has_tracking_signal || hasExternalReferrer;
 
-  /*
-   * Website → Consultation internal navigation aur Direct return
-   * Last Touch overwrite nahi karenge.
-   */
   if (shouldUpdateLastTouch) {
-    saveStoredAttribution({
-      ...storedAttribution,
-      last_touch: currentTouch,
-    });
+    saveStoredAttribution({ ...storedAttribution, last_touch: currentTouch });
   } else {
     saveStoredAttribution(storedAttribution);
   }
 }
 
+// ─────────────────────────────────────────────
+// APP
+// ─────────────────────────────────────────────
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
     const handleRouteChange = () => {
-      if (window.fbq) {
-        window.fbq("track", "PageView");
-      }
-
-      if (window._cl) {
-        window._cl.pageview();
-      }
+      if (window.fbq) window.fbq("track", "PageView");
+      if (window._cl) window._cl.pageview();
     };
-
     router.events.on("routeChangeComplete", handleRouteChange);
-
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
+    return () => router.events.off("routeChangeComplete", handleRouteChange);
   }, [router.events]);
 
   useEffect(() => {
@@ -559,7 +473,6 @@ export default function App({ Component, pageProps }) {
       const saved = JSON.parse(
         localStorage.getItem(ATTRIBUTION_STORAGE_KEY) || "null",
       );
-
       console.log("=== CONSULTATION ATTRIBUTION DEBUG ===");
       console.log("First Touch:", saved?.first_touch);
       console.log("Last Touch:", saved?.last_touch);

@@ -9,7 +9,7 @@ import { GetImageIsUplaod } from "@/api/mergeRoutes";
 import useAuthStore from "@/store/authStore";
 import Fetcher from "@/library/Fetcher";
 import toast from "react-hot-toast";
-import { GetUserOrderApi } from "@/api/mergeRoutes";
+import { GetUserOrderApi, patientSource } from "@/api/mergeRoutes";
 import { trackCustomerLabsPurchased } from "@/config/CustomerLabs";
 import useUserDataStore from "@/store/userDataStore";
 import usePatientInfoStore from "@/store/patientInfoStore";
@@ -133,6 +133,41 @@ const ThankYou = () => {
           },
           productProperties,
         });
+        // getAttribution() ki jagah yeh use karo
+        const stored = JSON.parse(
+          localStorage.getItem("owlc_attribution") || "null",
+        );
+
+        if (stored && clOrderId && userData?.id) {
+          try {
+            await patientSource({
+              user_id: userData?.id,
+              order_id: clOrderId,
+              first_touch: {
+                channel: stored.first_touch?.channel || "Direct",
+                source: stored.first_touch?.source || "direct",
+                medium: stored.first_touch?.medium || "none",
+                paid_status: stored.first_touch?.paid_status || "unknown",
+              },
+              last_touch: {
+                channel: stored.last_touch?.channel || "Direct",
+                source: stored.last_touch?.source || "direct",
+                medium: stored.last_touch?.medium || "none",
+                paid_status: stored.last_touch?.paid_status || "unknown",
+              },
+            });
+
+            // Clear karo
+            localStorage.removeItem("owlc_attribution");
+            localStorage.removeItem("utm_source");
+            localStorage.removeItem("utm_medium");
+            localStorage.removeItem("utm_campaign");
+
+            console.log("✅ Attribution sent");
+          } catch (attributionError) {
+            console.error("Attribution API failed:", attributionError);
+          }
+        }
       } catch (error) {
         toast.error(
           error?.response?.data?.errors?.Order || "An error occurred",

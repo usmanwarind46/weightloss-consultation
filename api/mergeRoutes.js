@@ -105,6 +105,10 @@ export const GetOrdersApi = async ({ data, page }) => {
   });
 };
 
+export const patientSource = async (data) => {
+  return Fetcher.post("/PatientSources", data);
+};
+
 export default {
   UploadPhotoLogs,
   UpdatePassword,
@@ -124,4 +128,5 @@ export default {
   forgotPassword,
   getOrderByIdApi,
   GetOrdersApi,
+  patientSource,
 };
