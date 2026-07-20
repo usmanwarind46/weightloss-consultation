@@ -44,7 +44,7 @@ import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
 import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
 import ConfirmationModal2 from "@/Components/Modal/ConfirmationModal2";
-import useExplanationEvidenceStore from "@/pages/useExplanationEvidenceStore";
+import useExplanationEvidenceStore from "@/store/useExplanationEvidenceStore";
 import { User2 } from "lucide-react";
 
 const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {

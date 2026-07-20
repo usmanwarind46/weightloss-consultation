@@ -107,36 +107,15 @@ const ThankYou = () => {
           };
         });
 
-        trackCustomerLabsPurchased({
-          formName: "Thank You - Order Placed",
-          formId: "onlineweightlossclinic_thankyou_order",
-          dedupeKey: clOrderId
-            ? `customerlabs_purchased_thankyou_${clOrderId}`
-            : null,
-          identity: {
-            firstName: userData?.fname || patientInfo?.firstName || "",
-            lastName: userData?.lname || patientInfo?.lastName || "",
-            email: userData?.email || "",
-            phone: userData?.phone || patientInfo?.phoneNo || "",
-            userId: userData?.id || "",
-          },
-          properties: {
-            event_source: "thank_you_page",
-            currency: "GBP",
-            value: clCheckout?.total || 0,
-            transaction_id: String(clOrderId || ""),
-            order_id: String(clOrderId || ""),
-            product_name: productName,
-            treatment_name: productName,
-            dose: `${doseName} x${doseQuantity}`,
-            addons: addonsString,
-          },
-          productProperties,
-        });
-
         const stored = JSON.parse(
           localStorage.getItem("owlc_attribution") || "null",
         );
+
+        console.log("=== ATTRIBUTION DEBUG ===");
+        console.log("stored:", stored);
+        console.log("clOrderId:", clOrderId);
+        console.log("userData?.id:", userData?.id);
+        console.log("condition:", !!(stored && clOrderId && userData?.id));
 
         if (stored && clOrderId && userData?.id) {
           try {
@@ -168,6 +147,33 @@ const ThankYou = () => {
             console.error("Attribution API failed:", attributionError);
           }
         }
+
+        trackCustomerLabsPurchased({
+          formName: "Thank You - Order Placed",
+          formId: "onlineweightlossclinic_thankyou_order",
+          dedupeKey: clOrderId
+            ? `customerlabs_purchased_thankyou_${clOrderId}`
+            : null,
+          identity: {
+            firstName: userData?.fname || patientInfo?.firstName || "",
+            lastName: userData?.lname || patientInfo?.lastName || "",
+            email: userData?.email || "",
+            phone: userData?.phone || patientInfo?.phoneNo || "",
+            userId: userData?.id || "",
+          },
+          properties: {
+            event_source: "thank_you_page",
+            currency: "GBP",
+            value: clCheckout?.total || 0,
+            transaction_id: String(clOrderId || ""),
+            order_id: String(clOrderId || ""),
+            product_name: productName,
+            treatment_name: productName,
+            dose: `${doseName} x${doseQuantity}`,
+            addons: addonsString,
+          },
+          productProperties,
+        });
       } catch (error) {
         toast.error(
           error?.response?.data?.errors?.Order || "An error occurred",

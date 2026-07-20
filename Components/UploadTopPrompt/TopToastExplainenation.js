@@ -1,4 +1,3 @@
-import useExplanationEvidenceStore from "@/store/useExplanationEvidenceStore";
 import React, { useState } from "react";
 import { FiAlertCircle, FiUpload, FiX, FiFileText } from "react-icons/fi";
 import { AiOutlineCheckCircle } from "react-icons/ai";
@@ -15,6 +14,7 @@ import {
   PostPrescriptionEvidence,
 } from "@/api/PrescriptionEvidenceApi";
 import useAuthStore from "@/store/authStore";
+import useExplanationEvidenceStore from "@/store/useExplanationEvidenceStore";
 
 const TopToastExplanation = () => {
   const MAX_SIZE_MB = 5;
