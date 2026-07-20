@@ -111,13 +111,7 @@ const ThankYou = () => {
           localStorage.getItem("owlc_attribution") || "null",
         );
 
-        console.log("=== ATTRIBUTION DEBUG ===");
-        console.log("stored:", stored);
-        console.log("clOrderId:", clOrderId);
-        console.log("userData?.id:", userData?.id);
-        console.log("condition:", !!(stored && clOrderId && userData?.id));
-
-        if (stored && clOrderId && userData?.id) {
+        if (stored) {
           try {
             await patientSource({
               user_id: userData?.id,
