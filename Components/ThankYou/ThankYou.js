@@ -133,7 +133,7 @@ const ThankYou = () => {
           },
           productProperties,
         });
-        // getAttribution() ki jagah yeh use karo
+
         const stored = JSON.parse(
           localStorage.getItem("owlc_attribution") || "null",
         );
