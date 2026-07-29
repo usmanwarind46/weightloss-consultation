@@ -467,6 +467,7 @@ function initializeAttribution() {
   }
 
   if (!storedAttribution?.first_touch) {
+    // Pehli baar — dono same
     saveStoredAttribution({
       first_touch: currentTouch,
       last_touch: currentTouch,
@@ -474,18 +475,11 @@ function initializeAttribution() {
     return;
   }
 
-  const hasExternalReferrer =
-    Boolean(currentTouch.referrer_hostname) &&
-    !currentTouch.is_internal_referrer;
-
-  const shouldUpdateLastTouch =
-    currentTouch.has_tracking_signal || hasExternalReferrer;
-
-  if (shouldUpdateLastTouch) {
-    saveStoredAttribution({ ...storedAttribution, last_touch: currentTouch });
-  } else {
-    saveStoredAttribution(storedAttribution);
-  }
+  // Last Touch har visit pe update hoga
+  saveStoredAttribution({
+    ...storedAttribution,
+    last_touch: currentTouch,
+  });
 }
 
 // ─────────────────────────────────────────────
