@@ -466,8 +466,19 @@ function initializeAttribution() {
     return;
   }
 
+  // ── Website se aaya — last touch update nahi hoga ──
+  if (currentTouch.is_internal_referrer) {
+    console.log("Internal referrer — attribution update skipped");
+    if (!storedAttribution?.first_touch) {
+      saveStoredAttribution({
+        first_touch: currentTouch,
+        last_touch: currentTouch,
+      });
+    }
+    return;
+  }
+
   if (!storedAttribution?.first_touch) {
-    // Pehli baar — dono same
     saveStoredAttribution({
       first_touch: currentTouch,
       last_touch: currentTouch,
