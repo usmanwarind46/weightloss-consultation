@@ -329,7 +329,7 @@ function detectAttribution() {
       paidStatus = "unknown";
     } else if (!utmMedium && isAISource(source)) {
       medium = "organic";
-      channel = "AI Assisted";
+      channel = "AI Assistant";
       paidStatus = "organic";
     } else if (!utmMedium && isSearchSource(source)) {
       medium = "organic";
@@ -390,7 +390,7 @@ function detectAttribution() {
   } else if (!isInternalReferrer && isAISource(referrerHostname)) {
     source = referrerHostname;
     medium = "organic";
-    channel = "AI Assisted";
+    channel = "AI Assistant";
     paidStatus = "organic";
     confidence = "medium";
     evidence = ["ai_referrer"];
