@@ -111,6 +111,9 @@ const ThankYou = () => {
           localStorage.getItem("owlc_attribution") || "null",
         );
 
+        console.log("First Touch Data:", stored?.first_touch);
+        console.log("Last Touch Data:", stored?.last_touch);
+
         if (stored) {
           try {
             await patientSource({

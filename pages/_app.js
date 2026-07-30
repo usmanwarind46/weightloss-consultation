@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import Script from "next/script";
 
 // ─────────────────────────────────────────────
-// CONSTANTS — same domain, same storage key
+// CONSTANTS
 // ─────────────────────────────────────────────
 const ATTRIBUTION_STORAGE_KEY = "owlc_attribution";
 const ROOT_DOMAIN = "onlineweightlossclinic.co.uk";
@@ -67,8 +67,28 @@ const SOCIAL_SOURCES = [
   "reddit",
 ];
 
+const AI_SOURCES = [
+  "chatgpt.com",
+  "chat.openai.com",
+  "gemini.google.com",
+  "bard.google.com",
+  "copilot.microsoft.com",
+  "bing.com/chat",
+  "you.com",
+  "phind.com",
+  "poe.com",
+  "character.ai",
+  "quora.com",
+  "inflection.ai",
+  "pi.ai",
+  "cohere.com",
+  "huggingface.co",
+  "mistral.ai",
+  "groq.com",
+];
+
 // ─────────────────────────────────────────────
-// HELPERS — website se same
+// HELPERS
 // ─────────────────────────────────────────────
 function normalizeValue(value) {
   return String(value || "")
@@ -111,6 +131,15 @@ function isSocialSource(value) {
   return includesSource(value, SOCIAL_SOURCES);
 }
 
+function isAISource(value) {
+  if (!value) return false;
+  const normalized = normalizeValue(value);
+  if (AI_SOURCES.some((p) => normalized.includes(normalizeValue(p))))
+    return true;
+  if (value.endsWith(".ai")) return true;
+  return false;
+}
+
 function getSearchEngine(value) {
   const n = normalizeValue(value);
   if (n.includes("google")) return "google";
@@ -125,7 +154,12 @@ function getSearchEngine(value) {
 
 function getSocialPlatform(value) {
   const n = normalizeValue(value);
-  if (n.includes("facebook") || n === "fb" || n.includes("l.facebook"))
+  if (
+    n.includes("facebook") ||
+    n === "fb" ||
+    n.includes("l.facebook") ||
+    n.includes("lm.facebook")
+  )
     return "facebook";
   if (n.includes("instagram") || n === "ig") return "instagram";
   if (n.includes("linkedin")) return "linkedin";
@@ -167,9 +201,6 @@ function saveStoredAttribution(attribution) {
   }
 }
 
-// ─────────────────────────────────────────────
-// CLEAR ATTRIBUTION — order k baad call karo
-// ─────────────────────────────────────────────
 export function clearAttribution() {
   try {
     localStorage.removeItem(ATTRIBUTION_STORAGE_KEY);
@@ -178,36 +209,6 @@ export function clearAttribution() {
     localStorage.removeItem("utm_campaign");
   } catch (error) {
     console.error("Unable to clear attribution:", error);
-  }
-}
-
-// ─────────────────────────────────────────────
-// GET ATTRIBUTION — order API mein use karo
-// ─────────────────────────────────────────────
-export function getAttribution() {
-  try {
-    const stored = readStoredAttribution();
-    if (!stored) return null;
-
-    return {
-      first_touch_source: stored.first_touch?.source || "direct",
-      first_touch_medium: stored.first_touch?.medium || "none",
-      first_touch_channel: stored.first_touch?.channel || "Direct",
-      first_touch_campaign: stored.first_touch?.utm_campaign || "none",
-      first_touch_paid: stored.first_touch?.paid_status || "unknown",
-
-      last_touch_source: stored.last_touch?.source || "direct",
-      last_touch_medium: stored.last_touch?.medium || "none",
-      last_touch_channel: stored.last_touch?.channel || "Direct",
-      last_touch_campaign: stored.last_touch?.utm_campaign || "none",
-      last_touch_paid: stored.last_touch?.paid_status || "unknown",
-
-      click_ids: stored.first_touch?.click_ids || {},
-      landing_page: stored.first_touch?.landing_page || "",
-      captured_at: stored.first_touch?.captured_at || "",
-    };
-  } catch {
-    return null;
   }
 }
 
@@ -223,7 +224,6 @@ function detectAttribution() {
   const utmTerm = params.get("utm_term") || "";
   const utmContent = params.get("utm_content") || "";
   const utmId = params.get("utm_id") || "";
-
   const gclid = params.get("gclid") || "";
   const gbraid = params.get("gbraid") || "";
   const wbraid = params.get("wbraid") || "";
@@ -309,6 +309,7 @@ function detectAttribution() {
     medium = normalizedMedium || "unknown";
     confidence = "high";
     evidence = ["manual_utm"];
+
     if (ORGANIC_MEDIUMS.has(normalizedMedium)) {
       paidStatus = "organic";
       if (isSocialSource(source)) channel = "Organic Social";
@@ -326,6 +327,18 @@ function detectAttribution() {
     ) {
       channel = "Affiliates";
       paidStatus = "unknown";
+    } else if (!utmMedium && isAISource(source)) {
+      medium = "organic";
+      channel = "AI Referral";
+      paidStatus = "organic";
+    } else if (!utmMedium && isSearchSource(source)) {
+      medium = "organic";
+      channel = "Organic Search";
+      paidStatus = "organic";
+    } else if (!utmMedium && isSocialSource(source)) {
+      medium = "social";
+      channel = "Organic Social";
+      paidStatus = "organic";
     } else {
       channel = "Unassigned";
       paidStatus = "unknown";
@@ -374,6 +387,13 @@ function detectAttribution() {
     paidStatus = "organic";
     confidence = "medium";
     evidence = ["social_referrer"];
+  } else if (!isInternalReferrer && isAISource(referrerHostname)) {
+    source = referrerHostname;
+    medium = "organic";
+    channel = "AI Referral";
+    paidStatus = "organic";
+    confidence = "medium";
+    evidence = ["ai_referrer"];
   } else if (referrerHostname && !isInternalReferrer) {
     source = referrerHostname;
     medium = "referral";
@@ -425,32 +445,6 @@ function detectAttribution() {
   };
 }
 
-// function initializeAttribution() {
-//   const currentTouch = detectAttribution();
-//   const storedAttribution = readStoredAttribution();
-
-//   if (!storedAttribution?.first_touch) {
-//     saveStoredAttribution({
-//       first_touch: currentTouch,
-//       last_touch: currentTouch,
-//     });
-//     return;
-//   }
-
-//   const hasExternalReferrer =
-//     Boolean(currentTouch.referrer_hostname) &&
-//     !currentTouch.is_internal_referrer;
-
-//   const shouldUpdateLastTouch =
-//     currentTouch.has_tracking_signal || hasExternalReferrer;
-
-//   if (shouldUpdateLastTouch) {
-//     saveStoredAttribution({ ...storedAttribution, last_touch: currentTouch });
-//   } else {
-//     saveStoredAttribution(storedAttribution);
-//   }
-// }
-
 function initializeAttribution() {
   const currentTouch = detectAttribution();
   const storedAttribution = readStoredAttribution();
@@ -466,7 +460,7 @@ function initializeAttribution() {
     return;
   }
 
-  // ── Website se aaya — last touch update nahi hoga ──
+  // ── Internal referrer — last touch update nahi hoga ──
   if (currentTouch.is_internal_referrer) {
     console.log("Internal referrer — attribution update skipped");
     if (!storedAttribution?.first_touch) {
