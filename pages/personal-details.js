@@ -51,17 +51,35 @@ export default function PersonalDetails() {
   const validateAge = (date) => {
     if (!date) return "Date of birth is required";
 
-    const age = differenceInYears(new Date(), date);
+    const today = new Date();
+    const age = differenceInYears(today, date);
 
     if (age < 18) {
       return "You must be at least 18 years old";
     }
 
-    if (productId === 1 && age > 85) {
+    // 85th birthday calculate karo
+    const birthDate = new Date(date);
+    const eightyFifthBirthday = new Date(
+      birthDate.getFullYear() + 85,
+      birthDate.getMonth(),
+      birthDate.getDate(),
+    );
+
+    // Agar aaj 85th birthday ke baad hai — block karo
+    const isOver85 = today > eightyFifthBirthday;
+
+    console.log(productId, age, "product id & Age");
+
+    if (productId === 1 && isOver85) {
       return "Wegovy (Semaglutide) is not recommended for individuals above 85 years of age";
     }
 
-    if (productId === 4 && age > 85) {
+    if (productId === 7 && isOver85) {
+      return "Wegovy Pill is not recommended for individuals above 85 years of age";
+    }
+
+    if (productId === 4 && isOver85) {
       return "Mounjaro (Tirzepatide) is not recommended for individuals above 85 years of age";
     }
 
