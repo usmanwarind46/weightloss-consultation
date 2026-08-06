@@ -278,7 +278,7 @@ const ThankYou = () => {
                       </td>
                       <td></td>
                       <td className="px-6 py-3 text-right reg-font text-primary">
-                        {checkOut?.discount?.type === "percentage"
+                        {checkOut?.discount?.type == "Percent"
                           ? `${parseFloat(checkOut?.discount?.discount).toFixed(
                               2,
                             )}%`
@@ -288,6 +288,22 @@ const ThankYou = () => {
                       </td>
                     </tr>
                   )}
+
+                  {checkOut?.discount?.discount_value &&
+                    checkOut?.discount?.type === "Percent" && (
+                      <tr>
+                        <td className="px-6 py-3 reg-font text-black">
+                          Discounted Amount
+                        </td>
+                        <td></td>
+                        <td className="px-6 py-3 text-right reg-font">
+                          -£
+                          {parseFloat(
+                            checkOut?.discount?.discount_value,
+                          ).toFixed(2)}
+                        </td>
+                      </tr>
+                    )}
 
                   {checkOut?.shipment && (
                     <tr className="hover:bg-gray-50">
