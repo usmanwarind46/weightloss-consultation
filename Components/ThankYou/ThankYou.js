@@ -272,7 +272,7 @@ const ThankYou = () => {
                       <td className="px-6 py-3 reg-font text-black">
                         Discount
                         {checkOut?.discount?.type === "Percent"
-                          ? ` (${parseFloat(checkOut?.discount?.discount).toFixed(2)}%)`
+                          ? ` (${parseInt(checkOut?.discount?.discount)}%)`
                           : checkOut?.discount?.type &&
                             ` (${checkOut?.discount?.type})`}
                         {checkOut?.discount?.code &&
