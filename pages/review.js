@@ -266,7 +266,7 @@ export default function ReviewScreen() {
                     transition={{ duration: 0.35, ease: "easeOut" }}
                   >
                     <motion.div className="review-buttons flex flex-col gap-4">
-                      <ReviewButton
+                      {/* <ReviewButton
                         icon={googleIcon}
                         label="Google Review"
                         brand="google"
@@ -280,7 +280,7 @@ export default function ReviewScreen() {
                             "_blank",
                           );
                         }}
-                      />
+                      /> */}
 
                       <ReviewButton
                         icon={trustpilotIcon}
@@ -292,7 +292,7 @@ export default function ReviewScreen() {
                             review_source: "trustpilot",
                           }); // 🔹 API
                           window.open(
-                            "https://www.trustpilot.com/review/weightlosspharmacy.co.uk",
+                            "https://www.trustpilot.com/review/onlineweightlossclinic.co.uk",
                             "_blank",
                           );
                         }}
