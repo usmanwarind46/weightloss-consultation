@@ -195,7 +195,7 @@ export default function GatherData() {
       setShowLoader(true);
 
       consultationMutation.mutate({
-        clinic_id: 1,
+        clinic_id: 2,
         product_id: abandonCard.productId,
         type: abandonCard.type,
         eid: Number(abandonCard.eid),

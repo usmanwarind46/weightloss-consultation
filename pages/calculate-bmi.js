@@ -540,7 +540,8 @@ export default function CalculateBmi() {
                     )}
 
                     {lastBmi ? (
-                      lastBmi?.weight_unit == "metrics" ? (
+                      lastBmi?.weight_unit == "metrics" ||
+                      lastBmi?.weight_unit == "metric" ? (
                         <div className="bg-[#FFF3CD] px-4 py-4 mt-6 mb-6 text-gray-700 rounded shadow-md">
                           <p className="flex items-center sm:text-[16px] text-xs">
                             <BsInfoCircle className="me-2" /> Your previous

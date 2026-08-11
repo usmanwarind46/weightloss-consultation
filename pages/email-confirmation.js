@@ -126,6 +126,7 @@ export default function EmailConfirmation() {
             setLastName(user?.lname);
             setEmail(user?.email);
             setShowResetPassword(user?.show_password_reset);
+            setIsReturningPatient(user?.isReturning);
 
             toast.success("Login Successfully");
             Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${user.token}`;
