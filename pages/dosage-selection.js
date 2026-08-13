@@ -114,12 +114,12 @@ export default function DosageSelection() {
       return;
     }
 
-    // Normal abandon cart logic
-    if (productId == 4 && hasNeedles) {
-      abandonCartMutation.mutate(abandonData);
-    } else if (productId == 1) {
-      abandonCartMutation.mutate(abandonData);
-    }
+    //⚠️ commit krdia h yaha sy q k ab har dose k click k api direct chaly gi⚠️
+    // if (productId == 4 && hasNeedles) {
+    //   abandonCartMutation.mutate(abandonData);
+    // } else if (productId == 1) {
+    //   abandonCartMutation.mutate(abandonData);
+    // }
 
     router.push("/checkout");
   };

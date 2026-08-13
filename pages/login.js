@@ -206,7 +206,7 @@ export default function LoginScreen() {
     const type = params.type;
     const eid = params.eid ? Number(params.eid) : null;
     setProductId(productId);
-    if (type == "abandoned-cart" && productId && !abandonCard) {
+    if (type == "abandoned-cart" && productId) {
       setAbandonCard({
         productId,
         fromEmail,
@@ -217,7 +217,7 @@ export default function LoginScreen() {
     } else {
       console.log("⛔ SKIPPED STORE UPDATE");
     }
-  }, [searchParams, abandonCard]);
+  }, [searchParams]);
 
   // herer i used ussEffect for if login or check abandonCard url direct
 

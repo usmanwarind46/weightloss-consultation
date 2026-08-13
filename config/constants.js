@@ -10,6 +10,7 @@ export const passwordlink =
   "https://www.onlineweightlossclinic.co.uk/start-consultation/email-confirmation";
 // export const app_url = "http://192.168.1.194:7000/api";
 export const app_url = "https://app.onlineweightlossclinic.co.uk/api";
+// export const app_url = "https://staging.onlineweightlossclinic.co.uk/api";
 // https://app.weightlosspharmacy.co.uk/
 // https://staging.mayfairweightlossclinic.co.uk/api
 // export const passwordlink = "http://localhost:3000/email-confirmation"
