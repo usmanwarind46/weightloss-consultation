@@ -13,8 +13,11 @@ export default function RouteGuard({ children }) {
     const path = router.pathname;
     const isPublic = publicRoutes.includes(path);
     const isLogin = path === loginRoute;
+    const isAbandonedCart = router.asPath.includes("abandoned-cart");
 
-    if (!isPublic && !token) {
+    if (isLogin && token && isAbandonedCart) {
+      setLoading(false); // login.js ko render hone do, woh khud handle karega
+    } else if (!isPublic && !token) {
       router.push("/login/");
     } else if (isLogin && token && review) {
       router.push("/review");
