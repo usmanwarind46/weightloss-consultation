@@ -15,7 +15,7 @@ import { differenceInYears, format, parse } from "date-fns";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import useProductId from "@/store/useProductIdStore";
 import MetaLayout from "@/Meta/MetaLayout";
-import { meta_url } from "@/config/constants";
+import { FoundayoProductId, meta_url, WegovyPillProductId } from "@/config/constants";
 
 export default function PersonalDetails() {
   const [showLoader, setShowLoader] = useState(false);
@@ -75,7 +75,10 @@ export default function PersonalDetails() {
       return "Wegovy (Semaglutide) is not recommended for individuals above 85 years of age";
     }
 
-    if (productId === 7 && isOver85) {
+    if (productId === FoundayoProductId && isOver85) {
+      return "Foundayo (Orforglipron) is not recommended for individuals above 85 years of age";
+    }
+    if (productId === WegovyPillProductId && isOver85) {
       return "Wegovy Pill is not recommended for individuals above 85 years of age";
     }
 
@@ -91,7 +94,7 @@ export default function PersonalDetails() {
       const parsedDate = parse(patientInfo.dob, "dd-MM-yyyy", new Date());
       const fixedGender = patientInfo?.gender
         ? patientInfo.gender.charAt(0).toUpperCase() +
-          patientInfo.gender.slice(1).toLowerCase()
+        patientInfo.gender.slice(1).toLowerCase()
         : "";
 
       setValue("dob", parsedDate);
@@ -159,10 +162,9 @@ export default function PersonalDetails() {
                         <label
                           key={option}
                           className={`flex items-center gap-3 px-4 py-3 border rounded-lg transition-all cursor-pointer text-sm
-                            ${
-                              selected
-                                ? "bg-[#E9F6FA] border-black text-black bold-font paragraph"
-                                : "border-gray-300 text-gray-900 hover:bg-gray-50"
+                            ${selected
+                              ? "bg-[#E9F6FA] border-black text-black bold-font paragraph"
+                              : "border-gray-300 text-gray-900 hover:bg-gray-50"
                             } bold-font paragraph`}
                         >
                           <div

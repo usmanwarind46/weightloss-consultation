@@ -15,6 +15,7 @@ import ConfirmationModal from "../Modal/ConfirmationModal";
 import useCartStore from "@/store/useCartStore";
 import { getNotified } from "@/api/mergeRoutes";
 import useProductId from "@/store/useProductIdStore";
+import { FoundayoProductId } from "@/config/constants";
 
 const Dose = ({
   doseData,
@@ -122,7 +123,7 @@ const Dose = ({
     <>
       <div className="">
         <div className="relative p-2 z-20">
-          {doseStatus === 0 && Number(productId) !== 7 && (
+          {doseStatus === 0 && Number(productId) !== FoundayoProductId && (
             <div className="absolute left-2 sm:left-auto sm:right-4 top-28 sm:top-5 group inline-block">
               <button
                 type="button"
@@ -175,7 +176,7 @@ const Dose = ({
 
               {/* Out of stock badge */}
               <div className="absolute left-[14px] top-[-10px] bg-primary text-white px-3 py-0.5 text-xs font-semibold rounded z-20">
-                {Number(productId) == 7 ? "Coming Soon" : "Out of stock"}
+                 {Number(productId) == FoundayoProductId ? "Coming Soon" : "Out of stock"}
               </div>
             </>
           )}
