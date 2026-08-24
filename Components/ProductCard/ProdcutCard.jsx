@@ -20,6 +20,7 @@ import useLastBmi from "@/store/useLastBmiStore";
 import useCouponStore from "@/store/couponStore";
 import useSignupStore from "@/store/signupStore";
 import useReturning from "@/store/useReturningPatient";
+import useAbandonCardStore from "@/store/abandonCardStore";
 
 const ProductCard = ({
   id,
@@ -59,6 +60,7 @@ const ProductCard = ({
   const { setLastBmi } = useLastBmi();
   const { firstName, lastName, setFirstName, setLastName } = useSignupStore();
   const { setIsReturningPatient } = useReturning();
+  const { clearAbandonCard } = useAbandonCardStore();
 
   //Get Consultation Data
   const consultationMutation = useMutation(userConsultationApi, {
@@ -117,6 +119,7 @@ const ProductCard = ({
   });
 
   const handleClick = () => {
+    clearAbandonCard();
     setProductId(id);
     setIsButtonLoading(true);
     const formData = {

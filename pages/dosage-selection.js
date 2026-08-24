@@ -18,7 +18,7 @@ import { MdDelete } from "react-icons/md";
 import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import MetaLayout from "@/Meta/MetaLayout";
-import { meta_url } from "@/config/constants";
+import { FoundayoProductId, meta_url, WegovyPillProductId } from "@/config/constants";
 import useNeedleConsent from "@/store/needleConsent";
 import { FaShoppingCart } from "react-icons/fa";
 import useAbandonCardStore from "@/store/abandonCardStore";
@@ -114,12 +114,12 @@ export default function DosageSelection() {
       return;
     }
 
-    // Normal abandon cart logic
-    if (productId == 4 && hasNeedles) {
-      abandonCartMutation.mutate(abandonData);
-    } else if (productId == 1) {
-      abandonCartMutation.mutate(abandonData);
-    }
+    //⚠️ commit krdia h yaha sy q k ab har dose k click k api direct chaly gi⚠️
+    // if (productId == 4 && hasNeedles) {
+    //   abandonCartMutation.mutate(abandonData);
+    // } else if (productId == 1) {
+    //   abandonCartMutation.mutate(abandonData);
+    // }
 
     router.push("/checkout");
   };
@@ -130,8 +130,12 @@ export default function DosageSelection() {
 
   // ✅ Put here → outside your component or at the top inside your component file
   const generateProductConcent = (variations, selectedDoseName) => {
-    if (productId == 7) {
+    if (productId == WegovyPillProductId) {
       return `If this is your first time taking Wegovy Tablets, you should start with the 1.5mg dose. Starting on a higher dose may increase the risk of side effects.\n\nPlease confirm that you are currently taking Wegovy Tablets from another provider, or have previously used, or currently use, a GLP-1 treatment such as Wegovy or Mounjaro.`;
+    }
+
+      if (productId == FoundayoProductId) {
+      return `If this is your first time taking Foundayo Tablets, you should start with the 2.5mg dose. Starting on a higher dose may increase the risk of side effects.\n\nPlease confirm that you are currently taking Foundayo Tablets from another provider, or have previously used, or currently use, a GLP-1 treatment such as Wegovy or Mounjaro.`;
     }
 
     const sortedVariations = [...variations].sort((a, b) => {
@@ -172,7 +176,7 @@ export default function DosageSelection() {
 
     const isFiveMg = dose?.name === "5 mg";
     const firstTwoDoses = variation?.variations?.slice(0, 1).map((v) => v.name);
-    const isFirstTwoDose = firstTwoDoses.includes(dose?.name);
+    const isFirstTwoDose = firstTwoDoses?.includes(dose?.name);
 
     if ((isFirstTwoDose && !isFiveMg) || reorder == true) {
       addToCart({
@@ -384,7 +388,7 @@ export default function DosageSelection() {
                 </p>
               )}
               <NextButton
-                label={productId == 7 ? "I confirm this dose" : " I Confirm"}
+                label={productId == FoundayoProductId || productId == WegovyPillProductId ? "I confirm this dose" : " I Confirm"}
                 onClick={() => {
                   setShowDoseModal(false);
                 }}
@@ -554,7 +558,7 @@ export default function DosageSelection() {
 
                   {Array.isArray(variation?.addons) &&
                     variation?.addons.length > 0 &&
-                    productId != 7 && (
+                     productId != FoundayoProductId && productId != WegovyPillProductId && (
                       <div className="mt-6">
                         <h1 className="mb-4 niba-reg-font text-lg sm:text-xl text-gray-800">
                           Select{" "}

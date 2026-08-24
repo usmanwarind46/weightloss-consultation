@@ -112,8 +112,8 @@ const Dose = ({
   };
 
   const isWegovyPill =
-    doseData?.product_name?.toLowerCase().trim() === "wegovy pill" ||
-    doseData?.name?.toLowerCase().trim() === "wegovy pill";
+    doseData?.product_name?.toLowerCase().trim() === "Foundayo (Orforglipron)" ||
+    doseData?.name?.toLowerCase().trim() === "Foundayo (Orforglipron)";
 
   const price = Number(doseData?.price || 0);
 

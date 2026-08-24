@@ -21,6 +21,22 @@ const useCartStore = create(
         const type = getCartType(product.type); // 'doses' or 'addons'
         const currentItems = state.items[type] || [];
 
+        // Safety guard: agar naya dose doosre product ka hai toh cart clear karo
+        if (type === "doses") {
+          const hasDifferentProduct = currentItems.some(
+            (item) => item.product !== product.product,
+          );
+          if (hasDifferentProduct) {
+            set({
+              items: { doses: [], addons: [] },
+              totalDoses: 0,
+              totalAddons: 0,
+              totalAmount: 0,
+            });
+            return get().addToCart(product);
+          }
+        }
+
         const existingItem = currentItems.find((item) => item.id === product.id);
 
         const newItems = [...currentItems];

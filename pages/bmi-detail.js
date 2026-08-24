@@ -52,36 +52,52 @@ export default function BmiDetail() {
   const explanation = watch("weight_related_comorbidity_explanation");
 
   const bmiValue = parseFloat(Number(bmi?.bmi).toFixed(1));
-  const shouldShowCheckboxes = patientInfo?.ethnicity === "Yes" ? bmiValue >= 25.5 && bmiValue <= 27.4 : bmiValue >= 27.5 && bmiValue <= 29.9;
-  const shouldShowInfoMessage = patientInfo?.ethnicity === "Yes" && bmiValue >= 27.5 && bmiValue <= 29.9;
-  const isApproachingUnderweight = bmiValue >= 19.5 && bmiValue <= 21.0;
+  const shouldShowCheckboxes =
+    patientInfo?.ethnicity === "Yes"
+      ? bmiValue >= 25.5 && bmiValue <= 27.4
+      : bmiValue >= 27 && bmiValue <= 29.9;
+
+  const shouldShowInfoMessage =
+    patientInfo?.ethnicity === "Yes" && bmiValue >= 27.5 && bmiValue <= 29.9;
+  const isApproachingUnderweight = bmiValue >= 20 && bmiValue <= 20.9;
 
   // Check For reorder and low BMI
-  const isReorderAndBmiLow = isReturningPatient && bmiValue <= 19.4;
+  const isReorderAndBmiLow = isReturningPatient && bmiValue < 20;
 
   // Check if the ethnicity is "Yes" or "No" and if the BMI is below the required threshold
   const isEthnicityYes = patientInfo?.ethnicity === "Yes";
   const isEthnicityNo = patientInfo?.ethnicity === "No";
+  const isEthnicityNotDecided = patientInfo?.ethnicity === "Prefer not to say";
   let bmiError = "";
 
   if (isEthnicityYes && bmiValue < 25.5 && !isReturningPatient) {
     bmiError = "BMI must be at least 25.5";
-  } else if (isEthnicityNo && bmiValue < 27 && !isReturningPatient) {
+  } else if (
+    (isEthnicityNo || isEthnicityNotDecided) &&
+    bmiValue < 27 &&
+    !isReturningPatient
+  ) {
     bmiError = "BMI must be at least 27";
   } else if (isApproachingUnderweight && isReturningPatient) {
-    bmiError = "Your BMI is approaching the lower end of healthy weight. Due to the risk of becoming underweight, you are not able to proceed. Please arrange a telephone consultation with a member of our clinical team to discuss alternatives";
+    bmiError =
+      "Your BMI is approaching the lower end of healthy weight. Due to the risk of becoming underweight, you are not able to proceed. Please arrange a telephone consultation with a member of our clinical team to discuss alternatives";
   }
 
-
   const isNextDisabled =
-    (!isReturningPatient && shouldShowCheckboxes && (noneOfTheAbove || (!checkbox1 && !checkbox2) || (checkbox2 && !explanation?.trim()))) ||
+    (!isReturningPatient &&
+      shouldShowCheckboxes &&
+      (noneOfTheAbove ||
+        (!checkbox1 && !checkbox2) ||
+        (checkbox2 && !explanation?.trim()))) ||
     (isReturningPatient && bmiValue < 20) ||
     bmiError;
 
   // const isNextDisabled = shouldShowCheckboxes && (noneOfTheAbove || (!checkbox1 && !checkbox2) || (checkbox2 && !explanation?.trim()));
 
   const getCheckbox1Label = () => {
-    return patientInfo?.ethnicity === "Yes" && bmiValue >= 25.5 && bmiValue <= 27.4
+    return patientInfo?.ethnicity === "Yes" &&
+      bmiValue >= 25.5 &&
+      bmiValue <= 27.4
       ? "You have previously taken weight loss medication your starting (baseline) BMI was above 27.5"
       : "You have previously taken weight loss medication your starting (baseline) BMI was above 30";
   };
@@ -98,7 +114,10 @@ export default function BmiDetail() {
         setValue("checkbox2", true);
       }
       if (consent.weight_related_comorbidity_explanation) {
-        setValue("weight_related_comorbidity_explanation", consent.weight_related_comorbidity_explanation);
+        setValue(
+          "weight_related_comorbidity_explanation",
+          consent.weight_related_comorbidity_explanation,
+        );
       }
       if (consent.assian_message) {
         setValue("noneOfTheAbove", true);
@@ -141,10 +160,13 @@ export default function BmiDetail() {
         }
 
         if (data.checkbox2) {
-          consent.weight_related_comorbidity.push("You have at least one weight-related comorbidity (e.g. PCOS, diabetes, etc.)");
+          consent.weight_related_comorbidity.push(
+            "You have at least one weight-related comorbidity (e.g. PCOS, diabetes, etc.)",
+          );
 
           if (data.weight_related_comorbidity_explanation) {
-            consent.weight_related_comorbidity_explanation = data.weight_related_comorbidity_explanation;
+            consent.weight_related_comorbidity_explanation =
+              data.weight_related_comorbidity_explanation;
           }
         }
       }
@@ -174,7 +196,7 @@ export default function BmiDetail() {
   return (
     <>
       <MetaLayout canonical={`${meta_url}bmi-detail/`} />
-      <StepsHeader percentage={"65"} />
+      <StepsHeader percentage={"70"} />
       <FormWrapper heading={"Your BMI:"}>
         <PageAnimationWrapper>
           <div className="py-12 mb-5 border text-center bg-blue-100 rounded-2xl shadow">
@@ -185,32 +207,48 @@ export default function BmiDetail() {
             <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4 border border-red-300">
               {/* Your BMI is approaching the lower end of healthy weight. Due to the risk of becoming underweight, you are not able to proceed. Please
               arrange a telephone consultation with a member of our clinical team to discuss alternatives. */}
-              Your BMI is in the underweight category. Therefore, losing further weight is not safe and you are not able to proceed further. Please contact us to discuss your options with the clinical team.
-
+              Your BMI is in the underweight category. Therefore, losing further
+              weight is not safe and you are not able to proceed further. Please
+              contact us to discuss your options with the clinical team.
             </div>
           )}
 
           {shouldShowInfoMessage && !isReturningPatient && (
             <div className="bg-[#FFF3CD] px-4 py-4 mt-6 mb-6 text-gray-700 rounded shadow-md">
               <p>
-                As you have confirmed that you are from one of the following family backgrounds: South Asian, Chinese, Other Asian, Middle Eastern,
-                Black African or African-Caribbean, your cardiometabolic risk occurs at a lower BMI. You are, therefore, able to proceed with a lower
-                BMI.
+                As you have confirmed that you are from one of the following
+                family backgrounds: South Asian, Chinese, Other Asian, Middle
+                Eastern, Black African or African-Caribbean, your
+                cardiometabolic risk occurs at a lower BMI. You are, therefore,
+                able to proceed with a lower BMI.
               </p>
             </div>
           )}
 
-          {bmiError && <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4 border border-red-300">{bmiError}</div>}
+          {bmiError && (
+            <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4 border border-red-300">
+              {bmiError}
+            </div>
+          )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 relative">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 relative"
+          >
             {shouldShowCheckboxes && !isReturningPatient && (
               <>
-                {patientInfo?.ethnicity === "No" || patientInfo?.ethnicity === "Prefer not to say" ? (
-                  <p className="text-gray-800 font-normal">Your BMI is between 27-29.9 which indicates you are overweight.</p>
+                {patientInfo?.ethnicity === "No" ||
+                patientInfo?.ethnicity === "Prefer not to say" ? (
+                  <p className="text-gray-800 font-normal">
+                    Your BMI is between 27-29.9 which indicates you are
+                    overweight.
+                  </p>
                 ) : null}
                 <p className="text-gray-800 font-normal">
-                  You should only continue with the consultation if you have tried losing weight through a reduced-calorie diet and increased physical
-                  activity but are still struggling to lose weight and confirm that either:
+                  You should only continue with the consultation if you have
+                  tried losing weight through a reduced-calorie diet and
+                  increased physical activity but are still struggling to lose
+                  weight and confirm that either:
                 </p>
 
                 <Box mb={1}>
@@ -270,8 +308,15 @@ export default function BmiDetail() {
                       control={control}
                       rules={{ required: "Explanation is required" }}
                       render={({ field }) => (
-                        <TextField {...field} label="Explanation"
-                          required name="weight_related_comorbidity_explanation" errors={errors} multiline rows={4} />
+                        <TextField
+                          {...field}
+                          label="Explanation"
+                          required
+                          name="weight_related_comorbidity_explanation"
+                          errors={errors}
+                          multiline
+                          rows={4}
+                        />
                       )}
                     />
                   </Box>
@@ -293,7 +338,10 @@ export default function BmiDetail() {
                               if (checked) {
                                 setValue("checkbox1", false);
                                 setValue("checkbox2", false);
-                                setValue("weight_related_comorbidity_explanation", "");
+                                setValue(
+                                  "weight_related_comorbidity_explanation",
+                                  "",
+                                );
                               }
                             }}
                             sx={{
@@ -312,8 +360,10 @@ export default function BmiDetail() {
 
                   {noneOfTheAbove && (
                     <p className="text-red-600 font-normal mt-2">
-                      Your BMI in this range, weight loss treatment can only be prescribed if you have either previously taken weight loss medication,
-                      or you have at least one weight-related medical condition.
+                      Your BMI in this range, weight loss treatment can only be
+                      prescribed if you have either previously taken weight loss
+                      medication, or you have at least one weight-related
+                      medical condition.
                     </p>
                   )}
                 </Box>
@@ -321,9 +371,15 @@ export default function BmiDetail() {
             )}
 
             <div className="flex justify-between mt-6 relative">
-              <BackButton label="Back" onClick={() => router.push("/calculate-bmi")} />
-              <NextButton label="Next" type="submit" disabled={isNextDisabled} />
-
+              <BackButton
+                label="Back"
+                onClick={() => router.push("/calculate-bmi")}
+              />
+              <NextButton
+                label="Next"
+                type="submit"
+                disabled={isNextDisabled}
+              />
             </div>
             {showLoader && (
               <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg">

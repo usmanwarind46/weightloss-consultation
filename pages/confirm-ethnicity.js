@@ -12,7 +12,7 @@ import BackButton from "@/Components/BackButton/BackButton";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
-import useReturning from "@/store/useReturningPatient";
+// import useReturning from "@/store/useReturningPatient";
 
 const options = ["Yes", "No", "Prefer not to say"];
 
@@ -40,7 +40,8 @@ export default function ConfirmEthnicity() {
 
   useEffect(() => {
     const fixedEthnicity = patientInfo?.ethnicity
-      ? patientInfo?.ethnicity.charAt(0).toUpperCase() + patientInfo?.ethnicity.slice(1).toLowerCase()
+      ? patientInfo?.ethnicity.charAt(0).toUpperCase() +
+        patientInfo?.ethnicity.slice(1).toLowerCase()
       : "";
 
     setValue("ethnicity", fixedEthnicity);
@@ -66,21 +67,31 @@ export default function ConfirmEthnicity() {
     router.push("/calculate-bmi");
   };
 
-
   return (
     <>
       <MetaLayout canonical={`${meta_url}confirm-ethnicity/`} />
       <StepsHeader percentage={"55"} />
       <FormWrapper
         heading={"Confirm Ethnicity"}
-        description={"People of certain ethnicities may be suitable for treatment at a lower BMI than others, if appropriate."}
-
+        description={
+          "People of certain ethnicities may be suitable for treatment at a lower BMI than others, if appropriate."
+        }
       >
         <PageAnimationWrapper>
-          <p className="bold-font paragraph my-3">Does one of the following options describe your ethnic group or background?</p>
+          <p className="bold-font paragraph my-3">
+            Does one of the following options describe your ethnic group or
+            background?
+          </p>
           <div className="">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              {["South Asian", "Chinese", "Other Asian", "Middle Eastern", "Black African", "African-Caribbean"].map((ethnicity, index) => (
+              {[
+                "South Asian",
+                "Chinese",
+                "Other Asian",
+                "Middle Eastern",
+                "Black African",
+                "African-Caribbean",
+              ].map((ethnicity, index) => (
                 <div key={index} className="flex items-start gap-3">
                   {/* w-2.5 h-2.5 */}
                   <div className=" mt-2 bg-primary rounded-full"></div>
@@ -91,7 +102,9 @@ export default function ConfirmEthnicity() {
                 </div>
               ))}
             </div>
-            <div className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}>
+            <div
+              className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
+            >
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-4">
                   {options.map((option) => {
@@ -108,7 +121,12 @@ export default function ConfirmEthnicity() {
                         >
                           {isSelected && <FiCheck className="w-4 h-4" />}
                         </div>
-                        <input type="radio" value={option} {...register("ethnicity", { required: true })} className="hidden" />
+                        <input
+                          type="radio"
+                          value={option}
+                          {...register("ethnicity", { required: true })}
+                          className="hidden"
+                        />
                         {option}
                       </label>
                     );
@@ -116,7 +134,10 @@ export default function ConfirmEthnicity() {
                 </div>
 
                 <div className="flex justify-between mt-6">
-                  <BackButton label="Back" onClick={() => router.push("/preferred-phone-number")} />
+                  <BackButton
+                    label="Back"
+                    onClick={() => router.push("/preferred-phone-number")}
+                  />
                   <NextButton disabled={!isValid} label="Next" />
                 </div>
               </form>
