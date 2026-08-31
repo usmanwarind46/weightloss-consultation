@@ -333,21 +333,28 @@ const ThankYou = () => {
                 </h2>{" "}
                 <p className="thin-font text-gray-700">
                   {" "}
-                  To complete your order, please upload a clear, recent
-                  full-body photo as part of our prescription approval process.
-                  This helps our prescribers verify your BMI and ensure the safe
-                  and appropriate supply of your treatment.
+                  As part of our ongoing commitment to patient safety and
+                  compliance with current regulatory requirements, we are
+                  required to verify your BMI as part of our prescribing
+                  process.
                 </p>
                 <p className="thin-font text-gray-700 my-3">
                   {" "}
-                  Once your photo has been reviewed and approved, your order
-                  will be processed and dispensed by our pharmacy.
+                  Please upload a clear, recent full-body photograph. This is
+                  one of the methods we use to verify your BMI and ensure that
+                  your treatment remains safe and appropriate for you.
                 </p>
                 <p className="thin-font text-gray-700 my-3 ">
                   {" "}
-                  Your privacy is important to us — all photos are stored
-                  securely, encrypted, and handled in strict confidence in line
-                  with data protection regulations.
+                  Once your photo has been reviewed and approved by our clinical
+                  team, your order will be processed and dispensed by our
+                  pharmacy.
+                </p>
+                <p className="thin-font text-gray-700 my-3 ">
+                  {" "}
+                  Your privacy is important to us, therefore all photos are
+                  stored securely, encrypted, and handled in strict confidence
+                  in accordance with applicable data protection regulations.
                 </p>
               </blockquote>
 
