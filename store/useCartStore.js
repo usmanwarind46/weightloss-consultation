@@ -199,6 +199,21 @@ const useCartStore = create(
       },
 
       clearCheckOutClear: () => set({ checkOut: null }),
+
+      setConsentGiven: (id, medicationData) => {
+        const state = get();
+        const updatedDoses = state.items.doses.map((item) =>
+          item.id === id
+            ? { ...item, consentGiven: true, ...medicationData }
+            : item,
+        );
+        set({
+          items: {
+            ...state.items,
+            doses: updatedDoses,
+          },
+        });
+      },
     }),
     {
       name: "cart-storage",

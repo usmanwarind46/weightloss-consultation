@@ -28,11 +28,13 @@ import { FaShoppingCart } from "react-icons/fa";
 import useAbandonCardStore from "@/store/abandonCardStore";
 
 export default function DosageSelection() {
-  const [shownDoseIds, setShownDoseIds] = useState([]);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [abandonData, setAbandonData] = useState([]);
+  const [prevMedication, setPrevMedication] = useState("");
+  const [prevDose, setPrevDose] = useState("");
+  const [lastTakenDate, setLastTakenDate] = useState("");
   const router = useRouter();
-  const { addToCart, increaseQuantity, decreaseQuantity, items, totalAmount } =
+  const { addToCart, increaseQuantity, decreaseQuantity, items, totalAmount, setConsentGiven } =
     useCartStore();
   const { productId } = useProductId();
   const [showModal, setShowModal] = useState(false);
@@ -66,6 +68,14 @@ export default function DosageSelection() {
       setValue("terms", false);
     }
   }, [variation?.show_expiry, clearErrors, setValue]);
+
+  useEffect(() => {
+    items.doses.forEach((dose) => {
+      if (dose.product_concent && !dose.consentGiven) {
+        removeItemCompletely(dose.id, "dose");
+      }
+    });
+  }, []);
 
   const allowed = variation?.allowed;
   const [showDoseModal, setShowDoseModal] = useState(false);
@@ -239,17 +249,11 @@ export default function DosageSelection() {
         eid: dose.id,
         pid: productId || abandonCard?.productId,
       });
-      // ✅ ✅ ✅ Check if modal was already shown for this dose
-      if (!shownDoseIds.includes(dose.id)) {
-        setSelectedDose({
-          ...dose,
-          productConcent: productConcent,
-        });
-        setShowDoseModal(true);
-
-        // ✅ ✅ ✅ Mark this dose as shown
-        setShownDoseIds((prev) => [...prev, dose.id]);
-      }
+      setSelectedDose({
+        ...dose,
+        productConcent: productConcent,
+      });
+      setShowDoseModal(true);
     }
   };
 
@@ -381,9 +385,24 @@ export default function DosageSelection() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full"
+              className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full relative"
             >
-              <h2 className="text-xl bold-font mb-4 text-gray-800 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  removeItemCompletely(selectedDose?.id, "dose");
+                  setPrevMedication("");
+                  setPrevDose("");
+                  setLastTakenDate("");
+                  setShowDoseModal(false);
+                }}
+                className="absolute -top-3 -right-3 flex items-center justify-center w-7 h-7 rounded-full bg-black cursor-pointer shadow-md"
+              >
+                <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                  <path d="M1 1L13 13M13 1L1 13" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
+              </button>
+              <h2 className="text-xl bold-font mb-4 text-gray-800">
                 Dosage Confirmation
               </h2>
               {selectedDose?.productConcent && (
@@ -391,6 +410,44 @@ export default function DosageSelection() {
                   {selectedDose?.productConcent}
                 </p>
               )}
+              <div className="space-y-3 mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Previous medication name
+                  </label>
+                  <input
+                    type="text"
+                    value={prevMedication}
+                    onChange={(e) => setPrevMedication(e.target.value)}
+                    placeholder="e.g. Ozempic, Mounjaro, Wegovy"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-colors focus:border-[#4565BF] focus:ring-1 focus:ring-[#4565BF]/20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    What dose were you on? (mg)
+                  </label>
+                  <input
+                    type="text"
+                    value={prevDose}
+                    onChange={(e) => setPrevDose(e.target.value)}
+                    placeholder="e.g. 2.5"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-colors focus:border-[#4565BF] focus:ring-1 focus:ring-[#4565BF]/20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    When did you last take it?
+                  </label>
+                  <input
+                    type="date"
+                    value={lastTakenDate}
+                    onChange={(e) => setLastTakenDate(e.target.value)}
+                    max={new Date().toISOString().split("T")[0]}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 outline-none transition-colors focus:border-[#4565BF] focus:ring-1 focus:ring-[#4565BF]/20"
+                  />
+                </div>
+              </div>
               <NextButton
                 label={
                   productId == FoundayoProductId ||
@@ -398,17 +455,25 @@ export default function DosageSelection() {
                     ? "I confirm this dose"
                     : " I Confirm"
                 }
+                disabled={!prevMedication || !prevDose || !lastTakenDate}
                 onClick={() => {
+                  console.log({
+                    medication_name: prevMedication,
+                    dosage: prevDose,
+                    dosage_time: lastTakenDate,
+                    selectedDose: selectedDose?.name,
+                  });
+                  setConsentGiven(selectedDose?.id, {
+                    medication_name: prevMedication,
+                    dosage: prevDose,
+                    dosage_time: lastTakenDate,
+                  });
+                  setPrevMedication("");
+                  setPrevDose("");
+                  setLastTakenDate("");
                   setShowDoseModal(false);
                 }}
               />
-
-              {/* <button
-                onClick={() => setShowDoseModal(false)}
-                className="w-full mt-2 border border-gray-300 py-2 px-4 rounded text-gray-600 hover:bg-gray-100"
-              >
-                Cancel
-              </button> */}
             </motion.div>
           </motion.div>
         )}
