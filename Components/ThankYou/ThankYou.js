@@ -14,6 +14,9 @@ import { trackCustomerLabsPurchased } from "@/config/CustomerLabs";
 import useUserDataStore from "@/store/userDataStore";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import useProductId from "@/store/useProductIdStore";
+import { GetIdVerification } from "@/api/IdVerificationApi";
+import useIdVerificationUploadStore from "@/store/useIdVerificationUploadStore";
+import { FiUpload } from "react-icons/fi";
 
 const ThankYou = () => {
   const { orderId, checkOut, setOrderId, setCheckOut } = useCartStore();
@@ -23,6 +26,8 @@ const ThankYou = () => {
   const { token } = useAuthStore();
   const router = useRouter();
   const [items, setItems] = useState(null);
+  const { idVerificationUpload, setIdVerificationUpload } =
+    useIdVerificationUploadStore();
 
   // useEffect(() => {
 
@@ -183,6 +188,21 @@ const ThankYou = () => {
     fetchUserOrder();
   }, [token]);
 
+  useEffect(() => {
+    const fetchIdVerificationStatus = async () => {
+      try {
+        const res = await GetIdVerification({ order_id: orderId });
+        console.log("ID Verification Response", res);
+
+        setIdVerificationUpload(res?.data?.status);
+      } catch (error) {
+        console.error("Failed to fetch ID verification status:", error);
+      }
+    };
+
+    if (orderId) fetchIdVerificationStatus();
+  }, [orderId]);
+
   const handleGoBack = () => {
     // if ( !imageUploaded) {
 
@@ -196,6 +216,10 @@ const ThankYou = () => {
 
   const handleGoUpload = () => {
     GO.push("/photo-upload");
+  };
+
+  const handleGoIdVerification = () => {
+    GO.push("/id-verification");
   };
 
   return (
@@ -358,21 +382,43 @@ const ThankYou = () => {
                 </p>
               </blockquote>
 
-              <div className="my-6 flex justify-center ">
+              <div className="my-4 bg-amber-50 border border-amber-200 text-gray-800 px-4 py-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="bg-amber-100 p-2 rounded-full shrink-0">
+                    <FiUpload className="text-base text-amber-600" />
+                  </div>
+
+                  <p className="text-sm reg-font text-gray-700">
+                    Please upload your full-body photo to complete your order.
+                  </p>
+                </div>
                 <button
-                  className="bg-[#f8d86e] border border-[#FFF3CD] rounded-xl sm:rounded-full  py-3 px-2 sm:px-6 text-black flex items-start sm:items-center bold-font cursor-pointer 
-                w-full  text-start sm:text-center"
                   onClick={handleGoUpload}
+                  className="bg-amber-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-amber-600 transition cursor-pointer whitespace-nowrap shrink-0"
                 >
-                  <RiErrorWarningLine
-                    className="text-black sm:mr-0 mr-2  sm:w-14 w-14 "
-                    size={20}
-                  />
-                  Click here to upload your full-body image to complete your
-                  order
+                  Click here to upload
                 </button>
               </div>
             </>
+          )}
+
+          {!idVerificationUpload && (
+            <div className="my-4 bg-amber-50 border border-amber-200 text-gray-800 px-4 py-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="bg-amber-100 p-2 rounded-full shrink-0">
+                  <FiUpload className="text-base text-amber-600" />
+                </div>
+                <p className="text-sm reg-font text-gray-700">
+                  Please upload your ID verification to complete your order.
+                </p>
+              </div>
+              <button
+                onClick={handleGoIdVerification}
+                className="bg-amber-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-amber-600 transition cursor-pointer whitespace-nowrap shrink-0"
+              >
+                Click here to upload
+              </button>
+            </div>
           )}
 
           <div className="text-left space-y-4 text-gray-700 text-sm leading-relaxed thin-font">
@@ -410,7 +456,7 @@ const ThankYou = () => {
               legislation around prescription-only medication.
             </p>
           </div>
-          {imageUploaded && (
+          {imageUploaded && idVerificationUpload && (
             <>
               <div className="">
                 <NextButton

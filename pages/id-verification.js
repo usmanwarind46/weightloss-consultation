@@ -84,7 +84,7 @@ const IdVerification = () => {
   const frontPhoto = watch("frontPhoto");
   const sidePhoto = watch("sidePhoto");
   const [loading, setLoading] = useState(false);
-  const [selectedId, setSelectedId] = useState("passport");
+  const [selectedId, setSelectedId] = useState("id_card");
   const [ImagesSend, setImagesSend] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Return to Dashboard");
 
