@@ -25,6 +25,7 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import useReturning from "@/store/useReturningPatient";
+import { patientSource } from "@/api/mergeRoutes";
 
 export default function EmailConfirmation() {
   const [showLoader, setShowLoader] = useState(false);
@@ -43,7 +44,7 @@ export default function EmailConfirmation() {
   } = useSignupStore();
   const { setIsReturningPatient } = useReturning();
 
-  const { setUserData } = useUserDataStore();
+  const { userData, setUserData } = useUserDataStore();
   const { token, setToken } = useAuthStore();
   const { setIsPasswordReset, isPasswordReset, setShowResetPassword } =
     usePasswordReset();
@@ -61,6 +62,7 @@ export default function EmailConfirmation() {
     mode: "onChange",
     defaultValues: { email: "", confirmationEmail: "" },
   });
+
   useEffect(() => {
     setValue("email", email);
     setValue("confirmationEmail", confirmationEmail);
@@ -68,7 +70,7 @@ export default function EmailConfirmation() {
   }, [email, confirmationEmail, setValue, trigger]);
 
   const registerMutation = useMutation(registerUser, {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       const user = data?.data?.data;
       setAuthUserDetail(user);
       setUserData(user);
@@ -76,6 +78,38 @@ export default function EmailConfirmation() {
       setIsPasswordReset(true);
       setIsReturningPatient(user?.isReturning);
       Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${user?.token}`;
+
+      const stored = JSON.parse(
+        localStorage.getItem("owlc_attribution") || "null",
+      );
+
+      if (stored) {
+        try {
+          await patientSource({
+            user_id: userData?.id,
+            type: "register",
+            first_touch: {
+              channel: stored.first_touch?.channel || "Direct",
+              source: stored.first_touch?.source || "direct",
+              medium: stored.first_touch?.medium || "none",
+              paid_status: stored.first_touch?.paid_status || "unknown",
+            },
+            last_touch: {
+              channel: stored.last_touch?.channel || "Direct",
+              source: stored.last_touch?.source || "direct",
+              medium: stored.last_touch?.medium || "none",
+              paid_status: stored.last_touch?.paid_status || "unknown",
+            },
+          });
+
+          // Clear karo
+
+          console.log("✅ Attribution sent");
+        } catch (attributionError) {
+          console.error("Attribution API failed:", attributionError);
+        }
+      }
+
       router.push("/steps-information");
     },
     onError: (error) => {

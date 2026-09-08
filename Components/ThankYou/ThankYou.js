@@ -124,6 +124,7 @@ const ThankYou = () => {
             await patientSource({
               user_id: userData?.id,
               order_id: clOrderId,
+              type: "order",
               first_touch: {
                 channel: stored.first_touch?.channel || "Direct",
                 source: stored.first_touch?.source || "direct",
