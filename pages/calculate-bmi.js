@@ -542,21 +542,21 @@ export default function CalculateBmi() {
                     {lastBmi ? (
                       lastBmi?.weight_unit == "metrics" ||
                       lastBmi?.weight_unit == "metric" ? (
-                        <div className="bg-[#FFF3CD] px-4 py-4 mt-6 mb-6 text-gray-700 rounded shadow-md">
-                          <p className="flex items-center sm:text-[16px] text-xs">
-                            <BsInfoCircle className="me-2" /> Your previous
+                        <div className="mt-6 mb-6 rounded-xl border border-amber-200/70 bg-amber-50/70 px-4 py-3.5">
+                          <p className="inter-reg-font flex items-center gap-2 text-[13px] text-amber-800">
+                            <BsInfoCircle className="shrink-0" /> Your previous
                             recorded weight was{" "}
-                            <span className="font-bold ms-1 sm:text-[16px] text-xs">
+                            <span className="inter-semibold-font">
                               {lastBmi?.kg} kg
                             </span>
                           </p>
                         </div>
                       ) : (
-                        <div className="bg-[#FFF3CD] px-4 py-4 mt-6 mb-6 text-gray-700 rounded shadow-md">
-                          <p className="flex items-center sm:text-[16px] text-xs">
-                            <BsInfoCircle className="me-2" /> Your previous
+                        <div className="mt-6 mb-6 rounded-xl border border-amber-200/70 bg-amber-50/70 px-4 py-3.5">
+                          <p className="inter-reg-font flex items-center gap-2 text-[13px] text-amber-800">
+                            <BsInfoCircle className="shrink-0" /> Your previous
                             recorded weight was{" "}
-                            <span className="font-bold ms-1 me-2 sm:text-[16px] text-xs">
+                            <span className="inter-semibold-font">
                               {lastBmi?.stones} st & {lastBmi?.pound} lbs
                             </span>
                           </p>
@@ -568,7 +568,13 @@ export default function CalculateBmi() {
                   </>
                 )}
 
-                <div className="flex justify-between items-center mt-6">
+                <div className="mt-6 flex flex-col gap-3">
+                  <NextButton
+                    label="Next"
+                    onClick={handleNext}
+                    type="button"
+                    disabled={!isStepValid()}
+                  />
                   {localStep === 2 ? (
                     <BackButton
                       type="button"
@@ -578,12 +584,6 @@ export default function CalculateBmi() {
                   ) : (
                     <BackButton label="Back" onClick={back} />
                   )}
-                  <NextButton
-                    label="Next"
-                    onClick={handleNext}
-                    type="button"
-                    disabled={!isStepValid()}
-                  />
                 </div>
               </form>
 

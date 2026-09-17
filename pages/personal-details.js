@@ -9,7 +9,6 @@ import StepsHeader from "@/layout/stepsHeader";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import { useEffect, useState } from "react";
 import PageLoader from "@/Components/PageLoader/PageLoader";
-import { FiCheck } from "react-icons/fi";
 import MuiDatePickerField from "@/Components/DatePicker/DatePicker";
 import { differenceInYears, format, parse } from "date-fns";
 import usePatientInfoStore from "@/store/patientInfoStore";
@@ -150,48 +149,55 @@ export default function PersonalDetails() {
             >
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-4">
-                  {/* <h1 className="text-lg font-semibold text-center mb-2 text-black">What is your gender</h1> */}
-                  {/* <p className="text-sm text-green-900 text-center mb-6">
-                                Why do we ask about your sex at birth?
-                            </p> */}
-
                   <div className="space-y-3">
                     {["Male", "Female"].map((option) => {
                       const selected = watch("gender") === option;
                       return (
                         <label
                           key={option}
-                          className={`flex items-center gap-3 px-4 py-3 border rounded-lg transition-all cursor-pointer text-sm
-                            ${selected
-                              ? "bg-[#E9F6FA] border-black text-black bold-font paragraph"
-                              : "border-gray-300 text-gray-900 hover:bg-gray-50"
-                            } bold-font paragraph`}
+                          className={`flex min-w-0 items-center gap-2.5 cursor-pointer rounded-xl border-2 px-4 py-3.5 transition-all duration-150 select-none
+                            ${
+                              selected
+                                ? "border-[#4565BF] bg-[#4565BF]/[0.05]"
+                                : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                            }`}
                         >
-                          <div
-                            className={`w-5 h-5 rounded-sm flex items-center justify-center border transition
-                            ${selected ? "bg-primary border-[#4565BF] text-white" : "border-gray-400 bg-white"}`}
-                          >
-                            {selected && <FiCheck className="w-4 h-4" />}
-                          </div>
                           <input
                             type="radio"
                             value={option}
                             {...register("gender", { required: true })}
                             className="hidden"
                           />
-
-                          {option}
+                          <div
+                            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
+                              ${
+                                selected
+                                  ? "border-[#4565BF] bg-[#4565BF]"
+                                  : "border-slate-300 bg-white"
+                              }`}
+                          >
+                            {selected && (
+                              <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                            )}
+                          </div>
+                          <span
+                            className={`inter-medium-font text-[14px] ${
+                              selected ? "text-[#4565BF]" : "text-slate-700"
+                            }`}
+                          >
+                            {option}
+                          </span>
                         </label>
                       );
                     })}
 
                     {gender === "Female" && (
-                      <div className="space-y-4 mt-6">
-                        <p className="mb-3 reg-font paragraph !text-black !text-lg">
+                      <div className="rounded-xl border border-slate-100 bg-[#FBFBFD] p-5 mt-4 space-y-4">
+                        <p className="inter-semibold-font text-[15px] text-slate-900">
                           Are you pregnant, breastfeeding, or trying to
                           conceive?
                         </p>
-                        <p className="mb-6 reg-font paragraph">
+                        <p className="inter-reg-font text-[13.5px] text-slate-600">
                           Our treatment programme is not suitable while
                           breastfeeding, pregnant, or trying to conceive.
                         </p>
@@ -202,8 +208,12 @@ export default function PersonalDetails() {
                             return (
                               <label
                                 key={option}
-                                className={`reg-font flex items-center px-4 py-4 rounded-md border justify-start cursor-pointer transition-all duration-200 flex-1
-              ${isSelected ? "bg-violet-100 border-[#4565BF] text-primary" : "bg-white border-gray-300 hover:border-gray-400 text-gray-800"}`}
+                                className={`flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3.5 transition-all duration-150 select-none
+                                  ${
+                                    isSelected
+                                      ? "border-[#4565BF] bg-[#4565BF]/[0.05]"
+                                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                                  }`}
                               >
                                 <input
                                   type="radio"
@@ -212,14 +222,22 @@ export default function PersonalDetails() {
                                   className="hidden"
                                 />
                                 <div
-                                  className={`w-5 h-5 mr-2 rounded-md border flex items-center justify-center
-                ${isSelected ? "bg-primary border-[#4565BF] text-white" : "border-gray-400 bg-white"}`}
+                                  className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
+                                    ${
+                                      isSelected
+                                        ? "border-[#4565BF] bg-[#4565BF]"
+                                        : "border-slate-300 bg-white"
+                                    }`}
                                 >
                                   {isSelected && (
-                                    <FiCheck className="text-md" />
+                                    <div className="h-1.5 w-1.5 rounded-full bg-white" />
                                   )}
                                 </div>
-                                <span className="text-black bold-font paragraph capitalize">
+                                <span
+                                  className={`inter-medium-font text-[14px] capitalize ${
+                                    isSelected ? "text-[#4565BF]" : "text-slate-700"
+                                  }`}
+                                >
                                   {option}
                                 </span>
                               </label>
@@ -228,18 +246,20 @@ export default function PersonalDetails() {
                         </div>
 
                         {pregnancy === "yes" && (
-                          <p className="text-red-600 text-sm mt-2">
-                            This treatment is not suitable if you are pregnant,
-                            trying to get pregnant or breastfeeding. We
-                            recommend you speak to your GP in person.
-                          </p>
+                          <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
+                            <p className="inter-reg-font text-[13px] text-red-600">
+                              This treatment is not suitable if you are pregnant,
+                              trying to get pregnant or breastfeeding. We
+                              recommend you speak to your GP in person.
+                            </p>
+                          </div>
                         )}
                       </div>
                     )}
                   </div>
 
                   {errors.gender && (
-                    <p className="text-red-500 text-sm mt-1 text-center">
+                    <p className="inter-reg-font text-red-500 text-sm mt-1 text-center">
                       Please select your gender
                     </p>
                   )}
@@ -252,13 +272,9 @@ export default function PersonalDetails() {
                     errors={errors}
                     rules={{ validate: validateAge }}
                   />
-
-                  {/* {errors.dob && <p className="text-red-500 text-sm mt-1 text-center">{errors.dob.message}</p>} */}
-
-                  {/* {errors.dob && <p className="text-red-500 text-sm mt-1">Date of birth is required</p>} */}
                 </div>
 
-                <div className="flex justify-end mt-6">
+                <div className="mt-6">
                   <NextButton
                     label="Next"
                     disabled={

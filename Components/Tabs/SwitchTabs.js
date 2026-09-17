@@ -1,6 +1,6 @@
 const SwitchTabs = ({ tabs, selectedTab, onTabChange }) => {
   return (
-    <div className="w-full flex rounded-md overflow-hidden border border-green-700 mb-6">
+    <div className="mb-5 flex w-full gap-2 rounded-xl bg-slate-100 p-1">
       {tabs.map((tab) => {
         const isActive = selectedTab === tab.value;
         return (
@@ -8,8 +8,8 @@ const SwitchTabs = ({ tabs, selectedTab, onTabChange }) => {
             key={tab.value}
             type="button"
             onClick={() => onTabChange(tab.value)}
-            className={`w-full py-2 text-sm font-semibold border-r border-black last:border-none transition-all
-                ${isActive ? "bg-green-100 text-black" : "bg-white text-black hover:bg-gray-100"}
+            className={`inter-medium-font w-full rounded-lg py-2 text-[13.5px] transition-all duration-150 cursor-pointer
+                ${isActive ? "bg-white text-[#4565BF] shadow-[0_1px_3px_rgba(15,23,42,0.08)]" : "text-slate-500 hover:text-slate-700"}
               `}
           >
             {tab.label}

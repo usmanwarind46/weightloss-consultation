@@ -3,8 +3,9 @@ import FullScreenModal from "../FullScreenModal/FullScreenModal";
 import { GetProductsApi } from "@/api/mergeRoutes";
 import useProductId from "@/store/useProductIdStore";
 import { useMutation } from "@tanstack/react-query";
-import Product from "../ProductCard/Product";
+import ModalProductListCard from "./ModalProductListCard";
 import { Skeleton } from "@mui/material";
+import toast from "react-hot-toast";
 import { userConsultationApi } from "@/api/consultationApi";
 import useCheckoutStore from "@/store/checkoutStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
@@ -121,49 +122,44 @@ const ProductSelection = ({ showProductSelection }) => {
         renderSkeletons()
       ) : (
         <div className="w-full flex flex-col items-center justify-center px-4 py-2">
-          <div className="w-full flex flex-col items-center justify-center gap-8">
+          <div className="w-full flex flex-col items-center justify-center gap-5">
             {/* ───── Reorder Treatments ───── */}
 
             {/* ───── Available Treatments ───── */}
             {productData?.products?.length ? (
-              <section className="w-full flex flex-col items-center gap-6">
+              <section className="flex w-full flex-col items-center gap-5">
                 <div className="text-center">
-                  <h2 className="text-2xl font-bold text-gray-800">
+                  <h2 className="inter-bold-font text-[21px] tracking-[-0.02em] text-slate-900 sm:text-[24px]">
                     Select Treatment
                   </h2>
-                  <p className="text-sm text-gray-500 mt-1 max-w-md mx-auto">
+                  <p className="inter-reg-font mx-auto mt-1.5 max-w-md text-[12.5px] leading-5 text-slate-500 sm:text-[13px]">
                     We offer the following weight-loss injection treatments to
                     help you in your weight-loss journey…
                   </p>
                 </div>
 
-                <div
-                  className={`flex flex-wrap gap-6 w-full ${
-                    productData.products.filter(
-                      (p) => p?.inventories?.[0]?.status === 1,
-                    ).length === 1
-                      ? "justify-center"
-                      : "justify-center"
-                  }`}
-                >
+                <div className="grid w-full grid-cols-2 gap-2.5 sm:grid-cols-1 sm:gap-3">
                   {(Array.isArray(productData.reorder)
                     ? productData.reorder
                     : [productData.reorder]
                   )
                     .filter((item) => item?.inventories?.[0]?.status === 1)
                     .map((item) => (
-                      <Product
+                      <ModalProductListCard
                         key={item?.id}
                         id={item?.id}
                         title={item?.name}
                         image={item?.img}
-                        price={item?.price || "N/A"}
-                        status={item?.inventories?.[0]?.status}
-                        lastOrderDate={item?.lastOrderDate}
-                        buttonText="Reorder Treatment"
-                        reorder
+                        originalPrice={item?.price || "N/A"}
+                        isOutOfStock={!item?.inventories?.[0]?.status}
+                        isLoading={false}
+                        buttonText={
+                          selectedProductId === item?.id
+                            ? "Selected"
+                            : "Reorder Treatment"
+                        }
                         isSelected={selectedProductId === item?.id}
-                        onSelect={() =>
+                        onClick={() =>
                           handleProductSelect(item?.id, "reorder")
                         }
                       />
@@ -172,22 +168,27 @@ const ProductSelection = ({ showProductSelection }) => {
                     .filter((p) => p?.inventories?.[0]?.status === 1)
                     .sort((a, b) => (a.sequence || 0) - (b.sequence || 0))
                     .map((p) => (
-                      <Product
+                      <ModalProductListCard
                         key={p?.id}
                         id={p?.id}
                         title={p?.name}
                         image={p?.img}
-                        price={p?.price || "N/A"}
-                        status={p?.inventories?.[0]?.status}
-                        buttonText="Start Consultation"
+                        originalPrice={p?.price || "N/A"}
+                        isOutOfStock={!p?.inventories?.[0]?.status}
+                        isLoading={false}
+                        buttonText={
+                          selectedProductId === p?.id
+                            ? "Selected"
+                            : "Start Consultation"
+                        }
                         isSelected={selectedProductId === p?.id}
-                        onSelect={() => handleProductSelect(p?.id, "new")}
+                        onClick={() => handleProductSelect(p?.id, "new")}
                       />
                     ))}
                 </div>
               </section>
             ) : (
-              <p className="text-sm text-gray-500 text-center">
+              <p className="inter-reg-font text-center text-sm text-slate-500">
                 No available treatments at the moment.
               </p>
             )}

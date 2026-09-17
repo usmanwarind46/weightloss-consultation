@@ -48,35 +48,41 @@ const Step6 = () => {
 
   const renderYesNo = (fieldName, value) => {
     return (
-      <div className="flex gap-4 mt-4 flex-wrap sm:flex-nowrap">
+      <div className="mt-4 flex flex-wrap gap-3 sm:flex-nowrap">
         {["yes", "no"].map((option) => {
           const isSelected = value === option;
           return (
             <label
               key={option}
-              className={`flex items-center px-4 py-2 rounded-md border w-fit min-w-[100px] justify-center cursor-pointer transition-all duration-200
+              className={`flex min-w-[110px] cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3 transition-all duration-150 select-none
                 ${
                   isSelected
                     ? option === "yes"
-                      ? "bg-violet-100 border-[#4565BF] text-primary"
-                      : "bg-red-100 border-red-600 text-red-700"
-                    : "bg-white border-gray-300 hover:border-gray-400 text-gray-800"
+                      ? "border-[#4565BF] bg-[#4565BF]/[0.05]"
+                      : "border-red-400 bg-red-50"
+                    : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
                 }`}
             >
               <input type="radio" value={option} {...register(fieldName, { required: true })} className="hidden" />
               <div
-                className={`w-5 h-5 mr-2 rounded-md border flex items-center justify-center
+                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
                   ${
                     isSelected
                       ? option === "yes"
-                        ? "bg-primary border-[#4565BF] text-white"
-                        : "bg-red-600 border-red-600 text-white"
-                      : "border-gray-400 bg-white"
+                        ? "border-[#4565BF] bg-[#4565BF]"
+                        : "border-red-500 bg-red-500"
+                      : "border-slate-300 bg-white"
                   }`}
               >
-                {isSelected && <FiCheck className="text-xs" />}
+                {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
               </div>
-              <span className="text-sm reg-font capitalize">{option}</span>
+              <span
+                className={`inter-medium-font text-[14px] capitalize ${
+                  isSelected ? (option === "yes" ? "text-[#4565BF]" : "text-red-700") : "text-slate-700"
+                }`}
+              >
+                {option}
+              </span>
             </label>
           );
         })}
@@ -92,33 +98,33 @@ const Step6 = () => {
           <div className="bg-white px-6 sm:p-7 mt-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               {/* Questions */}
-              <div className="space-y-6 max-h-[400px] overflow-auto">
+              <div className="max-h-[400px] space-y-6 overflow-auto">
                 <div className="space-y-2">
-                  <p className="text-sm reg-font text-gray-800">
+                  <p className="inter-medium-font text-[14px] text-slate-800">
                     Are you purchasing this medication for yourself, of your own free will and the medicine is for your personal use only?
                   </p>
                   {renderYesNo("personalUse", personalUse)}
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm reg-font text-gray-800">Do you believe you have the ability to make healthcare decisions for yourself?</p>
+                  <p className="inter-medium-font text-[14px] text-slate-800">Do you believe you have the ability to make healthcare decisions for yourself?</p>
                   {renderYesNo("decisionCapacity", decisionCapacity)}
                 </div>
 
                 {showConsentBox && (
-                  <div className="bg-white space-y-4 py-4">
-                    <label className="flex items-center gap-3 text-sm font-semibold text-gray-800 cursor-pointer">
+                  <div className="rounded-xl border border-slate-100 bg-[#FBFBFD] p-4 sm:p-5">
+                    <label className="flex cursor-pointer items-center gap-3 select-none">
                       <input type="checkbox" {...register("confirmConsent", { required: true })} className="hidden" />
                       <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center border transition-all duration-200
-                          ${confirmConsent ? "bg-primary border-[#4565BF] text-white" : "bg-white border-gray-400"}`}
+                        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
+                          ${confirmConsent ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
                       >
-                        {confirmConsent && <FiCheck className="w-3 h-3" />}
+                        {confirmConsent && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
                       </div>
-                      Do you confirm that:
+                      <span className="inter-semibold-font text-[14px] text-slate-800">Do you confirm that:</span>
                     </label>
 
-                    <ul className="list-disc list-inside text-sm text-gray-700 space-y-2">
+                    <ul className="inter-reg-font mt-4 list-disc list-inside space-y-2 text-[13px] text-slate-600">
                       <li>
                         You consent for your medical information to be assessed by the clinical team at Online Weight Loss Clinic and its pharmacy
                         and to be prescribed medication.

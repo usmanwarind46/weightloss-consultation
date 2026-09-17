@@ -275,15 +275,15 @@ export default function LoginScreen() {
         </div>
       ) : (
         <>
-          <div className={`flex justify-center bg-[#E9F6FA] py-8 sm:py-16`}>
+          <div className={`flex justify-center bg-[#EEF2FA] px-4 py-8 sm:py-16`}>
             <div
-              className={`bg-white rounded-xl shadow-md w-full max-w-lg p-8`}
+              className={`bg-white rounded-xl shadow-md w-full max-w-lg p-5 sm:p-8`}
             >
               {/* Title */}
-              <h1 className="niba-reg-font heading mb-2">Login</h1>
+              <h1 className="inter-bold-font text-[22px] text-slate-900 mb-2">Login</h1>
 
               {/* Description */}
-              <p className="mb-6 reg-font paragraph">
+              <p className="inter-reg-font text-[14px] text-slate-500 mb-6">
                 Returning patient? Login now to re-order your treatment.
               </p>
 
@@ -317,11 +317,11 @@ export default function LoginScreen() {
                       type="submit"
                       className="mb-5"
                     />
-                    <p className="reg-font text-black text-sm text-center my-3">
+                    <p className="inter-reg-font text-slate-700 text-sm text-center my-3">
                       Are you a new patient?{" "}
                       <Link
                         href={"/acknowledgment"}
-                        className="text-primary underline"
+                        className="text-[#4565BF] hover:text-[#3550a0] underline"
                       >
                         Get started with the consultation
                       </Link>
@@ -331,7 +331,7 @@ export default function LoginScreen() {
                       <button
                         onClick={openLoginModal}
                         label=""
-                        className="text-black underline text-sm reg-font cursor-pointer"
+                        className="inter-reg-font text-slate-700 hover:text-[#3550a0] underline text-sm cursor-pointer"
                       >
                         Forgot password
                       </button>

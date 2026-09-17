@@ -85,14 +85,13 @@ export default function SignUp() {
                   <TextField label="Last Name" name="lastName" placeholder="Last Name" register={register} required errors={errors} />
                 </div>
 
-                <div className="flex justify-between mt-6">
-
-                  <BackButton label="Back" onClick={() => router.push("/acknowledgment")} />
+                <div className="mt-6 flex flex-col gap-3">
                   <NextButton
                     label="Next"
                     disabled={!isValid} // ✅ disables until valid
                     type="submit"
                   />
+                  <BackButton label="Back" onClick={() => router.push("/acknowledgment")} />
                 </div>
               </form>
 

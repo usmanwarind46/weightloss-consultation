@@ -64,6 +64,7 @@ const ConfirmationSummary = () => {
     clearConfirmationEmail,
     firstName,
     lastName,
+    email,
   } = useSignupStore();
 
   console.log(bmi);
@@ -364,83 +365,99 @@ const ConfirmationSummary = () => {
           <div className="relative">
             <div className="space-y-6 ">
               {/* Summary Box */}
-              <div className="bg-[#E9F6FA] border border-green-100 rounded-md p-5 text-sm text-gray-800">
-                <p className="bold-font text-black mb-1">
-                  <span className="bold-font paragraph capitalize">
-                    Full Name:{" "}
-                  </span>
-                  {firstName ? (
-                    <>
-                      {" "}
-                      <span className="bold-font paragraph !text-black capitalize">
-                        {firstName} {lastName}
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="bold-font paragraph capitalize">
-                        {patientInfo?.firstName} {patientInfo?.lastName}
-                      </span>
-                    </>
-                  )}
-                </p>
-                {/* <hr className="border-gray-300 mb-3" /> */}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-8">
-                  <p className="bold-font text-black">
-                    <span className="bold-font paragraph">Post code: </span>
-                    <span className="bold-font paragraph !text-black capitalize">
+              <div className="rounded-xl bg-[#FBFBFD] overflow-hidden p-3 sm:p-5">
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-x-8 sm:gap-y-3">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      Full Name
+                    </p>
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                      {firstName ? (
+                        <>
+                          {firstName} {lastName}
+                        </>
+                      ) : (
+                        <>
+                          {patientInfo?.firstName} {patientInfo?.lastName}
+                        </>
+                      )}
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      Email
+                    </p>
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 sm:text-[14px]">
+                      {email || patientInfo?.email}
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      Post code
+                    </p>
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
                       {patientInfo?.address?.postalcode}
-                    </span>
-                  </p>
-                  <p className="bold-font text-black">
-                    <span className="bold-font paragraph">Date of Birth:</span>{" "}
-                    {patientInfo?.dob}
-                  </p>
-                  <p className="bold-font text-black">
-                    <span className="bold-font paragraph">Height:</span>{" "}
-                    {bmi?.height_unit == "imperial" ? (
-                      <span className="bold-font paragraph !text-black capitalize">
-                        {bmi?.ft} ft {bmi?.inch} inch
-                      </span>
-                    ) : (
-                      <span className="bold-font paragraph !text-black capitalize">
-                        {bmi?.cm} cm
-                      </span>
-                    )}
-                  </p>
-                  <p className="bold-font text-black">
-                    <span className="bold-font paragraph">Gender:</span>{" "}
-                    <span className="bold-font paragraph !text-black capitalize">
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      Date of Birth
+                    </p>
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 sm:text-[14px]">
+                      {patientInfo?.dob}
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      Height
+                    </p>
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                      {bmi?.height_unit == "imperial" ? (
+                        <>
+                          {bmi?.ft} ft {bmi?.inch} inch
+                        </>
+                      ) : (
+                        <>{bmi?.cm} cm</>
+                      )}
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      Gender
+                    </p>
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
                       {patientInfo?.gender}
-                    </span>
-                  </p>
-                  <p className="bold-font text-black">
-                    <span className="bold-font paragraph">Weight:</span>{" "}
-                    {bmi?.weight_unit == "metrics" ? (
-                      <span className="bold-font paragraph !text-black capitalize">
-                        {bmi?.kg} kg
-                      </span>
-                    ) : (
-                      <span className="bold-font paragraph !text-black capitalize">
-                        {bmi?.stones} stones {bmi?.pound} pound
-                      </span>
-                    )}
-                  </p>
-                  <p className="bold-font text-black paragraph">
-                    <span className="paragraph mt-1">BMI: </span>
-                    <span className="bold-font paragraph !text-black capitalize">
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      Weight
+                    </p>
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                      {bmi?.weight_unit == "metrics" ? (
+                        <>{bmi?.kg} kg</>
+                      ) : (
+                        <>
+                          {bmi?.stones} stones {bmi?.pound} pound
+                        </>
+                      )}
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                      BMI
+                    </p>
+                    <p className="inter-semibold-font text-[14px] text-[#4565BF]">
                       {bmi?.bmi?.toFixed(1)}
-                    </span>
-                  </p>
+                    </p>
+                  </div>
                 </div>
               </div>
 
               {/* Confirm & Review Buttons */}
-              <div className="space-y-3 flex justify-between items-center relative mt-6">
-                <BackButton label="Back" onClick={back} />
-
+              <div className="space-y-3 relative mt-6">
                 <NextButton label="Next" onClick={hanldeConfirm} />
+                <BackButton label="Back" onClick={back} />
               </div>
               {showLoader && (
                 <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
@@ -453,7 +470,7 @@ const ConfirmationSummary = () => {
       </FormWrapper>
       <div className="flex justify-center items-center mt-4 mb-6">
         <button onClick={reviewAll}>
-          <span className="text-xs sm:text-sm reg-font text-primary underline hover:text-blue-600 cursor-pointer">
+          <span className="inter-reg-font text-xs sm:text-sm text-[#4565BF] underline hover:text-[#3550a0] cursor-pointer">
             Review all answers
           </span>
         </button>

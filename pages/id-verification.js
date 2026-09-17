@@ -27,6 +27,7 @@ import useImageUploadStore from "@/store/useImageUploadStore ";
 import MUISelectField from "@/Components/SelectField/SelectField";
 import { heicTo, isHeic } from "heic-to"; // ✅ import heic converter
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import PageLoader from "@/Components/PageLoader/PageLoader";
 
 const IdVerification = () => {
   const MAX_SIZE_MB = 5;
@@ -282,72 +283,73 @@ const IdVerification = () => {
     };
 
     return (
-      <>
-        <div className="flex flex-col items-center w-full px-3">
-          <label className="w-full cursor-pointer">
-            <p className="mt-2 mb-1 text-gray-800 font-medium reg-font">
-              {label.includes("*") ? (
-                <>
-                  {label.replace("*", "")}
-                  <span className="text-red-500">*</span>
-                </>
-              ) : (
-                label
-              )}
-            </p>
+      <div className="w-full">
+        <p className="inter-medium-font mb-2 text-[13px] text-slate-800">
+          {label.includes("*") ? (
+            <>
+              {label.replace("*", "")}
+              <span className="text-red-500">*</span>
+            </>
+          ) : (
+            label
+          )}
+        </p>
 
-            <div
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              className="border-2 border-dashed border-blue-700 rounded-2xl p-2
-        hover:border-blue-800 hover:shadow-md transition-all duration-300 ease-in-out
-        flex flex-col items-center justify-center text-center relative min-h-[140px] bg-white"
-            >
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleUpload(e, type)}
-                className="hidden"
-              />
+        <label className="block w-full cursor-pointer rounded-xl focus-within:ring-2 focus-within:ring-[#4565BF]/25 focus-within:ring-offset-2">
+          <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            className="relative flex min-h-[164px] flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#9db3e8] bg-[#f4f6fd] px-5 py-6 text-center transition-all duration-200 hover:border-[#4565BF] hover:bg-[#eef1fb]"
+          >
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleUpload(e, type)}
+              className="hidden"
+            />
 
-              {/* 🔄 Loading state */}
-              {loadingPhoto[type] ? (
-                <div className="flex flex-col items-center justify-center">
-                  <AiOutlineLoading3Quarters className="animate-spin text-blue-700 w-7 h-7 mb-3" />
-                  <p className="text-gray-700 text-sm reg-font">Uploading...</p>
+            {/* 🔄 Loading state */}
+            {loadingPhoto[type] ? (
+              <div className="flex flex-col items-center justify-center">
+                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-[#4565BF]/10">
+                  <AiOutlineLoading3Quarters className="h-5 w-5 animate-spin text-[#4565BF]" />
                 </div>
-              ) : !photo ? (
-                /* 📤 Upload UI */
-                <div className="flex flex-col items-center justify-center">
-                  <FiUpload className="text-blue-700 w-full h-7 mb-3" />
-                  <p className="text-gray-700 text-sm reg-font">
-                    Click here
-                    <br />
-                    <span className="text-gray-400 text-xs">
-                      or drag the image to upload
-                    </span>
-                  </p>
+                <p className="inter-medium-font text-sm text-slate-700">Uploading...</p>
+              </div>
+            ) : !photo ? (
+              /* 📤 Upload UI */
+              <div className="flex flex-col items-center justify-center">
+                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#4565BF] shadow-sm ring-1 ring-[#4565BF]/10">
+                  <FiUpload className="h-5 w-5" />
                 </div>
-              ) : (
-                /* 🖼️ Preview UI */
-                <div className="flex flex-col items-center">
-                  <img
-                    src={URL.createObjectURL(photo)}
-                    alt={`${label} preview`}
-                    className="w-full object-contain rounded-lg mb-3"
-                  />
-                  <AiOutlineCheckCircle className="w-6 h-6 text-[#1F9E8C] absolute top-3 right-3" />
-                </div>
-              )}
-            </div>
-          </label>
+                <p className="inter-semibold-font text-[14px] text-slate-800">
+                  Choose a photo
+                </p>
+                <p className="inter-reg-font mt-1 text-[12px] leading-5 text-slate-500">
+                  Tap to browse, or drag the image here
+                </p>
+              </div>
+            ) : (
+              /* 🖼️ Preview UI */
+              <div className="relative my-1 w-full max-w-[240px]">
+                <img
+                  src={URL.createObjectURL(photo)}
+                  alt={`${label} preview`}
+                  className="h-36 w-full rounded-xl bg-white object-contain shadow-sm ring-1 ring-slate-200"
+                />
+                <AiOutlineCheckCircle className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-white text-emerald-500" />
+              </div>
+            )}
+          </div>
+        </label>
 
-          {/* 💡 Suggestion / helper text */}
-          <p className="text-xs text-gray-500 mt-2 text-center italic">
+        {/* 💡 Suggestion / helper text */}
+        {suggestion && (
+          <p className="inter-reg-font mt-3 text-center text-[11px] leading-5 text-slate-500 italic">
             {suggestion}
           </p>
-        </div>
-      </>
+        )}
+      </div>
     );
   };
 
@@ -355,7 +357,10 @@ const IdVerification = () => {
     <>
       <StepsHeader />
       <MetaLayout canonical={`${meta_url}photo-upload/`} />
-      <div className="my-14">
+      {loading && (
+        <PageLoader message="Please wait while your ID images are being uploaded..." />
+      )}
+      <main className="min-h-[calc(100vh-66px)] bg-[#EEF2FA] px-4 py-8 sm:py-12">
         <AnimatePresence>
           {open && (
             <motion.div
@@ -369,7 +374,7 @@ const IdVerification = () => {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 50, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                className="relative bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-8 max-w-md w-full border border-white/30"
+                className="relative mx-4 w-full max-w-md rounded-2xl border border-[#4565BF]/10 bg-white p-7 shadow-[0_20px_60px_rgba(30,20,60,0.18)] sm:p-8"
               >
                 {/* Animated Check Icon */}
                 <motion.div
@@ -378,20 +383,16 @@ const IdVerification = () => {
                   transition={{ type: "spring", stiffness: 250, damping: 15 }}
                   className="flex justify-center mb-4"
                 >
-                  <FaCheckCircle
-                    className="text-primary"
-                    color="text-[#c9b2ed]"
-                    size={80}
-                  />
+                  <FaCheckCircle className="text-[#4565BF]" size={64} />
                 </motion.div>
 
                 {/* Title */}
-                <h2 className="text-2xl font-bold text-center text-primary">
+                <h2 className="inter-semibold-font text-center text-[22px] text-slate-900">
                   ID successfully uploaded
                 </h2>
 
                 {/* Message */}
-                <p className="text-md text-black text-center mt-3 mb-6 reg-font">
+                <p className="inter-reg-font mb-6 mt-3 text-center text-[14px] leading-6 text-slate-600">
                   {!imageUploaded
                     ? "Your ID Verification photo have been uploaded and are now under review by our prescribers. Seems like your full body photo is still pending. Please upload it to proceed."
                     : "Your ID has been uploaded and are now under review by our prescribers. We’ll approve your order once the review is complete and notify you straight away."}
@@ -411,42 +412,29 @@ const IdVerification = () => {
         </AnimatePresence>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="max-w-3xl mx-auto my-auto px-6 sm:px-32 py-10 bg-white shadow-2xl rounded-3xl border border-gray-100"
+          className="mx-auto w-full max-w-[620px] rounded-2xl border border-[#4565BF]/10 bg-white px-5 py-6 shadow-[0_12px_36px_rgba(69,101,191,0.09)] sm:px-8 sm:py-8"
         >
-          <div className="mb-4 max-w-2xl mx-auto text-left">
+          <div className="mb-6 text-left">
             {/* Heading */}
-            {/* <h2 className="subHeading niba-semibold-font mb-2 border-b pb-3">
-                            Please upload a <span className='niba-bold-font text-black' >full body</span> picture of yourself
-                        </h2> */}
-
-            <h2 className="subHeading !text-black bold-font mb-3 border-b pb-3">
+            <h1 className="inter-semibold-font text-[21px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[23px]">
               ID verification required
-            </h2>
+            </h1>
 
             {/* Description */}
-            <p className="text-gray-700 mb-1 reg-font">
+            <p className="inter-reg-font mt-2 text-[13.5px] leading-6 text-slate-500">
               As an online healthcare provider, we are required by law to
               confirm that all patients are at least 18 years of age. Normally,
               these checks are completed automatically against national identity
               registers using the information you provide.
             </p>
 
-            {/* Bullet Points */}
-            {/* <ul className="list-disc pl-6 text-gray-800 text-sm space-y-2 font-normal font-sans pt-2 my-10 sm:my-0">
-              <li>We will only ask for this once.</li>
-              <li>
-                We realise it's inconvenient, but this is a regulatory
-                requirement designed for your safety and to prevent
-                inappropriate use.
-              </li>
-            </ul> */}
-            <p className="text-gray-700 mb-0 mt-6 reg-font">
+            <p className="inter-medium-font mt-5 text-[13.5px] text-slate-700">
               How would you like to verify your identity?
             </p>
           </div>
 
           {/* Dropdown */}
-          <div className="flex justify-center mb-4">
+          <div className="mb-6">
             <div className="w-full">
               <MUISelectField
                 value={selectedId}
@@ -475,7 +463,7 @@ const IdVerification = () => {
             </div>
           </div> */}
 
-          <div className="flex flex-wrap sm:flex-nowrap justify-center gap-6 mb-8">
+          <div className="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
             <Controller
               name="frontPhoto"
               control={control}
@@ -520,16 +508,15 @@ const IdVerification = () => {
                     /> */}
           </div>
 
-          <div className="w-full flex justify-center">
+          <div className="w-full">
             <button
               type="submit"
               disabled={loading || !frontPhoto}
-              className={`reg-font px-6 py-3 rounded-full text-white font-semibold text-sm transition-all duration-150 ease-in-out
-      flex items-center justify-center 
+              className={`inter-semibold-font flex min-h-[54px] w-full items-center justify-center rounded-xl px-6 py-3 text-[15px] text-white transition-all duration-200
       ${
         loading || !frontPhoto
-          ? "bg-gray-300 cursor-not-allowed"
-          : "border-[#4565BF] bg-[#4565BF] hover:bg-[#4565BF] border-2 cursor-pointer"
+          ? "cursor-not-allowed bg-slate-200 text-slate-400"
+          : "cursor-pointer bg-[#4565BF] shadow-[0_8px_20px_rgba(69,101,191,0.18)] hover:bg-[#3550a0] active:scale-[0.99]"
       }
     `}
             >
@@ -537,7 +524,7 @@ const IdVerification = () => {
             </button>
           </div>
         </form>
-      </div>
+      </main>
     </>
   );
 };

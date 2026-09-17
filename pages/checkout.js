@@ -9,19 +9,13 @@ import ProductConsent from "@/Components/checkout/ProductConsent";
 import OrderSummary from "@/Components/checkout/OrderSummary";
 import usePasswordReset from "@/store/usePasswordReset";
 import useShippingOrBillingStore from "@/store/shipingOrbilling";
-import useCartStore from "@/store/useCartStore";
-import { Inter } from "next/font/google";
 import useReorder from "@/store/useReorderStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReturning from "@/store/useReturningPatient";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ArrowLeft } from "lucide-react";
 
 const Checkout = () => {
-
-  const [closeShipping, setCloseShipping] = useState(false);
-  const [closeBilling, setCloseBilling] = useState(false);
   const { isReturningPatient } = useReturning();
   const { isPasswordReset, showResetPassword } = usePasswordReset();
   // const [isCompleted, setCompleted] = useState(false);
@@ -37,11 +31,11 @@ const Checkout = () => {
   const [isConcentCheck, setIsConcentCheck] = useState(false);
   const [isShippingCheck, setIsShippingCheck] = useState(false);
   const [isBillingCheck, setIsBillingCheck] = useState(false);
+  const [closeShipping, setCloseShipping] = useState(false);
+  const [closeBilling, setCloseBilling] = useState(false);
 
   const [showThankYouModal, setShowThankYouModal] = useState(false);
-  console.log(isShippingCheck, "isShippingCheck")
   const router = useRouter();
-
   const personalRef = useRef(null);
   const addressRef = useRef(null);
   const billingRef = useRef(null);
@@ -50,6 +44,20 @@ const Checkout = () => {
   const headingRef = useRef(null);
 
   const [refIndex, setRefIndex] = useState(0);
+  const [showPasswordStep] = useState(
+    () => isPasswordReset && !isReturningPatient,
+  );
+  const passwordStepIndex = showPasswordStep ? 0 : null;
+  const shippingStepIndex = showPasswordStep ? 1 : 0;
+  const billingStepIndex = billingSameAsShipping
+    ? null
+    : shippingStepIndex + 1;
+  const consentStepIndex = billingSameAsShipping
+    ? shippingStepIndex + 1
+    : billingStepIndex + 1;
+  const shippingDone = completedSteps[shippingStepIndex] || closeShipping;
+  const billingDone =
+    billingSameAsShipping || completedSteps[billingStepIndex] || closeBilling;
 
   useEffect(() => {
     headingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -57,17 +65,27 @@ const Checkout = () => {
 
   const scrollToRef = (ref) => {
     if (ref?.current) {
-      ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      const headerOffset = 78;
+      const sectionTop =
+        ref.current.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({ top: sectionTop, behavior: "smooth" });
     }
   };
 
   const getStepRefs = () => {
-    return [isPasswordReset && personalRef, addressRef, !billingSameAsShipping && billingRef, paymentRef, summaryRef].filter(Boolean);
+    return [
+      showPasswordStep && personalRef,
+      addressRef,
+      !billingSameAsShipping && billingRef,
+      paymentRef,
+      summaryRef,
+    ].filter(Boolean);
   };
   const stepRefs = getStepRefs();
 
   const goToNextStep = (stepIndexOverride) => {
-    const currentIndex = typeof stepIndexOverride === "number" ? stepIndexOverride : refIndex;
+    const currentIndex =
+      typeof stepIndexOverride === "number" ? stepIndexOverride : refIndex;
     const nextIndex = currentIndex + 1;
 
     // ✅ Mark correct step as complete
@@ -79,7 +97,7 @@ const Checkout = () => {
     // ✅ Go to next step
     if (stepRefs[nextIndex]) {
       setRefIndex(nextIndex);
-      scrollToRef(stepRefs[nextIndex]);
+      setTimeout(() => scrollToRef(stepRefs[nextIndex]), 420);
     }
   };
 
@@ -94,15 +112,6 @@ const Checkout = () => {
       <MetaLayout canonical={`${meta_url}checkout/`} />
 
       <StepsHeader />
-
-      <div className="bottom-[30px] fixed left-10 cursor-pointer py-2 rounded-full border-2 border-[#4565BF] sm:block hidden">
-        <button
-          onClick={back}
-          className="text-primary reg-font px-6 cursor-pointer"
-        >
-          <span>Back</span>
-        </button>
-      </div>
 
       <AnimatePresence>
         {showThankYouModal && (
@@ -130,7 +139,7 @@ const Checkout = () => {
               <button
                 type="button"
                 onClick={() => setShowThankYouModal(false)}
-                className="mt-6 px-6 py-2 bg-primary text-white rounded-lg hover:bg-[#4565BF] transition"
+                className="inter-medium-font mt-6 px-6 py-2 bg-[#4565BF] text-white rounded-xl hover:bg-[#3550a0] transition-colors"
               >
                 Close
               </button>
@@ -139,69 +148,94 @@ const Checkout = () => {
         )}
       </AnimatePresence>
 
-      <div className="max-w-2xl mx-auto px-4 pb-10 space-y-10">
-        <div ref={headingRef} className="sm:px-6 px-0 pt-10 text-center">
-          <h1 className="text-2xl niba-reg-font heading mb-2 text-gray-900">
-            {reorder ? (
-              <>
-                Confirm your treatment
-                <br />
-                re-order
-              </>
-            ) : (
-              "Checkout to kick-start your weight loss journey"
-            )}
-          </h1>
-          <p className="text-sm reg-font paragraph mb-6">
-            {reorder
-              ? "You're almost done. Complete your checkout to continue your weight loss journey without interruption."
-              : "Complete your details below to secure your consultation. If you decide not to proceed after your consult for any reason, you will be fully refunded."}
-          </p>
+      <div className="min-h-[calc(100vh-66px)] bg-[#EEF2FA]">
+      <div className="max-w-2xl mx-auto px-4 pb-14 space-y-6">
+        <div ref={headingRef} className="pt-6 sm:pt-8">
+          <div className="sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:items-center sm:gap-2">
+            <button
+              type="button"
+              onClick={back}
+              className="inter-medium-font mb-2 inline-flex min-h-11 cursor-pointer items-center justify-start gap-1.5 px-0 text-[13px] text-[#4565BF] transition-colors duration-200 hover:text-[#3550a0] focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4565BF]/25 focus-visible:ring-offset-2 sm:mb-0 sm:min-h-9 sm:w-auto sm:justify-self-start sm:px-1"
+              aria-label="Back to dosage selection"
+            >
+              <ArrowLeft size={15} strokeWidth={2} />
+              <span>Back</span>
+            </button>
+            <h1
+              className={`inter-bold-font text-center text-slate-900 ${
+                reorder
+                  ? "text-[19px] leading-tight sm:whitespace-nowrap sm:text-[30px]"
+                  : "text-[19px] leading-tight sm:text-[30px]"
+              }`}
+            >
+              {reorder ? "Confirm your treatment re-order" : "Checkout to kick-start your weight loss journey"}
+            </h1>
+            <span className="hidden sm:block" aria-hidden="true" />
+          </div>
+
+          <div className="text-center sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:gap-2">
+            <p className="inter-reg-font mt-3 text-[13.5px] leading-5 text-slate-500 sm:col-start-2">
+              {reorder
+                ? "You're almost done. Complete your checkout to continue your weight loss journey without interruption."
+                : "Complete your details below to secure your consultation. If you decide not to proceed after your consult for any reason, you will be fully refunded."}
+            </p>
+          </div>
         </div>
 
         {/* Sections */}
-        {showResetPassword && !isReturningPatient && (
-          <div ref={personalRef}>
-            <SetAPassword onComplete={() => goToNextStep(0)} isCompleted={completedSteps[0] || !isPasswordReset} />
-          </div>
+        {showPasswordStep && (
+          <motion.div ref={personalRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
+            <SetAPassword
+              onComplete={() => goToNextStep(passwordStepIndex)}
+              isCompleted={completedSteps[passwordStepIndex] || !isPasswordReset}
+            />
+          </motion.div>
         )}
 
-        <div ref={addressRef}>
+        {(!showPasswordStep || completedSteps[passwordStepIndex]) && (
+        <motion.div ref={addressRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
           <ShippingAddress
-            onComplete={() => goToNextStep(1)}
-            isCompleted={completedSteps[1] || closeShipping}
+            onComplete={() => goToNextStep(shippingStepIndex)}
+            isCompleted={completedSteps[shippingStepIndex] || closeShipping}
             setIsShippingCheck={setIsShippingCheck}
             setIsBillingCheck={setIsBillingCheck}
             setCloseShipping={setCloseShipping}
           />
-        </div>
-
-        {!billingSameAsShipping && (
-          <div ref={billingRef}>
-            <BillingAddress
-              onComplete={() => goToNextStep(2)}
-              isCompleted={completedSteps[2] || closeBilling}
-              setCloseBilling={setCloseBilling}
-              setIsBillingCheck={setIsBillingCheck} />
-          </div>
+        </motion.div>
         )}
 
-        <div ref={paymentRef}>
+        {!billingSameAsShipping && shippingDone && (
+          <motion.div ref={billingRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
+            <BillingAddress
+              onComplete={() => goToNextStep(billingStepIndex)}
+              isCompleted={completedSteps[billingStepIndex] || closeBilling}
+              setIsBillingCheck={setIsBillingCheck}
+              setCloseBilling={setCloseBilling}
+            />
+          </motion.div>
+        )}
+
+        {shippingDone && billingDone && (
+        <motion.div ref={paymentRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
           <ProductConsent
-            onComplete={() => goToNextStep(billingSameAsShipping ? 2 : 3)}
+            onComplete={() => goToNextStep(consentStepIndex)}
             setIsConcentCheck={setIsConcentCheck}
             isCompleted={setIsConcentCheck}
           />
-        </div>
+        </motion.div>
+        )}
 
-        <div ref={summaryRef}>
+        {isConcentCheck && (
+        <motion.div ref={summaryRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
           <OrderSummary
             onComplete={isConcentCheck}
             isConcentCheck={isConcentCheck}
             isShippingCheck={isShippingCheck}
             isBillingCheck={isBillingCheck}
           />
-        </div>
+        </motion.div>
+        )}
+      </div>
       </div>
     </>
   );

@@ -148,20 +148,22 @@ export default function ResidentialAddress() {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-6">
                   <div className="relative">
-                    <TextField
-                      label="Post code"
-                      name="postalCode"
-                      register={register}
-                      required
-                      errors={errors}
-                    />
+                    <div className="min-w-0">
+                      <TextField
+                        label="Post code"
+                        name="postalCode"
+                        placeholder="e.g. SW1A 1AA"
+                        register={register}
+                        required
+                        errors={errors}
+                        className="pr-[108px]"
+                      />
+                    </div>
                     <button
                       type="button"
                       onClick={handleSearch}
-                      className={`bold-medium-font absolute right-3 transform -translate-y-1/2 cursor-pointer flex items-center bg-primary text-white px-2 py-1 rounded w-32 justify-center ${
-                        errors.postalCode ? "top-2/4" : "top-2/3"
-                      }`}
                       disabled={addressSearchLoading}
+                      className="inter-medium-font absolute right-0 top-[24px] flex min-h-[38px] min-w-[96px] cursor-pointer items-center justify-center gap-1.5 rounded-md bg-[#4565BF] px-4 py-2 text-[12px] text-white transition-colors hover:bg-[#3550a0] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {addressSearchLoading ? (
                         <motion.div
@@ -171,13 +173,13 @@ export default function ResidentialAddress() {
                             duration: 1,
                             ease: "linear",
                           }}
-                          className="w-6 h-6 border-4 border-t-transparent rounded-full text-white"
+                          className="h-4 w-4 rounded-full border-2 border-white border-t-transparent"
                         />
                       ) : (
-                        <span className="flex items-center reg-font">
-                          <FaSearch className="inline-block me-2" />
-                          Search
-                        </span>
+                        <>
+                          <FaSearch size={12} />
+                          <span>Search</span>
+                        </>
                       )}
                     </button>
                   </div>
@@ -223,11 +225,11 @@ export default function ResidentialAddress() {
                     />
                   )}
 
-                  <div className="text-sm sm:text-right text-center">
+                  <div className="text-right">
                     <button
                       type="button"
                       onClick={() => setManual(!manual)}
-                      className="bold-font paragraph underline transition cursor-pointer"
+                      className="inter-medium-font cursor-pointer text-[13px] text-[#4565BF] transition-colors hover:text-[#3550a0]"
                     >
                       {manual
                         ? "Hide manual address entry"
@@ -240,6 +242,7 @@ export default function ResidentialAddress() {
                       <TextField
                         label="Address"
                         name="address1"
+                        placeholder="e.g. 10 Downing Street"
                         register={register}
                         required
                         errors={errors}
@@ -247,12 +250,14 @@ export default function ResidentialAddress() {
                       <TextField
                         label="Address 2"
                         name="address2"
+                        placeholder="Apartment, suite or unit (optional)"
                         register={register}
                         errors={errors}
                       />
                       <TextField
                         label="Town / City"
                         name="city"
+                        placeholder="e.g. London"
                         register={register}
                         required
                         errors={errors}
@@ -260,6 +265,7 @@ export default function ResidentialAddress() {
                       <TextField
                         label="Country"
                         name="country"
+                        placeholder="e.g. United Kingdom"
                         register={register}
                         required
                         errors={errors}
@@ -268,12 +274,12 @@ export default function ResidentialAddress() {
                   )}
                 </div>
 
-                <div className="flex justify-between items-center mt-6">
+                <div className="space-y-3 mt-6">
+                  <NextButton label="Next" disabled={!isNextEnabled} />
                   <BackButton
                     label="Back"
                     onClick={() => router.push("/personal-details")}
                   />
-                  <NextButton label="Next" disabled={!isNextEnabled} />
                 </div>
               </form>
 

@@ -7,12 +7,10 @@ import PageLoader from "@/Components/PageLoader/PageLoader";
 import NextButton from "@/Components/NextButton/NextButton";
 import BackButton from "@/Components/BackButton/BackButton";
 import { useRouter } from "next/navigation";
-import { FaRegCircle, FaDotCircle } from "react-icons/fa";
 import useConfirmationQuestionsStore from "@/store/confirmationQuestionStore";
 import useConfirmationInfoStore from "@/store/confirmationInfoStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
-import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 
 export default function PatientConsent() {
   const router = useRouter();
@@ -129,16 +127,16 @@ export default function PatientConsent() {
                   return (
                     <div
                       key={q.id}
-                      className="space-y-4 border rounded-md border-gray-700 p-5"
+                      className="space-y-4 border rounded-xl border-slate-200 p-5"
                     >
                       {/* Question and Checkbox */}
-                      <span className="bold-font text-gray-700 sm:text-lg text-sm">
+                      <span className="inter-semibold-font text-gray-700 sm:text-lg text-sm border-b border-slate-200 pb-2 block">
                         I confirm and understand that:
                       </span>
                       {/* Checklist (if exists) */}
                       {q.checklist && (
                         <div
-                          className="list-disc list-outside sm:pl-5 text-sm text-gray-700 space-y-2 reg-font paragraph [&>ul]:list-disc [&>ul]:ml-6 [&>li]:mt-0.5"
+                          className="list-disc list-outside sm:pl-5 text-sm text-gray-700 space-y-2 inter-reg-font [&>ul]:list-disc [&>ul]:ml-6 [&>li]:mt-0.5"
                           dangerouslySetInnerHTML={{ __html: q.checklist }}
                         ></div>
                       )}
@@ -155,14 +153,32 @@ export default function PatientConsent() {
                         />
                         <label
                           htmlFor={`question-${q.id}`}
-                          className="flex items-start gap-2 cursor-pointer"
+                          className="group flex items-start gap-2.5 cursor-pointer"
                         >
-                          {selectedAnswer ? (
-                            <MdCheckBox className="text-primary sm:w-9 w-18 h-18 sm:h-9 mt-1" />
-                          ) : (
-                            <MdCheckBoxOutlineBlank className="text-[#4565BF] sm:w-9 sm:h-9 w-18 h-18 mt-1" />
-                          )}
-                          <span className="bold-font text-gray-700 sm:text-lg text-sm">
+                          <span
+                            className={`flex h-5 w-5 shrink-0 items-center justify-center self-center rounded-[6px] border-2 transition-all duration-150 group-hover:border-[#4565BF]/60
+                              ${selectedAnswer ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
+                          >
+                            {selectedAnswer && (
+                              <svg
+                                width="10"
+                                height="8"
+                                viewBox="0 0 10 8"
+                                fill="none"
+                              >
+                                <path
+                                  d="M1 4L3.5 6.5L9 1"
+                                  stroke="white"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            )}
+                          </span>
+                          <span
+                            className={`inter-medium-font text-[15px] ${selectedAnswer ? "text-[#4565BF]" : "text-gray-700"}`}
+                          >
                             {q.question
                               .replace("I confirm and understand that:", "")
                               .replace("below", "above")
@@ -176,17 +192,17 @@ export default function PatientConsent() {
 
                 {/* Show error if not accepted */}
                 {!isNextEnabled && (
-                  <p className="text-sm text-red-500 mt-2">
+                  <p className="inter-reg-font border-l-2 border-amber-300 pl-3 text-sm text-amber-700 mt-2">
                     You must confirm before proceeding.
                   </p>
                 )}
 
-                <div className="flex justify-between items-center mt-6">
+                <div className="space-y-3 mt-6">
+                  <NextButton label="Next" disabled={!isNextEnabled} />
                   <BackButton
                     label="Back"
                     onClick={() => router.push("/medical-questions")}
                   />
-                  <NextButton label="Next" disabled={!isNextEnabled} />
                 </div>
               </form>
 

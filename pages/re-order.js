@@ -58,20 +58,19 @@ export default function ReOrder() {
   };
 
   const renderYesNo = (fieldName, value) => (
-    <div className="flex gap-4 mt-4 w-full">
+    <div className="mt-4 flex w-full gap-3">
       {["yes", "no"].map((option) => {
         const isSelected = value === option;
         return (
           <label
             key={option}
-            className={`reg-font flex items-center px-4 py-4 rounded-md border justify-start cursor-pointer transition-all duration-200 flex-1
-                            ${
-                              isSelected
-                                ? option === "yes"
-                                  ? "bg-violet-100 border-[#4565BF] text-primary"
-                                  : "bg-green-100 border-[#4DB581] text-[#4DB581]"
-                                : "bg-white border-gray-300 hover:border-gray-400 text-gray-800"
-                            }`}
+            className={`flex min-h-[54px] flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3.5 transition-all duration-200 select-none ${
+              isSelected
+                ? option === "yes"
+                  ? "border-[#4565BF] bg-[#4565BF]/[0.08] shadow-[0_3px_12px_rgba(69,101,191,0.08)]"
+                  : "border-emerald-500 bg-emerald-50 shadow-[0_3px_12px_rgba(16,185,129,0.08)]"
+                : "border-slate-200 bg-white text-slate-700 hover:border-[#4565BF]/25 hover:bg-[#4565BF]/[0.02]"
+            }`}
           >
             <input
               type="radio"
@@ -80,18 +79,25 @@ export default function ReOrder() {
               className="hidden"
             />
             <div
-              className={`w-5 h-5 mr-2 rounded-md border flex items-center justify-center
-                                ${
-                                  isSelected
-                                    ? option === "yes"
-                                      ? "bg-primary border-[#4565BF] text-white"
-                                      : "bg-[#4DB581] border-[#4DB581] text-white"
-                                    : "border-gray-400 bg-white"
-                                }`}
+              className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150 ${
+                isSelected
+                  ? option === "yes"
+                    ? "border-[#4565BF] bg-[#4565BF]"
+                    : "border-emerald-500 bg-emerald-500"
+                  : "border-slate-300 bg-white"
+              }`}
             >
-              {isSelected && <FiCheck className="text-md" />}
+              {isSelected && <FiCheck className="text-[11px] text-white" />}
             </div>
-            <span className="text-md bold-font paragraph capitalize">
+            <span
+              className={`inter-medium-font text-[14px] capitalize ${
+                isSelected
+                  ? option === "yes"
+                    ? "text-[#4565BF]"
+                    : "text-emerald-700"
+                  : "text-slate-700"
+              }`}
+            >
               {option}
             </span>
           </label>
@@ -107,18 +113,16 @@ export default function ReOrder() {
       <StepsHeader />
       <FormWrapper heading="Reorder Confirmation" description="" percentage="0">
         <PageAnimationWrapper>
-          <div className="bg-white">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <p className="text-sm reg-font paragraph">
-                    Has anything changed since your last order?
-                  </p>
-                  {renderYesNo("personalUse", personalUse)}
-                </div>
+          <div className="relative">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div>
+                <p className="inter-medium-font text-[14px] leading-relaxed text-slate-800">
+                  Has anything changed since your last order?
+                </p>
+                {renderYesNo("personalUse", personalUse)}
               </div>
 
-              <div className="my-5">
+              <div>
                 <NextButton disabled={!isValid} label="I Confirm" />
               </div>
             </form>

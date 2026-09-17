@@ -9,7 +9,6 @@ import StepsHeader from "@/layout/stepsHeader";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import { useState, useEffect } from "react";
 import PageLoader from "@/Components/PageLoader/PageLoader";
-import { FiCheck } from "react-icons/fi";
 import BackButton from "@/Components/BackButton/BackButton";
 import useGpDetailsStore from "@/store/gpDetailStore";
 import MUISelectField from "@/Components/SelectField/SelectField";
@@ -197,43 +196,46 @@ export default function GpDetail() {
             className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
           >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <h1 className="text-gray-500 reg-font">
+              <h1 className="inter-medium-font text-gray-500">
                 Are you registered with a GP in the UK?
               </h1>
               <div className="flex mt-4 gap-2">
-                {["yes", "no"].map((option) => (
-                  <label
-                    key={option}
-                    className={`cursor-pointer w-1/2 flex items-center gap-3 px-4 py-3 border rounded-lg text-black ${
-                      gpDetails === option
-                        ? "bg-[#E9F6FA] border-[#4565BF]"
-                        : "border-gray-300 hover:bg-gray-50"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      value={option}
-                      {...register("gpDetails", { required: true })}
-                      className="hidden"
-                    />
-                    <div
-                      className={`w-5 h-5 rounded-sm flex items-center justify-center border ${
-                        gpDetails === option
-                          ? "bg-primary border-[#4565BF] text-white"
-                          : "border-gray-400"
-                      }`}
+                {["yes", "no"].map((option) => {
+                  const isSelected = gpDetails === option;
+                  return (
+                    <label
+                      key={option}
+                      className={`flex flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3 transition-all duration-150 select-none
+                        ${isSelected ? "border-[#4565BF] bg-[#4565BF]/[0.05]" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"}`}
                     >
-                      {gpDetails === option && <FiCheck />}
-                    </div>
-                    {option.charAt(0).toUpperCase() + option.slice(1)}
-                  </label>
-                ))}
+                      <input
+                        type="radio"
+                        value={option}
+                        {...register("gpDetails", { required: true })}
+                        className="hidden"
+                      />
+                      <div
+                        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
+                          ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
+                      >
+                        {isSelected && (
+                          <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                        )}
+                      </div>
+                      <span
+                        className={`inter-medium-font text-[14px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                      >
+                        {option}
+                      </span>
+                    </label>
+                  );
+                })}
               </div>
 
               {/* This was missing (✅ FIXED now) */}
               {gpDetails === "no" && (
-                <div className="bg-[#FFF3CD] px-4 py-4 mt-6 text-gray-700 rounded shadow-md">
-                  <p>
+                <div className="rounded-xl border border-amber-200/70 bg-amber-50/70 px-4 py-3.5 mt-6">
+                  <p className="inter-reg-font text-[13px] text-amber-800">
                     You should inform your doctor of any medication you take.
                     Contact us if you want us to email a letter for your doctor.
                   </p>
@@ -242,11 +244,11 @@ export default function GpDetail() {
 
               {gpDetails === "yes" && (
                 <>
-                  <p className="text-gray-500 mt-6 mb-3">
+                  <p className="inter-reg-font text-gray-500 mt-6 mb-3">
                     If you are registered with a GP in the UK then we can inform
                     them on your behalf.
                   </p>
-                  <p className="text-gray-500 mt-0">
+                  <p className="inter-reg-font text-gray-500 mt-0">
                     Do you consent for us to inform your GP about the treatment?
                   </p>
                   <div className="mt-4 flex flex-col sm:flex-row sm:gap-4">
@@ -257,36 +259,37 @@ export default function GpDetail() {
                         label:
                           "No – I will inform my GP prior to starting treatment",
                       },
-                    ].map((option) => (
-                      <label
-                        key={option.value}
-                        className={`cursor-pointer flex-1 flex items-center gap-3 px-4 sm:my-0 my-2 py-3 border rounded-lg text-black ${
-                          gepTreatMent === option.value
-                            ? "bg-[#E9F6FA] border-[#4565BF]"
-                            : "border-gray-300 hover:bg-gray-50"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          value={option.value}
-                          {...register("gepTreatMent", { required: true })}
-                          className="hidden"
-                        />
-                        <div
-                          className={`min-w-5 h-5 rounded-sm flex items-center justify-center border ${
-                            gepTreatMent === option.value
-                              ? "bg-primary border-[#4565BF] text-white"
-                              : "border-gray-400"
-                          }`}
+                    ].map((option) => {
+                      const isSelected = gepTreatMent === option.value;
+                      return (
+                        <label
+                          key={option.value}
+                          className={`flex flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 sm:my-0 my-2 py-3 transition-all duration-150 select-none
+                            ${isSelected ? "border-[#4565BF] bg-[#4565BF]/[0.05]" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"}`}
                         >
-                          {gepTreatMent === option.value && (
-                            <FiCheck size={16} />
-                          )}
-                        </div>
+                          <input
+                            type="radio"
+                            value={option.value}
+                            {...register("gepTreatMent", { required: true })}
+                            className="hidden"
+                          />
+                          <div
+                            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
+                              ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
+                          >
+                            {isSelected && (
+                              <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                            )}
+                          </div>
 
-                        <span className="text-sm">{option.label}</span>
-                      </label>
-                    ))}
+                          <span
+                            className={`inter-medium-font text-[14px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                          >
+                            {option.label}
+                          </span>
+                        </label>
+                      );
+                    })}
                   </div>
                 </>
               )}
@@ -301,19 +304,21 @@ export default function GpDetail() {
                     errors={errors}
                   />
 
-                  <div className="relative">
-                    <TextField
-                      label="Post code"
-                      name="postalCode"
-                      register={register}
-                      required
-                      errors={errors}
-                    />
+                  <div className="flex items-end gap-2">
+                    <div className="flex-1">
+                      <TextField
+                        label="Post code"
+                        name="postalCode"
+                        register={register}
+                        required
+                        errors={errors}
+                      />
+                    </div>
                     <button
                       type="button"
                       onClick={handleAddressFetch}
                       disabled={searchLoading}
-                      className="absolute right-3 top-6 bg-primary text-white px-3 py-1 rounded w-28 flex items-center cursor-pointer text-center justify-center"
+                      className="inter-medium-font mb-4 flex h-[42px] shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#4565BF] px-4 text-[13px] text-white transition-colors duration-150 hover:bg-[#3550a0] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {searchLoading ? (
                         <motion.div
@@ -323,11 +328,11 @@ export default function GpDetail() {
                             duration: 1,
                             ease: "linear",
                           }}
-                          className="w-6 h-6 border-4 border-t-transparent rounded-full text-white"
+                          className="h-4 w-4 rounded-full border-2 border-white border-t-transparent"
                         />
                       ) : (
                         <>
-                          <FaSearch className="mr-2" />
+                          <FaSearch size={12} />
                           Search
                         </>
                       )}
@@ -373,7 +378,7 @@ export default function GpDetail() {
                     <button
                       type="button"
                       onClick={() => setManual(!manual)}
-                      className="text-black font-bold underline cursor-pointer"
+                      className="inter-medium-font cursor-pointer text-[#4565BF] underline transition-colors duration-150 hover:text-[#3550a0]"
                     >
                       {manual
                         ? "Hide manual address entry"
@@ -415,15 +420,14 @@ export default function GpDetail() {
                 </>
               )}
 
-              <div className="flex justify-between items-center mt-6">
-                <BackButton
-                  label="Back"
-                  onClick={() => router.push("/patient-consent")}
-                />
+              <div className="space-y-3 mt-6">
                 <NextButton
                   label="Next"
                   disabled={!isNextEnabled}
-                  className="mt-5"
+                />
+                <BackButton
+                  label="Back"
+                  onClick={() => router.push("/patient-consent")}
                 />
               </div>
             </form>

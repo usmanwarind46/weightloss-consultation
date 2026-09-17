@@ -28,14 +28,14 @@ const TextField = ({
   const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
   return (
-    <div className="mb-4 relative">
+    <div className="mb-4">
       {label && (
-        <label htmlFor={name} className="bold-font paragraph mb-2">
+        <label htmlFor={name} className="inter-medium-font relative mb-1.5 block text-[13.5px] text-slate-700">
           {label}
           {required ? (
-            <span className="text-red-500 absolute top-1 ms-1 niba-semibold-font"> *</span>
+            <span className="ms-1 text-red-500">*</span>
           ) : (
-            <span className="text-gray-500 text-sm font-normal ml-1">(optional)</span>
+            <span className="ml-1 text-[12px] font-normal text-slate-400">(optional)</span>
           )}
         </label>
       )}
@@ -51,9 +51,9 @@ const TextField = ({
           value={value}
           onChange={onChange}
           rows={rows}
-          className={`reg-font w-full text-black px-3 py-4 border rounded-sm placeholder-gray-400 
-            focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-[#4565BF]
-            ${errors[name] ? "border-red-500" : "border-black"}
+          className={`inter-reg-font w-full rounded-xl border-2 bg-white px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400
+            transition-all duration-150 focus:outline-none focus:border-[#4565BF] focus:ring-[3px] focus:ring-[#4565BF]/10
+            ${errors[name] ? "border-red-300" : "border-slate-200 hover:border-slate-300"}
           `}
         />
       ) : (
@@ -70,10 +70,9 @@ const TextField = ({
                 ...validation,
               })
               : { value, onChange })}
-            className={`reg-font w-full text-black px-3 py-2 border-b border-gray-400 
-  focus:outline-none focus:border-b-2 focus:border-[#4565BF]
-  placeholder-gray-400
-  ${errors[name] ? "border-b-red-500" : ""}
+            className={`inter-reg-font h-[42px] w-full border-b-2 bg-transparent px-1 text-[14px] text-slate-900 placeholder:text-slate-400
+  transition-all duration-150 focus:outline-none focus:border-[#4565BF]
+  ${errors[name] ? "border-red-300" : "border-slate-200 hover:border-slate-300"}
   ${isPassword ? "pr-12" : ""}
 `}
 
@@ -82,7 +81,7 @@ const TextField = ({
           {isPassword && (
             <span
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+              className="absolute right-1 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400 hover:text-slate-600"
             >
               {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
             </span>
@@ -90,7 +89,7 @@ const TextField = ({
         </div>
       )}
 
-      {errors[name] && <p className="text-red-500 text-sm mt-1">{errors[name]?.message || "This field is required"}</p>}
+      {errors[name] && <p className="inter-reg-font mt-1.5 text-[12.5px] text-red-500">{errors[name]?.message || "This field is required"}</p>}
     </div>
   );
 };

@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const NextButton = ({
   label = "Next",
   loading = false,
@@ -9,20 +7,21 @@ const NextButton = ({
   disabled = false,
   type = "submit",
   onClick,
-  props = "w-full",
+  props,
+  className = "",
 }) => {
   return (
-    <div className={"mb-0"}>
+    <div className="mb-0">
       <button
         type={type}
         onClick={onClick}
         disabled={disabled || loading}
-        className={`${props ? "w-full" : ""} ${subLabel ? "" : "px-8"} border-2    py-3 rounded-md text-white bold-font text-md transition-all duration-150 ease-in-out
-            flex justify-center items-center cursor-pointer
+        className={`${className} w-full inter-medium-font text-[14px] tracking-wide transition-all duration-150 ease-in-out
+            flex justify-center items-center cursor-pointer rounded-lg py-3 px-6
             ${
               disabled || loading
-                ? "bg-gray-300 !cursor-not-allowed border-gray-300"
-                : " border-[#4565BF] bg-[#4565BF] hover:bg-[#4565BF]"
+                ? "bg-slate-200 text-slate-500 !cursor-not-allowed"
+                : "bg-[#4565BF] hover:bg-[#3550a0] text-white"
             }`}
       >
         {loading ? (
@@ -31,18 +30,14 @@ const NextButton = ({
             <span>Loading...</span>
           </div>
         ) : (
-          <>
-            {/* {icon && <span className="mr-2 flex items-center">{icon}</span>} */}
-
-            <div className="flex flex-col items-center ">
-              <div>{label}</div>
-              {subLabel && (
-                <div className="text-[13px] reg-font pt-1 normal-case">
-                  {subLabel}
-                </div>
-              )}
-            </div>
-          </>
+          <div className="flex flex-col items-center">
+            <div>{label}</div>
+            {subLabel && (
+              <div className="text-[12px] inter-reg-font pt-1 normal-case opacity-80">
+                {subLabel}
+              </div>
+            )}
+          </div>
         )}
       </button>
     </div>

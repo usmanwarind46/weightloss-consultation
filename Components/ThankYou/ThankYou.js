@@ -3,7 +3,14 @@ import { useRouter } from "next/router";
 import { HiBadgeCheck } from "react-icons/hi";
 import NextButton from "../NextButton/NextButton";
 import useCartStore from "@/store/useCartStore";
-import { RiErrorWarningLine } from "react-icons/ri";
+import {
+  ChevronRight,
+  UploadCloud,
+  Camera,
+  IdCard,
+  ShieldCheck,
+  ClipboardCheck,
+} from "lucide-react";
 import useImageUploadStore from "@/store/useImageUploadStore ";
 import { GetImageIsUplaod } from "@/api/mergeRoutes";
 import useAuthStore from "@/store/authStore";
@@ -16,7 +23,52 @@ import usePatientInfoStore from "@/store/patientInfoStore";
 import useProductId from "@/store/useProductIdStore";
 import { GetIdVerification } from "@/api/IdVerificationApi";
 import useIdVerificationUploadStore from "@/store/useIdVerificationUploadStore";
-import { FiUpload } from "react-icons/fi";
+
+const VerificationCard = ({
+  icon: Icon,
+  title,
+  description,
+  label,
+  onClick,
+}) => (
+  <section className="w-full overflow-hidden rounded-2xl border border-amber-200/70 bg-amber-50/40 shadow-[0_1px_4px_rgba(180,83,9,0.06)]">
+    <div className="flex w-full flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex min-w-0 flex-1 items-center gap-3.5">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+          <Icon aria-hidden="true" size={18} strokeWidth={2} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="mb-0.5 flex items-center gap-2">
+            <span className="inter-medium-font inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] uppercase tracking-[0.1em] text-amber-600">
+              Action required
+            </span>
+          </div>
+          <h3 className="inter-semibold-font text-[14px] leading-snug text-slate-900">
+            {title}
+          </h3>
+          <p className="inter-reg-font mt-0.5 text-[12.5px] text-slate-500">
+            {description}
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={onClick}
+        className="inter-medium-font group inline-flex min-h-[38px] w-full shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-5 py-2 text-[12.5px] text-amber-600 transition-all duration-150 hover:bg-amber-100 active:scale-[0.98] lg:w-auto lg:min-w-[140px]"
+      >
+        <UploadCloud aria-hidden="true" size={14} strokeWidth={2.2} />
+        <span>{label}</span>
+        <ChevronRight
+          aria-hidden="true"
+          size={13}
+          strokeWidth={2.5}
+          className="shrink-0 transition-transform duration-150 group-hover:translate-x-0.5"
+        />
+      </button>
+    </div>
+  </section>
+);
 
 const ThankYou = () => {
   const { orderId, checkOut, setOrderId, setCheckOut } = useCartStore();
@@ -224,43 +276,52 @@ const ThankYou = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#E9F6FA] px-4 sm:px-8 md:px-20 py-16">
-      <div className="bg-white shadow-2xl rounded-3xl p-8 md:p-12 w-full max-w-3xl transition-all duration-300">
-        <div className="text-center mb-10">
-          <HiBadgeCheck className="w-20 h-20 text-gray-200 fill-[#387dcc] mx-auto mb-5" />
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">
+    <div className="min-h-screen bg-[#EEF2FA] px-4 py-10 sm:px-6 sm:py-14">
+      <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-[#4565BF]/10 bg-white shadow-[0_18px_55px_rgba(69,101,191,0.10)] transition-all duration-300">
+        <div className="mb-0 border-b border-[#4565BF]/[0.08] bg-[#f2f4fb] px-6 py-8 text-center sm:px-10">
+          <HiBadgeCheck className="mx-auto mb-4 h-14 w-14 fill-[#4565BF] text-white" />
+          <h2 className="inter-bold-font mb-2 text-[24px] tracking-[-0.02em] text-slate-900 sm:text-[30px]">
             {" "}
             Order Placed Successfully
           </h2>
-          <span className="text-gray-800 font-bold text-2xl">
+          <span className="inter-semibold-font text-[15px] text-[#4565BF] sm:text-[16px]">
             {" "}
             Order #{orderId}
           </span>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 px-5 py-6 sm:px-8 sm:py-8">
           <div>
             {/* <h3 className="text-2xl reg-font text-gray-800 border-b border-gray-200 pb-2 mb-4 text-center">Order Summary</h3> */}
-            <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md">
-              <table className="min-w-full divide-y divide-gray-200 text-sm text-gray-700">
-                <thead className="bg-gray-100 text-gray-700 font-semibold">
+            <div className="overflow-x-auto rounded-xl border border-slate-200/80">
+              <table className="inter-reg-font min-w-full divide-y divide-slate-100 text-sm text-slate-700">
+                <thead className="inter-semibold-font bg-[#4565BF]/[0.05] text-slate-700">
                   <tr>
-                    <th className="px-6 py-4 text-left bold-font">Items</th>
-                    <th className="px-6 py-4 text-right bold-font">Quantity</th>
-                    <th className="px-6 py-4 text-right bold-font">Amount</th>
+                    <th className="inter-semibold-font px-6 py-4 text-left">
+                      Items
+                    </th>
+                    <th className="inter-semibold-font px-6 py-4 text-right">
+                      Quantity
+                    </th>
+                    <th className="inter-semibold-font px-6 py-4 text-right">
+                      Amount
+                    </th>
                     <th className="px-6 py-4 text-right"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100 bg-white">
+                <tbody className="divide-y divide-slate-100 bg-white">
                   {items?.map((item, index) => (
-                    <tr key={`addon-${index}`} className="hover:bg-gray-50">
-                      <td className="px-6 py-3 reg-font text-black">
+                    <tr
+                      key={`addon-${index}`}
+                      className="transition-colors hover:bg-[#4565BF]/[0.02]"
+                    >
+                      <td className="inter-medium-font px-6 py-3 text-slate-900">
                         {item?.label || item?.product || "Add-on"}
                       </td>
-                      <td className="px-6 py-3 text-center reg-font">
+                      <td className="inter-reg-font px-6 py-3 text-center">
                         {item?.quantity}
                       </td>
-                      <td className="px-6 py-3 text-right reg-font">
+                      <td className="inter-reg-font px-6 py-3 text-right">
                         £
                         {(
                           parseFloat(item?.price) * (item?.quantity || 1)
@@ -294,7 +355,7 @@ const ThankYou = () => {
 
                   {checkOut?.discount?.discount !== null && (
                     <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-3 reg-font text-black">
+                      <td className="inter-reg-font px-6 py-3 text-slate-900">
                         Discount
                         {checkOut?.discount?.type === "Percent"
                           ? ` (${parseInt(checkOut?.discount?.discount)}%)`
@@ -304,7 +365,7 @@ const ThankYou = () => {
                           ` - Code: ${checkOut?.discount?.code}`}
                       </td>
                       <td></td>
-                      <td className="px-6 py-3 text-right reg-font text-primary">
+                      <td className="inter-medium-font px-6 py-3 text-right text-[#4565BF]">
                         {checkOut?.discount?.type === "Percent"
                           ? `-£${parseFloat(checkOut?.discount?.discount_value || 0).toFixed(2)}`
                           : `-£${parseFloat(checkOut?.discount?.discount).toFixed(2)}`}
@@ -321,17 +382,20 @@ const ThankYou = () => {
                         </span>
                       </td>
                       <td></td>
-                      <td className="px-6 py-3 text-right reg-font ">
+                      <td className="inter-reg-font px-6 py-3 text-right">
                         £{parseFloat(checkOut?.shipment?.price).toFixed(2)}
                       </td>
                     </tr>
                   )}
 
-                  <tr className="bg-gray-100 font-bold text-gray-900">
-                    <td colSpan={2} className="px-6 py-3 text-right bold-font">
+                  <tr className="bg-[#4565BF]/[0.055] font-bold text-slate-900">
+                    <td
+                      colSpan={2}
+                      className="inter-semibold-font px-6 py-3 text-right"
+                    >
                       Total
                     </td>
-                    <td className="px-6 py-3 text-right bold-font">
+                    <td className="inter-semibold-font px-6 py-3 text-right text-[#4565BF]">
                       £{parseFloat(checkOut?.total).toFixed(2)}
                     </td>
                     <td></td>
@@ -340,89 +404,97 @@ const ThankYou = () => {
               </table>
             </div>
           </div>
+
           {!imageUploaded && (
-            <>
-              <blockquote
-                style={{
-                  padding: "10px",
-                  backgroundColor: "#F9F9F9",
-                  borderLeft: "3px solid #ccc",
-                  borderRight: "3px solid #ccc",
-                  borderRadius: 15,
-                  padding: 20,
-                }}
-                className={`${imageUploaded ? "my-6" : ""} `}
-              >
-                <h2 className="niba-bold-font underline text-black mb-2">
-                  Photo Upload Request:
-                </h2>{" "}
-                <p className="thin-font text-gray-700">
-                  {" "}
-                  As part of our ongoing commitment to patient safety and
-                  compliance with current regulatory requirements, we are
-                  required to verify your BMI as part of our prescribing
-                  process.
-                </p>
-                <p className="thin-font text-gray-700 my-3">
-                  {" "}
-                  Please upload a clear, recent full-body photograph. This is
-                  one of the methods we use to verify your BMI and ensure that
-                  your treatment remains safe and appropriate for you.
-                </p>
-                <p className="thin-font text-gray-700 my-3 ">
-                  {" "}
-                  Once your photo has been reviewed and approved by our clinical
-                  team, your order will be processed and dispensed by our
-                  pharmacy.
-                </p>
-                <p className="thin-font text-gray-700 my-3 ">
-                  {" "}
-                  Your privacy is important to us, therefore all photos are
-                  stored securely, encrypted, and handled in strict confidence
-                  in accordance with applicable data protection regulations.
-                </p>
-              </blockquote>
+            <blockquote className="rounded-xl border border-[#4565BF]/10 bg-[#f2f4fb] px-5 py-4 sm:px-6 sm:py-5">
+              <h2 className="inter-semibold-font mb-2 text-[14px] text-slate-900">
+                Photo Upload Request
+              </h2>
+              <p className="inter-reg-font text-[13px] leading-relaxed text-slate-600">
+                As part of our ongoing commitment to patient safety and
+                compliance with current regulatory requirements, we are
+                required to verify your BMI as part of our prescribing
+                process.
+              </p>
+              <p className="inter-reg-font mt-3 text-[13px] leading-relaxed text-slate-600">
+                Please upload a clear, recent full-body photograph. This is
+                one of the methods we use to verify your BMI and ensure that
+                your treatment remains safe and appropriate for you.
+              </p>
+              <p className="inter-reg-font mt-3 text-[13px] leading-relaxed text-slate-600">
+                Once your photo has been reviewed and approved by our clinical
+                team, your order will be processed and dispensed by our
+                pharmacy.
+              </p>
+              <p className="inter-reg-font mt-3 text-[13px] leading-relaxed text-slate-600">
+                Your privacy is important to us, therefore all photos are
+                stored securely, encrypted, and handled in strict confidence
+                in accordance with applicable data protection regulations.
+              </p>
+            </blockquote>
+          )}
 
-              <div className="my-4 bg-amber-50 border border-amber-200 text-gray-800 px-4 py-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="bg-amber-100 p-2 rounded-full shrink-0">
-                    <FiUpload className="text-base text-amber-600" />
-                  </div>
-
-                  <p className="text-sm reg-font text-gray-700">
-                    Please upload your full-body photo to complete your order.
+          {(!imageUploaded || !idVerificationUpload) && (
+            <section
+              aria-labelledby="verification-heading"
+              className="space-y-4"
+            >
+              <div className="flex items-start gap-3">
+                <ClipboardCheck
+                  aria-hidden="true"
+                  size={22}
+                  strokeWidth={1.7}
+                  className="mt-0.5 shrink-0 text-[#4565BF]"
+                />
+                <div>
+                  <h2
+                    id="verification-heading"
+                    className="inter-semibold-font text-[18px] tracking-[-0.02em] text-slate-900"
+                  >
+                    Your next step: verification
+                  </h2>
+                  <p className="inter-reg-font mt-1 text-[13px] leading-relaxed text-slate-500">
+                    Please complete the uploads below so our clinical team can
+                    review your order.
                   </p>
                 </div>
-                <button
-                  onClick={handleGoUpload}
-                  className="bg-amber-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-amber-600 transition cursor-pointer whitespace-nowrap shrink-0"
-                >
-                  Click here to upload
-                </button>
               </div>
-            </>
+
+              <div className="flex flex-col gap-3">
+                {!imageUploaded && (
+                  <VerificationCard
+                    icon={Camera}
+                    title="Upload your photo"
+                    description="Please upload your full-body photo to complete your order."
+                    label="Upload photo"
+                    onClick={handleGoUpload}
+                  />
+                )}
+                {!idVerificationUpload && (
+                  <VerificationCard
+                    icon={IdCard}
+                    title="Verify Your Identity"
+                    description="Please upload your ID verification to complete your order."
+                    label="Upload ID"
+                    onClick={handleGoIdVerification}
+                  />
+                )}
+              </div>
+
+              <p className="inter-reg-font flex items-start gap-2 text-[12px] leading-relaxed text-slate-500">
+                <ShieldCheck
+                  aria-hidden="true"
+                  size={17}
+                  strokeWidth={1.7}
+                  className="mt-0.5 shrink-0 text-teal-800"
+                />
+                Your uploads are stored securely and handled confidentially as
+                part of your clinical review.
+              </p>
+            </section>
           )}
 
-          {!idVerificationUpload && (
-            <div className="my-4 bg-amber-50 border border-amber-200 text-gray-800 px-4 py-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="bg-amber-100 p-2 rounded-full shrink-0">
-                  <FiUpload className="text-base text-amber-600" />
-                </div>
-                <p className="text-sm reg-font text-gray-700">
-                  Please upload your ID verification to complete your order.
-                </p>
-              </div>
-              <button
-                onClick={handleGoIdVerification}
-                className="bg-amber-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-amber-600 transition cursor-pointer whitespace-nowrap shrink-0"
-              >
-                Click here to upload
-              </button>
-            </div>
-          )}
-
-          <div className="text-left space-y-4 text-gray-700 text-sm leading-relaxed thin-font">
+          <div className="inter-reg-font space-y-4 text-left text-[13px] leading-relaxed text-slate-600">
             {/* <p>
               We have received your medical consultation form which is now being
               reviewed by our prescribers. You may be contacted by a member of
@@ -432,7 +504,9 @@ const ThankYou = () => {
               account.
             </p> */}
             <p>
-              <span className="bold-font underline text-black">Delivery:</span>{" "}
+              <span className="inter-semibold-font text-slate-900">
+                Delivery:
+              </span>{" "}
               All orders, once approved, are shipped via next-day tracked
               delivery using either DPD or Royal Mail. Orders may take longer
               than one working day to approve due to the clinical checks
@@ -441,14 +515,14 @@ const ThankYou = () => {
               accordingly.
             </p>
             <p>
-              <span className="bold-font underline text-black">
+              <span className="inter-semibold-font text-slate-900">
                 Changes or cancellation:
               </span>{" "}
               If there are any changes you would like to make to your order or
               to cancel it, please contact us immediately by email on{" "}
               <a
                 href="mailto:contact@onlineweightlossclinic.co.uk"
-                className="text-primary font-semibold underline"
+                className="inter-medium-font text-[#4565BF] underline underline-offset-2"
               >
                 contact@onlineweightlossclinic.co.uk.
               </a>{" "}

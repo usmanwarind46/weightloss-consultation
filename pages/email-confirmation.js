@@ -226,24 +226,24 @@ export default function EmailConfirmation() {
               />
 
               {already && (
-                <div className="text-sm text-red-600 bg-red-50 border border-red-200 p-3 rounded-md">
+                <div className="inter-reg-font rounded-xl border border-red-100 bg-red-50 px-4 py-3.5 text-[13px] text-red-600">
                   The email address you have entered is already associated with
                   an existing account{" "}
                   <span
                     onClick={openLoginModal}
-                    className="text-blue-600 underline cursor-pointer reg-font hover:text-blue-800"
+                    className="inter-medium-font cursor-pointer text-[#4565BF] underline hover:text-[#3550a0]"
                   >
                     Click here to login.
                   </span>
                 </div>
               )}
 
-              <div className="flex justify-between items-center mt-4">
+              <div className="mt-6 flex flex-col gap-3">
+                <NextButton label="Next" type="submit" disabled={!isValid} />
                 <BackButton
                   label="Back"
                   onClick={() => router.push("/signup")}
                 />
-                <NextButton label="Next" type="submit" disabled={!isValid} />
               </div>
             </form>
 

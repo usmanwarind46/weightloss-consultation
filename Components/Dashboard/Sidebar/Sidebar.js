@@ -1,109 +1,133 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FiX } from "react-icons/fi";
 import {
-  HiLocationMarker,
-  HiOutlineLockClosed,
-  HiShoppingBag,
-  HiUser,
-} from "react-icons/hi";
-import { GiMedicines } from "react-icons/gi";
+  Headphones,
+  LayoutDashboard,
+  Lock,
+  MapPin,
+  Phone,
+  ShoppingBag,
+  TrendingUp,
+  UserRound,
+  X,
+} from "lucide-react";
 import ApplicationLogo from "@/config/ApplicationLogo";
-import styles from "@/styles/sidebar.module.css"; // ✅ Import as module
-import { FaWeight } from "react-icons/fa";
+
+const navItems = [
+  { href: "/dashboard", label: "My Account", icon: LayoutDashboard, key: "tab-home", match: ["/dashboard"] },
+  { href: "/orders", label: "My Orders", icon: ShoppingBag, key: "tab-orders", match: ["/orders", "/order-detail"] },
+  { href: "/address", label: "My Address Book", icon: MapPin, key: "tab-address", match: ["/address"] },
+  { href: "/change-password", label: "Change Password", icon: Lock, key: "tab-password", match: ["/change-password"] },
+  { href: "/weight-loss-journey", label: "Weight Loss Journey", icon: TrendingUp, key: "tab-weight", match: ["/weight-loss-journey"] },
+];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const router = useRouter();
   const currentPath = router.pathname;
 
-  const navItems = [
-    {
-      href: "/dashboard",
-      label: "My Account",
-      icon: <GiMedicines />,
-      key: "tab-home",
-      match: ["/dashboard"],
-    },
-    {
-      href: "/orders",
-      label: currentPath.startsWith("/order-detail")
-        ? "Order Details"
-        : "My Orders",
-      icon: <HiShoppingBag />,
-      key: "tab-orders",
-      match: ["/orders", "/order-detail"],
-    },
-    {
-      href: "/address",
-      label: "My Address Book",
-      icon: <HiLocationMarker />,
-      key: "tab-address",
-      match: ["/address"],
-    },
-    {
-      href: "/change-password",
-      label: "Change Password",
-      icon: <HiOutlineLockClosed />,
-      key: "tab-password",
-      match: ["/change-password"],
-    },
-    {
-      href: "/weight-loss-journey",
-      label: "Weight Loss Journey",
-      icon: <FaWeight />,
-      key: "tab-weight",
-      match: ["/weight-loss-journey"],
-    },
-  ];
-
   return (
-    <div
-      className={`sm:m-4 sm:rounded-lg fixed top-0 left-0 lg:relative h-full bg-[#F9FAFB] py-4 px-3 flex flex-col shadow-md transform transition-transform duration-300 ease-in-out z-50 sm:relative sm:translate-x-0 sm:w-64 ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      }`}
-    >
-      <div className="flex justify-between p-1 mb-3 md:hidden">
-        <ApplicationLogo className="w-32 sm:w-40" />
-        <div
-          className="align-middle ms-2 pt-2 text-2xl text-primary"
+    <>
+      {isOpen && (
+        <button
+          type="button"
+          aria-label="Close sidebar overlay"
           onClick={toggleSidebar}
-        >
-          <FiX size={30} />
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] lg:hidden"
+        />
+      )}
+
+      <aside
+        role="navigation"
+        className={`
+          fixed inset-y-0 left-0 z-50 flex w-[240px] flex-col
+          bg-white border-r border-slate-100
+          shadow-[4px_0_24px_rgba(0,0,0,0.05)]
+          transition-transform duration-300 ease-out
+          lg:sticky lg:top-[72px] lg:z-20
+          lg:h-[calc(100vh-72px)] lg:w-[220px] 2xl:w-[260px]
+          lg:shrink-0 lg:translate-x-0 lg:shadow-none
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        {/* Mobile header */}
+        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 lg:hidden">
+          <div className="flex items-center gap-2.5">
+              <ApplicationLogo className="h-12 w-auto text-white" />
+            </div>
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            aria-label="Close navigation"
+            className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+          >
+            <X size={22} strokeWidth={2} />
+          </button>
         </div>
-      </div>
 
-      <nav className="space-y-2">
-        {navItems.map((item) => {
-          const isActive = item.match.some((path) =>
-            currentPath.startsWith(path),
-          );
-          console.log(currentPath, "→", item.label, "isActive:", isActive);
+        {/* Menu label */}
+        <div className="px-5 pt-6 pb-1.5">
+          <p className="inter-medium-font text-[10px] uppercase tracking-[0.12em] text-slate-400">
+            Menu
+          </p>
+        </div>
 
-          return (
-            <Link href={item.href} legacyBehavior key={item.key}>
-              <a
+        {/* Nav */}
+        <nav className="flex flex-col gap-0.5 px-3 pb-3">
+          {navItems.map(({ href, label, icon: Icon, key, match }) => {
+            const active = match.some((path) => currentPath.startsWith(path));
+            return (
+              <Link
+                href={href}
+                key={key}
                 onClick={toggleSidebar}
-                className={`flex items-center p-2 rounded-md ${item.key} ${
-                  isActive
-                    ? `bg-primary text-white ${styles["active-tab"]}`
-                    : "hover:bg-gray-200 darkGrayColor"
-                } medium-font niba-reg-font`}
+                aria-current={active ? "page" : undefined}
+                className={`
+                  ${key} group flex items-center gap-2.5
+                  rounded-md px-3 py-2.5 2xl:px-4 2xl:py-3 no-underline outline-none
+                  transition-all duration-150
+                  ${active
+                    ? "bg-[#4565BF]/[0.09] text-[#4565BF]"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                  }
+                `}
               >
-                {React.cloneElement(item.icon, {
-                  className: `text-2xl mr-3 ${isActive ? "text-white" : "text-[#6b7280]"}`,
-                })}
-                <span
-                  className={styles[`tab-text-${item.key.split("tab-")[1]}`]}
-                >
-                  {item.label}
+                <Icon
+                  size={15}
+                  strokeWidth={active ? 2.2 : 1.8}
+                  className={active ? "text-[#4565BF]" : "text-slate-400 group-hover:text-slate-600"}
+                />
+                <span className={`inter-medium-font text-[13px] lg:text-[14px] 2xl:text-[16px] leading-none ${active ? "text-[#4565BF]" : ""}`}>
+                  {label}
                 </span>
-              </a>
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex-1" />
+
+        {/* Support */}
+        <div className="border-t border-slate-100 px-5 py-4">
+          <a
+            href="tel:+442081782178"
+            className="group flex items-center gap-3 no-underline"
+          >
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#4565BF]/[0.07] text-[#4565BF]">
+              <Phone size={14} strokeWidth={2} />
+            </span>
+            <span className="min-w-0">
+              <span className="inter-medium-font block text-[10.5px] uppercase tracking-[0.1em] text-slate-400 leading-none">
+                Contact Support
+              </span>
+              <span className="inter-medium-font mt-1.5 block truncate text-[12px] leading-none text-[#4565BF]">
+                +44 (0)208 178 2178
+              </span>
+            </span>
+          </a>
+        </div>
+      </aside>
+    </>
   );
 };
 

@@ -62,33 +62,25 @@ export default function PregnancyCheck() {
 
   const renderYesNo = (fieldName, value) => {
     return (
-      <div className="flex gap-4 mt-4 w-full">
+      <div className="mt-4 flex w-full gap-4">
         {["yes", "no"].map((option) => {
           const isSelected = value === option;
           return (
             <label
               key={option}
-              className={`reg-font flex items-center px-4 py-4 rounded-md border justify-start cursor-pointer transition-all duration-200 flex-1
-                ${isSelected
-                  ? option === "yes"
-                    ? "bg-violet-100 border-[#4565BF] text-primary"
-                    : "bg-violet-100 border-[#4565BF] text-primary"
-                  : "bg-white border-gray-300 hover:border-gray-400 text-gray-800"
-                }`}
+              className={`flex flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3.5 transition-all duration-150 select-none
+                ${isSelected ? "border-[#4565BF] bg-[#4565BF]/[0.05]" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"}`}
             >
               <input type="radio" value={option} {...register(fieldName, { required: true })} className="hidden" />
               <div
-                className={`w-5 h-5 mr-2 rounded-md border flex items-center justify-start
-                  ${isSelected
-                    ? option === "yes"
-                      ? "bg-primary border-[#4565BF] text-white"
-                      : "bg-primary border-[#4565BF] text-white"
-                    : "border-gray-400 bg-white"
-                  }`}
+                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
+                  ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
               >
-                {isSelected && <FiCheck className="text-md" />}
+                {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
               </div>
-              <span className="text-black bold-font paragraph capitalize">{option}</span>
+              <span className={`inter-medium-font text-[14px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
+                {option}
+              </span>
             </label>
           );
         })}
@@ -117,15 +109,17 @@ export default function PregnancyCheck() {
                   {/* className="block text-sm reg-font text-black mb-1" */}
                   {renderYesNo("pregnancy", pregnancy)}
                   {pregnancy === "yes" && (
-                    <p className="text-red-600 text-sm mt-2">
-                      This treatment is not suitable if you are pregnant, trying to get pregnant or breastfeeding. We recommend you speak to your GP
-                      in person.
-                    </p>
+                    <div className="mt-3 rounded-xl border border-red-200/70 bg-red-50/70 px-4 py-3.5">
+                      <p className="inter-reg-font text-[13px] text-red-700">
+                        This treatment is not suitable if you are pregnant, trying to get pregnant or breastfeeding. We recommend you speak to your GP
+                        in person.
+                      </p>
+                    </div>
                   )}
                 </div>
               </div>
 
-              <div className="my-5 flex justify-between items-center">
+              <div className="my-5 flex flex-col gap-3">
                 <NextButton disabled={!isValid || pregnancy === "yes"} label="Next" />
                 <BackButton label="Back" onClick={() => router.back()} />
               </div>

@@ -1,21 +1,17 @@
 import React from "react";
 
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const BackButton = ({ label = "Back", loading = false, disabled = false, type = "button", onClick, className }) => {
+const BackButton = ({ label = "Back", loading = false, disabled = false, type = "button", onClick, className = "" }) => {
   return (
-    <div className={"mb-0"}>
+    <div className={`${className} flex items-center justify-center`}>
       <button
         type={type}
         onClick={onClick}
         disabled={disabled || loading}
-        className={`${className} px-8 border-2   py-3 rounded-md text-white bold-font text-sm transition-all duration-150 ease-in-out
-            flex justify-center items-center cursor-pointer
-            ${disabled || loading ? "bg-gray-300 !cursor-not-allowed" : " border-[#4565BF] bg-[#4565BF] hover:bg-[#4565BF]"}`}
+        className="inter-medium-font flex items-center justify-center gap-1 text-[13px] text-[#4565BF] underline hover:text-slate-600 transition-colors duration-150 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed mt-2"
       >
         {loading ? (
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-3.5 h-3.5 border-2 border-[#4565BF] border-t-transparent rounded-full animate-spin" />
             <span>Loading...</span>
           </div>
         ) : (

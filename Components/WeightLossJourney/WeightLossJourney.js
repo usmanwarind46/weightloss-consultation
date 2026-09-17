@@ -186,7 +186,7 @@ export default function WeightJourneyPage() {
     : 0;
 
   return (
-    <div className="p-6 space-y-10 min-h-screen bg-slate-50">
+    <div className="p-6 space-y-10 min-h-screen bg-[#EEF2FA]">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* Title */}

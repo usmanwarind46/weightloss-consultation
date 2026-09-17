@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { format, parse } from "date-fns";
 import NextButton from "@/Components/NextButton/NextButton";
 import Dose from "@/Components/Dose/Dose";
 import AddOn from "@/Components/AddOn/AddOn";
@@ -16,7 +20,7 @@ import BackButton from "@/Components/BackButton/BackButton";
 import StepsHeader from "@/layout/stepsHeader";
 import { MdDelete } from "react-icons/md";
 import ConfirmationModal from "@/Components/Modal/ConfirmationModal";
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, ThemeProvider } from "@mui/material";
 import MetaLayout from "@/Meta/MetaLayout";
 import {
   FoundayoProductId,
@@ -26,6 +30,7 @@ import {
 import useNeedleConsent from "@/store/needleConsent";
 import { FaShoppingCart } from "react-icons/fa";
 import useAbandonCardStore from "@/store/abandonCardStore";
+import brandTheme from "@/config/muiTheme";
 
 export default function DosageSelection() {
   const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -328,13 +333,13 @@ export default function DosageSelection() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full"
+              className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_20px_60px_rgba(30,20,60,0.18)]"
             >
-              <h2 className="text-xl bold-font mb-4 text-gray-800 text-center">
+              <h2 className="inter-semibold-font mb-4 text-center text-[19px] text-slate-900">
                 Needles are not included with Mounjaro
               </h2>
 
-              <p className="text-gray-700 text-md leading-relaxed mb-4 text-center">
+              <p className="inter-reg-font mb-5 text-center text-[13.5px] leading-6 text-slate-600">
                 Please note that Mounjaro is supplied without needles. If you
                 require needles, please add them to your order. If you already
                 have suitable needles, please confirm below to proceed.{" "}
@@ -360,7 +365,7 @@ export default function DosageSelection() {
                 onClick={() => {
                   handleConfirmForManjaro(false);
                 }}
-                className="w-full bold-font mt-2 border border-gray-300 py-3 px-4 rounded text-primary hover:bg-gray-100 cursor-pointer text-md"
+                className="inter-medium-font mt-2 w-full cursor-pointer rounded-xl border border-slate-200 px-4 py-3 text-[14px] text-[#4565BF] transition-colors hover:bg-slate-50"
               >
                 I confirm that I do not require needles
               </button>
@@ -385,129 +390,205 @@ export default function DosageSelection() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full relative"
+              className="max-h-[calc(100dvh-48px)] w-full max-w-md overflow-y-auto rounded-[22px] border border-white/80 bg-white shadow-[0_28px_80px_rgba(30,20,60,0.22)]"
             >
-              <button
-                type="button"
-                onClick={() => {
-                  removeItemCompletely(selectedDose?.id, "dose");
-                  setPrevMedication("");
-                  setPrevDose("");
-                  setLastTakenDate("");
-                  setShowDoseModal(false);
-                }}
-                className="absolute -top-3 -right-3 flex items-center justify-center w-7 h-7 rounded-full bg-black cursor-pointer shadow-md"
-              >
-                <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 1L13 13M13 1L1 13" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                </svg>
-              </button>
-              <h2 className="text-xl bold-font mb-4 text-gray-800">
-                Dosage Confirmation
-              </h2>
-              {selectedDose?.productConcent && (
-                <p className="text-md paragraph rounded-md p-3 reg-font mb-4">
-                  {selectedDose?.productConcent}
-                </p>
-              )}
-              <div className="space-y-3 mb-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Previous medication name
-                  </label>
-                  <input
-                    type="text"
-                    value={prevMedication}
-                    onChange={(e) => setPrevMedication(e.target.value)}
-                    placeholder="e.g. Ozempic, Mounjaro, Wegovy"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-colors focus:border-[#4565BF] focus:ring-1 focus:ring-[#4565BF]/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    What dose were you on? (mg)
-                  </label>
-                  <input
-                    type="text"
-                    value={prevDose}
-                    onChange={(e) => setPrevDose(e.target.value)}
-                    placeholder="e.g. 2.5"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-colors focus:border-[#4565BF] focus:ring-1 focus:ring-[#4565BF]/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    When did you last take it?
-                  </label>
-                  <input
-                    type="date"
-                    value={lastTakenDate}
-                    onChange={(e) => setLastTakenDate(e.target.value)}
-                    max={new Date().toISOString().split("T")[0]}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 outline-none transition-colors focus:border-[#4565BF] focus:ring-1 focus:ring-[#4565BF]/20"
-                  />
+              <div className="relative border-b border-slate-100 bg-white px-6 py-5 pr-16">
+                <h2 className="inter-semibold-font text-[19px] tracking-[-0.01em] text-slate-900">
+                  Dosage Confirmation
+                </h2>
+                <button
+                  type="button"
+                  aria-label="Close dosage confirmation"
+                  onClick={() => {
+                    removeItemCompletely(selectedDose?.id, "dose");
+                    setPrevMedication("");
+                    setPrevDose("");
+                    setLastTakenDate("");
+                    setShowDoseModal(false);
+                  }}
+                  className="absolute right-4 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 transition-all duration-150 hover:border-[#4565BF]/20 hover:bg-[#4565BF]/[0.05] hover:text-[#4565BF] active:scale-95"
+                >
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M1.5 1.5L12.5 12.5M12.5 1.5L1.5 12.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+              <div className="px-6 py-5">
+                {selectedDose?.productConcent && (
+                  <p className="inter-reg-font text-[13.5px] leading-[1.65] text-slate-600">
+                    {selectedDose?.productConcent}
+                  </p>
+                )}
+                <div className="mt-5 space-y-4">
+                  <div>
+                    <label className="inter-medium-font mb-1 block text-[13px] text-slate-700">
+                      Previous medication name
+                    </label>
+                    <input
+                      type="text"
+                      value={prevMedication}
+                      onChange={(e) => setPrevMedication(e.target.value)}
+                      placeholder="e.g. Ozempic, Mounjaro, Wegovy"
+                      className="inter-reg-font h-12 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 text-[14px] text-slate-800 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-[#4565BF] focus:bg-white focus:ring-4 focus:ring-[#4565BF]/[0.08]"
+                    />
+                  </div>
+                  <div>
+                    <label className="inter-medium-font mb-1 block text-[13px] text-slate-700">
+                      What dose were you on? (mg)
+                    </label>
+                    <input
+                      type="text"
+                      value={prevDose}
+                      onChange={(e) => setPrevDose(e.target.value)}
+                      placeholder="e.g. 2.5"
+                      className="inter-reg-font h-12 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 text-[14px] text-slate-800 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-[#4565BF] focus:bg-white focus:ring-4 focus:ring-[#4565BF]/[0.08]"
+                    />
+                  </div>
+                  <div>
+                    <label className="inter-medium-font mb-1 block text-[13px] text-slate-700">
+                      When did you last take it?
+                    </label>
+                    <ThemeProvider theme={brandTheme}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DatePicker
+                        value={
+                          lastTakenDate
+                            ? parse(lastTakenDate, "yyyy-MM-dd", new Date())
+                            : null
+                        }
+                        onChange={(date) =>
+                          setLastTakenDate(date ? format(date, "yyyy-MM-dd") : "")
+                        }
+                        maxDate={new Date()}
+                        format="dd/MM/yyyy"
+                        className="inter-reg-font"
+                        slotProps={{
+                          popper: {
+                            sx: { zIndex: 10000 },
+                          },
+                          dialog: {
+                            sx: { zIndex: 10000 },
+                          },
+                          desktopPaper: {
+                            sx: {
+                              borderRadius: "16px",
+                              "& .MuiPickersDay-root.Mui-selected": {
+                                backgroundColor: "#4565BF",
+                                "&:hover, &:focus": { backgroundColor: "#3550a0" },
+                              },
+                            },
+                          },
+                          mobilePaper: {
+                            sx: {
+                              borderRadius: "16px",
+                              "& .MuiPickersDay-root.Mui-selected": {
+                                backgroundColor: "#4565BF",
+                                "&:hover, &:focus": { backgroundColor: "#3550a0" },
+                              },
+                            },
+                          },
+                          textField: {
+                            fullWidth: true,
+                            placeholder: "DD/MM/YYYY",
+                            sx: {
+                              "& .MuiOutlinedInput-root, & .MuiPickersOutlinedInput-root": {
+                                borderRadius: "12px",
+                                backgroundColor: "rgba(248,250,252,0.5)",
+                                fontFamily: "var(--inter-reg)",
+                                fontSize: "14px",
+                                transition: "box-shadow 180ms ease",
+                                "&.Mui-focused": {
+                                  backgroundColor: "#ffffff",
+                                  boxShadow: "0 0 0 3px rgba(69, 101, 191, 0.10)",
+                                },
+                              },
+                              "& .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-notchedOutline": {
+                                borderColor: "#e2e8f0",
+                                borderWidth: "2px",
+                                borderRadius: "0.75rem",
+                                transition: "border-color 180ms ease",
+                              },
+                              "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-root:hover .MuiPickersOutlinedInput-notchedOutline": {
+                                borderColor: "#4565BF !important",
+                              },
+                              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-root.Mui-focused .MuiPickersOutlinedInput-notchedOutline": {
+                                borderColor: "#4565BF !important",
+                                borderWidth: "2px",
+                              },
+                              "& .MuiIconButton-root": {
+                                color: "#4565BF !important",
+                              },
+                            },
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
+                    </ThemeProvider>
+                  </div>
                 </div>
               </div>
-              <NextButton
-                label={
-                  productId == FoundayoProductId ||
-                  productId == WegovyPillProductId
-                    ? "I confirm this dose"
-                    : " I Confirm"
-                }
-                disabled={!prevMedication || !prevDose || !lastTakenDate}
-                onClick={() => {
-                  console.log({
-                    medication_name: prevMedication,
-                    dosage: prevDose,
-                    dosage_time: lastTakenDate,
-                    selectedDose: selectedDose?.name,
-                  });
-                  setConsentGiven(selectedDose?.id, {
-                    medication_name: prevMedication,
-                    dosage: prevDose,
-                    dosage_time: lastTakenDate,
-                  });
-                  setPrevMedication("");
-                  setPrevDose("");
-                  setLastTakenDate("");
-                  setShowDoseModal(false);
-                }}
-              />
+              <div className="px-6 pb-6">
+                <NextButton
+                  label={
+                    productId == FoundayoProductId ||
+                    productId == WegovyPillProductId
+                      ? "I confirm this dose"
+                      : " I Confirm"
+                  }
+                  disabled={!prevMedication || !prevDose || !lastTakenDate}
+                  className="w-full"
+                  onClick={() => {
+                    console.log({
+                      medication_name: prevMedication,
+                      dosage: prevDose,
+                      dosage_time: lastTakenDate,
+                      selectedDose: selectedDose?.name,
+                    });
+                    setConsentGiven(selectedDose?.id, {
+                      medication_name: prevMedication,
+                      dosage: prevDose,
+                      dosage_time: lastTakenDate,
+                    });
+                    setPrevMedication("");
+                    setPrevDose("");
+                    setLastTakenDate("");
+                    setShowDoseModal(false);
+                  }}
+                />
+              </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="w-full bg-[#e9f6fa] my-6 rounded-md px-4 sm:px-8">
-        <div className="w-full max-w-screen-xl mx-auto my-3 rounded-md">
+      <div className="w-full bg-[#EEF2FA] rounded-xl px-4 sm:px-8">
+        <div className="w-full max-w-screen-xl mx-auto rounded-md">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-12 gap-4 w-full max-w-3xl mx-auto">
               {/* === LEFT COLUMN === */}
               <div className="col-span-12 sm:col-span-8 px-4 md:px-4 py-10">
                 <div className="w-full max-w-screen-md mx-auto">
-                  <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
-                    <div className="bg-[#4565BF] p-4 sm:p-6">
+                  <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white mb-6">
+                    <div className="flex items-center justify-center bg-[#4565BF] p-4 sm:p-6">
                       <img
                         src={variation?.img}
                         alt={variation?.name}
-                        className="w-full h-40 object-contain"
+                        className="w-full h-36 object-contain"
                       />
                     </div>
                     <div className="p-4 sm:p-6">
-                      <h2 className="text-xl sm:text-2xl mb-2 sm:mb-4 text-black">
+                      <h2 className="inter-semibold-font text-xl sm:text-2xl mb-1.5 text-slate-900">
                         {variation?.name}
                       </h2>
-                      <span className="text-gray-800 text-sm sm:text-base">
+                      <span className="inter-medium-font text-[#4565BF] text-sm sm:text-base">
                         From £{variation?.price}
                       </span>
 
                       {variation?.variations?.[0]?.product_name ===
                         "Mounjaro (Tirzepatide)" && (
-                        <p className="py-1 text-md niba-reg-font text-[#1f9e8c] text-start rounded-full">
+                        <p className="inter-reg-font mt-3 text-[13px] leading-relaxed text-slate-500">
                           Needles are not included with{" "}
-                          <span className="py-1 text-md niba-bold-font text-[#1f9e8c] text-start rounded-full">
-                            {" "}
+                          <span className="inter-semibold-font text-slate-700">
                             Mounjaro
                           </span>
                           . Add them to your order if required.
@@ -516,8 +597,8 @@ export default function DosageSelection() {
                     </div>
                   </div>
 
-                  <h1 className="my-4 niba-bold-font text-lg sm:text-xl text-black text-start">
-                    <span className="niba-reg-font">Choose your </span> Dosage
+                  <h1 className="inter-semibold-font mb-4 text-[16px] sm:text-[18px] text-slate-900 text-start">
+                    Choose your dosage
                   </h1>
 
                   {variation?.variations
@@ -569,12 +650,12 @@ export default function DosageSelection() {
                                 transition={{ duration: 0.3, ease: "easeOut" }}
                                 className="overflow-hidden"
                               >
-                                <div className="flex items-start gap-3 bg-amber-50 border border-amber-300 rounded-md px-4 py-3 mt-1 mb-1">
+                                <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/70 px-4 py-3.5 mt-1 mb-1">
                                   <span className="text-amber-500 mt-0.5 text-lg leading-none">
                                     ℹ️
                                   </span>
-                                  <p className="text-amber-800 text-sm reg-font leading-relaxed">
-                                    <span className="bold-font">
+                                  <p className="inter-reg-font text-amber-800 text-sm leading-relaxed">
+                                    <span className="inter-semibold-font">
                                       Please note:
                                     </span>{" "}
                                     The 7.2mg pack is supplied as four
@@ -591,7 +672,7 @@ export default function DosageSelection() {
                     })}
 
                   {variation?.show_expiry === 1 && (
-                    <div className="flex flex-col space-y-2 text-sm py-6">
+                    <div className="mt-4 rounded-xl border border-slate-100 bg-white p-4">
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -601,7 +682,7 @@ export default function DosageSelection() {
                                 : false,
                             })}
                             icon={
-                              <span className="w-5 h-5 border-2 border-gray-400 rounded-full flex items-center justify-center" />
+                              <span className="w-5 h-5 border-2 border-slate-300 rounded-full flex items-center justify-center" />
                             }
                             checkedIcon={
                               <span className="w-5 h-5 border-2 border-[#4565BF] rounded-full flex items-center justify-center">
@@ -616,14 +697,14 @@ export default function DosageSelection() {
                           />
                         }
                         label={
-                          <p className="font-sans font-bold text-sm italic text-black">
+                          <p className="inter-medium-font text-[14px] leading-relaxed text-slate-700">
                             Please confirm that you have reviewed the expiry
                             dates of the selected doses.
                           </p>
                         }
                       />
                       {errors.terms && (
-                        <p className="text-red-600 text-xs font-semibold">
+                        <p className="inter-reg-font mt-1.5 text-[12px] text-red-500">
                           {errors.terms.message}
                         </p>
                       )}
@@ -635,9 +716,8 @@ export default function DosageSelection() {
                     productId != FoundayoProductId &&
                     productId != WegovyPillProductId && (
                       <div className="mt-6">
-                        <h1 className="mb-4 niba-reg-font text-lg sm:text-xl text-gray-800">
-                          Select{" "}
-                          <span className="font-bold text-xl">Add-ons</span>
+                        <h1 className="inter-semibold-font mb-4 text-[16px] sm:text-[18px] text-slate-900">
+                          Select add-ons
                         </h1>
 
                         {variation?.addons
@@ -697,8 +777,8 @@ export default function DosageSelection() {
               {/* === RIGHT COLUMN === */}
               <div className="col-span-12 sm:col-span-4">
                 <div className="w-full sm:fixed mt-6 sm:mt-10">
-                  <div className="bg-white w-full rounded-xl shadow-lg p-4 sm:max-w-[400px] overflow-hidden">
-                    <h2 className="text-lg bold-font mb-4 p-4 text-black">
+                  <div className="w-full overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 sm:max-w-[400px]">
+                    <h2 className="inter-semibold-font mb-4 p-4 text-[16px] text-slate-900">
                       Order Summary
                     </h2>
                     <div className="overflow-y-auto max-h-[300px] space-y-3 scrollbar-thin scrollbar-thumb-gray-300 px-1">
@@ -706,12 +786,12 @@ export default function DosageSelection() {
                       {items?.doses?.length > 0 ? (
                         items.doses.map((item) => (
                           <React.Fragment key={item.id}>
-                            <div className="flex justify-between items-start bg-[#f5f7fb] border border-gray-200 px-4 py-3 rounded-xl shadow-sm">
-                              <div className="flex flex-col text-sm text-gray-800 reg-font max-w-[80%]">
+                            <div className="flex justify-between items-start rounded-xl border border-slate-100 bg-[#4565BF]/[0.03] px-4 py-3">
+                              <div className="inter-reg-font flex flex-col text-sm text-slate-800 max-w-[80%]">
                                 <span className="line-clamp-2 leading-5">
                                   {item.product} {item.name}, {item.qty}x
                                 </span>
-                                <span className="font-bold text-black mt-1">
+                                <span className="inter-semibold-font text-slate-900 mt-1">
                                   £
                                   {(item.qty * parseFloat(item.price)).toFixed(
                                     2,
@@ -756,13 +836,13 @@ export default function DosageSelection() {
                         items.addons.map((item) => (
                           <div
                             key={item.id}
-                            className="flex justify-between items-start bg-[#f5f7fb] border border-gray-200 px-4 py-3 rounded-xl shadow-sm"
+                            className="flex justify-between items-start rounded-xl border border-slate-100 bg-[#4565BF]/[0.03] px-4 py-3"
                           >
-                            <div className="flex flex-col text-sm text-gray-800 reg-font max-w-[80%]">
+                            <div className="inter-reg-font flex flex-col text-sm text-slate-800 max-w-[80%]">
                               <span className="line-clamp-2 leading-5">
                                 {item.product} {item.name}, {item.qty}x
                               </span>
-                              <span className="font-bold text-black mt-1">
+                              <span className="inter-semibold-font text-slate-900 mt-1">
                                 £
                                 {(item.qty * parseFloat(item.price)).toFixed(2)}
                               </span>
@@ -791,11 +871,11 @@ export default function DosageSelection() {
                     </div>
 
                     {/* === TOTAL === */}
-                    <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4 px-1">
-                      <span className="text-black bold-font reg-font">
+                    <div className="flex justify-between items-center border-t border-slate-100 pt-4 mt-4 px-1">
+                      <span className="inter-semibold-font text-slate-900">
                         Total
                       </span>
-                      <span className="text-xl bold-font text-black">
+                      <span className="inter-bold-font text-xl text-slate-900">
                         £{totalAmount?.toFixed(2)}
                       </span>
                     </div>
@@ -804,22 +884,14 @@ export default function DosageSelection() {
               </div>
             </div>
 
-            <div className="flex-col sm:flex-row justify-between items-stretch gap-4 mt-6 sm:hidden block">
-              <div className="flex justify-between items-center">
-                <BackButton
-                  label="Back"
-                  onClick={Back}
-                  type="button"
-                  className="w-full sm:w-auto"
-                />
-                <NextButton
-                  onClick={handleSubmit(onSubmit)}
-                  disabled={totalSelectedQty() === 0 || !isValid}
-                  label="Proceed to Checkout"
-                  className="w-full sm:w-auto"
-                  loading={isButtonLoading}
-                />
-              </div>
+            <div className="space-y-3 mt-6 sm:hidden block">
+              <NextButton
+                onClick={handleSubmit(onSubmit)}
+                disabled={totalSelectedQty() === 0 || !isValid}
+                label="Proceed to Checkout"
+                loading={isButtonLoading}
+              />
+              <BackButton label="Back" onClick={Back} type="button" />
             </div>
           </form>
         </div>

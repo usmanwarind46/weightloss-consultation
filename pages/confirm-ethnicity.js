@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import NextButton from "@/Components/NextButton/NextButton";
-import { FiCheck } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import PageLoader from "@/Components/PageLoader/PageLoader";
 import StepsHeader from "@/layout/stepsHeader";
-import { GoDotFill } from "react-icons/go";
 import BackButton from "@/Components/BackButton/BackButton";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import MetaLayout from "@/Meta/MetaLayout";
@@ -78,12 +76,12 @@ export default function ConfirmEthnicity() {
         }
       >
         <PageAnimationWrapper>
-          <p className="bold-font paragraph my-3">
+          <p className="inter-medium-font my-3 text-[14px] text-slate-800">
             Does one of the following options describe your ethnic group or
             background?
           </p>
           <div className="">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div className="mb-6 grid grid-cols-1 gap-x-6 gap-y-3 rounded-xl border border-[#4565BF]/10 bg-[#4565BF]/[0.035] p-4 sm:grid-cols-2 sm:p-5">
               {[
                 "South Asian",
                 "Chinese",
@@ -92,13 +90,9 @@ export default function ConfirmEthnicity() {
                 "Black African",
                 "African-Caribbean",
               ].map((ethnicity, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  {/* w-2.5 h-2.5 */}
-                  <div className=" mt-2 bg-primary rounded-full"></div>
-                  <div className="flex items-center">
-                    <GoDotFill className="me-2 text-gray-800 text-xs" />
-                    <p className="niba-bold-font text-gray-700">{ethnicity}</p>
-                  </div>
+                <div key={index} className="flex items-center gap-2.5">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#4565BF]/80" />
+                  <p className="inter-medium-font text-[13.5px] text-slate-700">{ethnicity}</p>
                 </div>
               ))}
             </div>
@@ -106,20 +100,20 @@ export default function ConfirmEthnicity() {
               className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
             >
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="space-y-4">
-                  {options.map((option) => {
+                <div className="grid grid-cols-2 gap-3">
+                  {options.map((option, index) => {
                     const isSelected = selectedOption === option;
                     return (
                       <label
                         key={option}
-                        className={`flex items-center gap-3 px-4 py-3 border rounded-lg transition-all cursor-pointer text-sm
-                      ${isSelected ? "bg-[#E9F6FA] border-black bold-font paragraph" : "border-gray-300 bold-font paragraph hover:bg-gray-50"}`}
+                        className={`flex min-h-[56px] cursor-pointer items-center gap-3 rounded-xl border px-4 py-3.5 transition-all duration-150 select-none ${index === 2 ? "col-span-2" : ""}
+                          ${isSelected ? "border-[#4565BF] bg-[#4565BF]/[0.08] shadow-[0_3px_12px_rgba(69,101,191,0.08)]" : "border-slate-200 bg-white hover:border-[#4565BF]/25 hover:bg-[#4565BF]/[0.02]"}`}
                       >
                         <div
-                          className={`w-5 h-5 rounded-sm flex items-center justify-center border transition
-                        ${isSelected ? "bg-primary border-[#4565BF] text-white" : "border-gray-400 bg-white"}`}
+                          className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
+                            ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
                         >
-                          {isSelected && <FiCheck className="w-4 h-4" />}
+                          {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
                         </div>
                         <input
                           type="radio"
@@ -127,18 +121,20 @@ export default function ConfirmEthnicity() {
                           {...register("ethnicity", { required: true })}
                           className="hidden"
                         />
-                        {option}
+                        <span className={`inter-medium-font text-[14px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
+                          {option}
+                        </span>
                       </label>
                     );
                   })}
                 </div>
 
-                <div className="flex justify-between mt-6">
+                <div className="mt-6 flex flex-col gap-3">
+                  <NextButton disabled={!isValid} label="Next" />
                   <BackButton
                     label="Back"
                     onClick={() => router.push("/preferred-phone-number")}
                   />
-                  <NextButton disabled={!isValid} label="Next" />
                 </div>
               </form>
               {showLoader && (

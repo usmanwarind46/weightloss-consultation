@@ -1,6 +1,6 @@
 import React from "react";
 import toast from "react-hot-toast";
-import { FaMinus, FaPlus, FaRegCircle, FaCheck, FaDotCircle } from "react-icons/fa";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import moment from "moment";
 import ConfirmationModal from "../Modal/ConfirmationModal";
@@ -50,64 +50,68 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
     <>
       <div
         onClick={!isOutOfStock && !isSelected ? handleAdd : undefined}
-        className={`flex flex-col sm:flex-row sm:items-center justify-between w-full p-4 border-2 mt-3 transition-all duration-300 ease-in-out relative rounded-lg border-[#4565BF]
-    ${
-      isOutOfStock
-        ? "opacity-50 cursor-not-allowed bg-white border-gray-400"
-        : isSelected
-        ? "border-[#4565BF] bg-blue-100 cursor-pointer"
-        : "border-gray-300 bg-white hover:bg-gray-50 cursor-pointer"
-    }`}
+        className={`relative mt-3 flex flex-col justify-between gap-3 rounded-[14px] border-2 p-3.5 transition-all duration-200 sm:flex-row sm:items-center sm:gap-0 sm:p-4
+          ${
+            isOutOfStock
+              ? "cursor-not-allowed border-slate-200 bg-slate-50/80"
+              : isSelected
+                ? "cursor-pointer border-[#4565BF] bg-white shadow-[0_4px_16px_rgba(69,101,191,0.16)]"
+                : "cursor-pointer border-slate-200 bg-white hover:border-[#4565BF]/40 hover:bg-[#4565BF]/[0.02]"
+          }`}
       >
         {isOutOfStock && (
           <>
-            {/* Overlay to disable interaction */}
-            <div className="absolute inset-0 z-10 bg-white/10  cursor-not-allowed rounded-md"></div>
-
-            {/* Out of stock badge */}
-            <div className="absolute left-[14px] top-[-10px] bg-primary text-white px-3 py-0.5 text-xs font-semibold rounded z-20">Out of stock</div>
+            <div className="absolute inset-0 z-10 cursor-not-allowed rounded-[14px] bg-slate-100/20" />
+            <div className="inter-semibold-font absolute -top-3.5 left-3 z-20 inline-flex h-7 items-center rounded-lg border border-rose-200 bg-rose-50 px-3 text-[11.5px] text-rose-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              Out of stock
+            </div>
           </>
-        )}
-        {/* Check badge */}
-        {isSelected && (
-          <div className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center">
-            <FaCheck size={11} />
-          </div>
         )}
 
         {/* Left Content */}
-        <div className="flex items-start sm:items-center gap-3 w-full sm:w-auto">
-          {isSelected ? <FaDotCircle className="text-primary w-4 h-4 mt-1" /> : <FaRegCircle className="text-gray-800 w-4 h-4 mt-1" />}
+        <div className={`flex min-w-0 items-start gap-2.5 sm:items-center sm:gap-3 ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
+          <div className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border-2 transition-all duration-150 sm:h-5 sm:w-5
+            ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}>
+            {isSelected && (
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" aria-hidden="true">
+                <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
+          </div>
 
-          <div className=" text-gray-800">
-            <div className="capitalize font-bold text-sm  text-black">{addon?.product_name}</div>
-            <div className="capitalize font-bold text-sm  text-blac">{addon.name}</div>
+          <div className="min-w-0">
+            <p className="inter-semibold-font break-words text-[14px] capitalize leading-snug text-slate-900 sm:text-[15px]">
+              {addon?.product_name}
+            </p>
+            <p className={`inter-medium-font text-[13px] ${isSelected ? "text-[#4565BF]" : "text-slate-500"}`}>
+              {addon.name}
+            </p>
           </div>
         </div>
 
         {/* Right Content */}
-        <div className="flex items-center justify-end gap-3 w-full sm:w-auto">
-          <span className={`font-semibold text-md  ${isSelected ? "text-black" : "text-gray-700"}`}>
+        <div className={`flex items-center gap-2 sm:gap-3 ${isSelected ? "justify-between border-t border-slate-100 pt-3 sm:border-t-0 sm:pt-0" : "justify-end"} ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
+          <span className={`inter-semibold-font shrink-0 text-[16px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
             £{parseFloat(addon?.price).toFixed(2)}
           </span>
 
           {isSelected && (
             <>
-              <div className="flex items-center space-x-2 bg-white rounded-full px-2 py-1 shadow-md">
-                <button type="button" onClick={handleDecrement} className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full cursor-pointer">
-                  <FaMinus size={10} className="text-black" />
+              <div className="ml-auto flex items-center gap-0.5 rounded-full border border-slate-200 bg-white p-1 shadow-sm sm:ml-0 sm:gap-1">
+                <button type="button" onClick={handleDecrement} className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors">
+                  <FaMinus size={9} className="text-slate-600" />
                 </button>
 
-                <span className="px-2 text-sm font-bold text-black">{quantity}</span>
+                <span className="inter-semibold-font w-6 text-center text-[13px] text-slate-900">{quantity}</span>
 
                 <button
                   type="button"
                   onClick={handleIncrement}
-                  className={`p-2 rounded-full ${
-                    quantity >= allowed ? "cursor-not-allowed bg-gray-100 opacity-50" : "bg-gray-100 hover:bg-gray-200 cursor-pointer"
+                  className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
+                    quantity >= allowed ? "cursor-not-allowed bg-slate-100 opacity-40" : "bg-slate-100 hover:bg-slate-200 cursor-pointer"
                   }`}
                 >
-                  <FaPlus size={10} className="text-black" />
+                  <FaPlus size={9} className="text-slate-600" />
                 </button>
               </div>
 
@@ -117,9 +121,9 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
                   e.stopPropagation();
                   setShowModal(true);
                 }}
-                className="bg-red-100 hover:bg-red-200 text-red-500 rounded-full p-2 cursor-pointer"
+                className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-red-100 bg-red-50 text-red-500 transition-colors hover:border-red-200 hover:bg-red-100"
               >
-                <MdDelete />
+                <MdDelete size={15} />
               </button>
             </>
           )}

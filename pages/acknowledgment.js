@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { FiCheck } from "react-icons/fi";
 
 import NextButton from "@/Components/NextButton/NextButton";
 import ProgressBar from "@/Components/ProgressBar/ProgressBar";
 import StepsHeader from "@/layout/stepsHeader";
 
-// ✅ Initialize Inter font here
-import { Inter } from "next/font/google";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import PageLoader from "@/Components/PageLoader/PageLoader";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
@@ -16,7 +13,6 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderButtonStore from "@/store/useReorderButton";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export default function Acknowledgment() {
   const router = useRouter();
@@ -65,13 +61,11 @@ export default function Acknowledgment() {
           return (
             <label
               key={option}
-              className={`reg-font flex items-center px-4 py-4 rounded-md border justify-start cursor-pointer transition-all duration-200 flex-1
+              className={`flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3.5 transition-all duration-150 select-none
                 ${
                   isSelected
-                    ? option === "yes"
-                      ? "bg-violet-100 border-[#4565BF] text-primary"
-                      : "bg-red-100 border-red-600 text-red-700"
-                    : "bg-white border-gray-300 hover:border-gray-400 text-gray-800"
+                    ? "border-[#4565BF] bg-[#4565BF]/[0.05]"
+                    : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
                 }`}
             >
               <input
@@ -81,18 +75,20 @@ export default function Acknowledgment() {
                 className="hidden"
               />
               <div
-                className={`w-5 h-5 mr-2 rounded-md border flex items-center justify-start
+                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
                   ${
                     isSelected
-                      ? option === "yes"
-                        ? "bg-primary border-[#4565BF] text-white"
-                        : "bg-red-600 border-red-600 text-white"
-                      : "border-gray-400 bg-white"
+                      ? "border-[#4565BF] bg-[#4565BF]"
+                      : "border-slate-300 bg-white"
                   }`}
               >
-                {isSelected && <FiCheck className="text-md" />}
+                {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
               </div>
-              <span className="text-md bold-font paragraph capitalize">
+              <span
+                className={`inter-medium-font text-[14px] capitalize ${
+                  isSelected ? "text-[#4565BF]" : "text-slate-700"
+                }`}
+              >
                 {option}
               </span>
             </label>
@@ -114,8 +110,7 @@ export default function Acknowledgment() {
               {/* Questions */}
               <div className="space-y-6">
                 <div className="space-y-2">
-                  {/* className="block text-sm reg-font text-black mb-1" */}
-                  <p className="text-sm reg-font  paragraph">
+                  <p className="inter-reg-font text-sm text-slate-700">
                     Are you purchasing this medication for yourself, of your own
                     free will and the medicine is for your personal use only?
                   </p>
@@ -123,69 +118,91 @@ export default function Acknowledgment() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm reg-font paragraph">
+                  <p className="inter-reg-font text-sm text-slate-700">
                     Do you believe you have the ability to make healthcare
                     decisions for yourself?
                   </p>
                   {renderYesNo("decisionCapacity", decisionCapacity)}
                 </div>
 
+                {isNoSelected && (
+                  <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
+                    <p className="inter-reg-font text-[13px] text-red-600">
+                      Unfortunately, based on your answer, we are unable to
+                      proceed with your consultation at this time.
+                    </p>
+                  </div>
+                )}
+
                 {showConsentBox && (
-                  <div className="bg-white space-y-4 py-4 max-h-[200px] overflow-auto">
-                    <label className="flex items-center gap-3 text-sm bold-font text-gray-800 cursor-pointer paragraph">
+                  <div className="bg-white space-y-4 py-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
                       <input
                         type="checkbox"
                         {...register("confirmConsent", { required: true })}
                         className="hidden"
                       />
-                      <div
-                        className={`w-5 h-5 rounded-sm flex items-center justify-center border transition-all duration-200
+                      <span
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-[6px] border-2 transition-all duration-150
                           ${
                             confirmConsent
-                              ? "bg-primary border-[#4565BF] text-white"
-                              : "bg-white border-gray-400"
+                              ? "border-[#4565BF] bg-[#4565BF]"
+                              : "border-slate-300 bg-white"
                           }`}
                       >
-                        {confirmConsent && <FiCheck className="w-3 h-3" />}
-                      </div>
-                      Do you confirm that:
+                        {confirmConsent && (
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                            <path
+                              d="M1 4L3.5 6.5L9 1"
+                              stroke="white"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="inter-semibold-font text-sm text-slate-800">
+                        Do you confirm that:
+                      </span>
                     </label>
 
-                    <ul className="list-disc list-outside pl-5 text-sm text-gray-700 space-y-2 reg-font paragraph">
-                      <li>
-                        You consent for your medical information to be assessed
-                        by the clinical team at Online Weight Loss Clinic and
-                        its pharmacy and to be prescribed medication.
-                      </li>
-                      <li>
-                        You consent to an age and ID check when placing your
-                        first order.
-                      </li>
-                      <li>
-                        You will answer all questions honestly and accurately,
-                        and understand that it is an offence to provide false
-                        information.
-                      </li>
-                      <li>
-                        You have capacity to understand all about the condition
-                        and medication information we have provided and that you
-                        give fully informed consent to the treatment option
-                        provided.
-                      </li>
-                      <li>
-                        You understand that the treatment or medical advice
-                        provided is based on the information you have provided.
-                      </li>
-                    </ul>
+                    <div className="rounded-xl border border-[#4565BF]/[0.14] bg-[#f7f8fc] p-4 sm:p-5">
+                      <ul className="inter-reg-font list-disc list-outside pl-5 text-[13.5px] leading-[1.8] text-slate-700 space-y-2">
+                        <li>
+                          You consent for your medical information to be assessed
+                          by the clinical team at Online Weight Loss Clinic and
+                          its pharmacy and to be prescribed medication.
+                        </li>
+                        <li>
+                          You consent to an age and ID check when placing your
+                          first order.
+                        </li>
+                        <li>
+                          You will answer all questions honestly and accurately,
+                          and understand that it is an offence to provide false
+                          information.
+                        </li>
+                        <li>
+                          You have capacity to understand all about the condition
+                          and medication information we have provided and that you
+                          give fully informed consent to the treatment option
+                          provided.
+                        </li>
+                        <li>
+                          You understand that the treatment or medical advice
+                          provided is based on the information you have provided.
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 )}
               </div>
 
-              <div className="my-5 flex justify-end">
+              <div className="mt-6">
                 <NextButton
                   disabled={!isValid || isNoSelected}
                   label="I Confirm"
-                  props={"w-full"}
                 />
               </div>
             </form>
