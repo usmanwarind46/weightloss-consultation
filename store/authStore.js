@@ -19,6 +19,11 @@ const useAuthStore = create(
     }),
     {
       name: "auth-storage",
+      // 🚫 review is per-visit (driven by the ?review=true query param), never persist it
+      partialize: (state) => ({
+        token: state.token,
+        isImpersonationLogout: state.isImpersonationLogout,
+      }),
       // ✅ Trigger setHasHydrated AFTER rehydration completes
       onRehydrateStorage: () => (state) => {
         state.setHasHydrated();

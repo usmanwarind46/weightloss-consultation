@@ -12,12 +12,6 @@ import { useRouter } from "next/router";
 import useShipmentCountries from "@/store/useShipmentCountriesStore";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import {
-  MdCheckBox,
-  MdCheckBoxOutlineBlank,
-  MdOutlineCheckBox,
-  MdOutlineCheckBoxOutlineBlank,
-} from "react-icons/md";
 import NextButton from "../NextButton/NextButton";
 
 // const api = new Client("aYssNMkdXEGsdfGVZjiY0Q26381");
@@ -444,18 +438,20 @@ export default function ShippingAddress({
               control={control}
               render={({ field }) => (
                 <div
-                  className="flex items-center space-x-2 cursor-pointer"
+                  className="flex items-center gap-3 cursor-pointer select-none"
                   onClick={() => field.onChange(!field.value)}
                 >
-                  {field.value ? (
-                    <MdCheckBox className="text-primary mt-1" size={18} />
-                  ) : (
-                    <MdCheckBoxOutlineBlank
-                      className="text-[#4565BF]  mt-1"
-                      size={18}
-                    />
-                  )}
-                  <span className="text-gray-700 reg-font mt-1">
+                  <div
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-[6px] border-2 transition-all duration-150
+                      ${field.value ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
+                  >
+                    {field.value && (
+                      <svg width="13" height="10" viewBox="0 0 10 8" fill="none" aria-hidden="true">
+                        <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="inter-reg-font text-[14px] text-gray-700">
                     Make billing address same as shipping address
                   </span>
                 </div>

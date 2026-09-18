@@ -50,7 +50,7 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
     <>
       <div
         onClick={!isOutOfStock && !isSelected ? handleAdd : undefined}
-        className={`relative mt-3 flex flex-col justify-between gap-3 rounded-[14px] border-2 p-3.5 transition-all duration-200 sm:flex-row sm:items-center sm:gap-0 sm:p-4
+        className={`relative mt-3 flex flex-row items-center justify-between gap-2 rounded-[14px] border-2 p-3 transition-all duration-200 sm:gap-0 sm:p-4
           ${
             isOutOfStock
               ? "cursor-not-allowed border-slate-200 bg-slate-50/80"
@@ -69,8 +69,8 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
         )}
 
         {/* Left Content */}
-        <div className={`flex min-w-0 items-start gap-2.5 sm:items-center sm:gap-3 ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
-          <div className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border-2 transition-all duration-150 sm:h-5 sm:w-5
+        <div className={`flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3 ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
+          <div className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border-2 transition-all duration-150 sm:h-5 sm:w-5
             ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}>
             {isSelected && (
               <svg width="10" height="8" viewBox="0 0 10 8" fill="none" aria-hidden="true">
@@ -79,18 +79,20 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
             )}
           </div>
 
-          <div className="min-w-0">
-            <p className="inter-semibold-font break-words text-[14px] capitalize leading-snug text-slate-900 sm:text-[15px]">
-              {addon?.product_name}
+          <div className="min-w-0 flex-1">
+            <p className="inter-semibold-font truncate text-[14px] capitalize leading-snug text-slate-900 sm:text-[15px]">
+              {addon?.product_name || addon?.name}
             </p>
-            <p className={`inter-medium-font text-[13px] ${isSelected ? "text-[#4565BF]" : "text-slate-500"}`}>
-              {addon.name}
-            </p>
+            {addon?.product_name && addon?.name && (
+              <p className={`inter-medium-font truncate text-[13px] ${isSelected ? "text-[#4565BF]" : "text-slate-500"}`}>
+                {addon.name}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Right Content */}
-        <div className={`flex items-center gap-2 sm:gap-3 ${isSelected ? "justify-between border-t border-slate-100 pt-3 sm:border-t-0 sm:pt-0" : "justify-end"} ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
+        <div className={`flex shrink-0 items-center gap-2 sm:gap-3 ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
           <span className={`inter-semibold-font shrink-0 text-[16px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
             £{parseFloat(addon?.price).toFixed(2)}
           </span>

@@ -22,7 +22,7 @@ const ProductGridCard = ({
       `}
     >
       {/* Image */}
-      <div className="relative h-[145px] 2xl:h-[160px] [@media(min-width:1921px)]:h-[200px] overflow-hidden bg-slate-100">
+      <div className="relative h-[145px] 2xl:h-[160px] [@media(min-width:1921px)]:h-[200px] overflow-hidden bg-[#4565BF]/[0.07]">
         {isOutOfStock && (
           <span className="inter-medium-font absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-red-100 bg-white px-2 py-0.5 text-[10px] text-red-500 shadow-sm">
             <PackageX size={9} strokeWidth={2} />

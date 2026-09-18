@@ -344,6 +344,7 @@ export default function GpDetail() {
                       <MUISelectField
                         label="Select GP Address"
                         name="gpAddressSelect"
+                        required
                         value={selectedIndex}
                         onChange={(e) => {
                           const idx = e.target.value;

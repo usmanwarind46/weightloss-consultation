@@ -10,7 +10,7 @@ const Dashboard = ({ children }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#EEF2FA]">
+    <div className="flex flex-col h-screen bg-[#E8EDFA]">
       {/* Header */}
       <StepsHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 

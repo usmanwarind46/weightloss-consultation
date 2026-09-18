@@ -31,13 +31,13 @@ const SectionHeader = ({
       transition={{ duration: 0.4 }}
     >
       <div
-        className={`flex items-center space-x-4 cursor-pointer ${className}`}
+        className={`flex items-center space-x-3 cursor-pointer bg-[#f2f4fb] px-6 py-4 ${className}`}
         onClick={toggleAccordion}
       >
         <div
-          className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm transition-all duration-300 ${isCompleted
-            ? "bg-primary text-white"
-            : "border border-black text-black"
+          className={`flex items-center justify-center w-7 h-7 rounded-full text-[13px] transition-all duration-300 ${isCompleted
+            ? "bg-[#4565BF] text-white"
+            : "border-2 border-[#4565BF] text-[#4565BF] inter-semibold-font"
             }`}
         >
           <AnimatePresence mode="wait" initial={false}>
@@ -65,14 +65,14 @@ const SectionHeader = ({
           </AnimatePresence>
         </div>
 
-        <h2 className="text-black bold-font text-base">{title}</h2>
+        <h2 className="inter-semibold-font text-[15px] text-slate-900">{title}</h2>
 
         <motion.div
           className="ml-auto"
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          <FiChevronDown className="w-5 h-5 text-gray-600" />
+          <FiChevronDown className="w-4 h-4 text-slate-400" />
         </motion.div>
       </div>
 
@@ -86,13 +86,14 @@ const SectionHeader = ({
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <hr className="border-gray-200 my-2" />
+            <div className="px-6 py-5">
             {description && (
-              <p className="text-sm text-black mt-1 reg-font paragraph">
+              <p className="inter-reg-font text-[13px] text-slate-500 mb-4">
                 {description}
               </p>
             )}
             {children}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

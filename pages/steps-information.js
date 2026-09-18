@@ -195,11 +195,7 @@ export default function StepsInformation() {
       <StepsHeader />
 
       <main className="min-h-[calc(100vh-66px)] bg-[#EEF2FA]">
-        {showLoader && (
-          <div className="absolute inset-0 z-20 flex justify-center items-center bg-black/30 rounded-lg cursor-not-allowed">
-            <PageLoader />
-          </div>
-        )}
+        {showLoader && <PageLoader />}
 
         {showProductSelection && (
           <ProductSelection showProductSelection={showProductSelection} />

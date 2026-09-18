@@ -40,7 +40,7 @@ const ModalProductListCard = ({
       `}
       aria-selected={isSelected}
     >
-      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-100 sm:h-[64px] sm:w-[64px] 2xl:h-[76px] 2xl:w-[76px]">
+      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#4565BF]/[0.07] sm:h-[64px] sm:w-[64px] 2xl:h-[76px] 2xl:w-[76px]">
         {isOutOfStock && (
           <span className="absolute inset-0 flex items-center justify-center bg-white/70">
             <PackageX size={16} strokeWidth={1.8} className="text-red-400" />

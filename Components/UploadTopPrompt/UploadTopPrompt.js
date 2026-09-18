@@ -19,7 +19,7 @@ const AlertBanner = ({
   href,
 }) => {
   return (
-    <section className="w-full overflow-hidden rounded-2xl border border-amber-200/70 bg-amber-50/40 shadow-[0_1px_4px_rgba(180,83,9,0.06)]">
+    <section className="w-full overflow-hidden rounded-2xl border border-amber-200 bg-amber-50 shadow-[0_1px_4px_rgba(180,83,9,0.06)]">
       <div className="flex w-full flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
         {/* Content */}
         <div className="flex min-w-0 flex-1 items-center gap-3.5">
@@ -44,7 +44,7 @@ const AlertBanner = ({
         {/* Action */}
         <Link
           href={href}
-          className="inter-medium-font group inline-flex min-h-[38px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-amber-50 border border-amber-200 px-5 py-2 text-[12.5px] text-amber-600 no-underline transition-all duration-150 hover:bg-amber-100 active:scale-[0.98] lg:w-auto lg:min-w-[140px]"
+          className="inter-medium-font group inline-flex min-h-[38px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-amber-100 border border-amber-200 px-5 py-2 text-[12.5px] text-amber-600 no-underline transition-all duration-150 hover:bg-amber-100 active:scale-[0.98] lg:w-auto lg:min-w-[140px]"
         >
           <UploadCloud size={14} strokeWidth={2.2} />
           <span>{buttonText}</span>

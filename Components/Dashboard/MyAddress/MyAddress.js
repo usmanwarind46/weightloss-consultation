@@ -59,7 +59,7 @@ export default function MyAddress() {
   const countriesLoading = getProfileDataMutation.isLoading;
 
   return (
-    <main className="inter-reg-font min-w-0 flex-1 bg-[#EEF2FA]">
+    <main className="inter-reg-font min-w-0 flex-1 bg-[#E8EDFA]">
       <div className="mx-auto flex w-full flex-col gap-6 p-4 sm:p-5 lg:p-6">
 
         <PageHeader

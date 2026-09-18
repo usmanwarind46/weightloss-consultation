@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
-import { FiCheck } from "react-icons/fi";
 import SectionWrapper from "./SectionWrapper";
 import SectionHeader from "./SectionHeader";
 import useVariationStore from "@/store/useVariationStore";
@@ -49,25 +48,25 @@ const ProductConsent = ({ isCompleted, onComplete, onConsentChange, setIsConcent
 
           {/* Terms Checkbox */}
           <div className="mt-8 font-inter mb-5">
-            <label className="flex items-center gap-3 text-[15px] text-gray-900 font-semibold cursor-pointer select-none">
+            <label
+              className="flex items-center gap-3 text-[15px] text-gray-900 font-semibold cursor-pointer select-none"
+              onClick={(e) => {
+                e.preventDefault();
+                const checked = !isChecked;
+                setIsChecked(checked);
+                onConsentChange?.(checked);
+              }}
+            >
               {/* Custom Checkbox */}
-              <div className="relative flex items-center justify-center">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={(e) => {
-                    const checked = e.target.checked;
-                    setIsChecked(checked);
-
-                    // ✅ Notify parent
-                    onConsentChange?.(checked);
-                  }}
-                  className="peer w-6 h-6 cursor-pointer appearance-none rounded-sm border-2 border-gray-300 bg-white 
-  checked:bg-[#4565BF] checked:border-[#4565BF] focus:outline-none transition-all duration-300
-  checked:shadow-md checked:shadow-green-50 bold-font paragraph"
-                />
-                {/* Check Icon */}
-                <FiCheck size={16} className="text-white absolute" />
+              <div
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-[6px] border-2 transition-all duration-150
+                  ${isChecked ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
+              >
+                {isChecked && (
+                  <svg width="13" height="10" viewBox="0 0 10 8" fill="none" aria-hidden="true">
+                    <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
               </div>
 
               {/* Checkbox Label */}

@@ -41,12 +41,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         role="navigation"
         className={`
           fixed inset-y-0 left-0 z-50 flex w-[240px] flex-col
-          bg-white border-r border-slate-100
+          rounded-r-2xl bg-white border border-slate-100
           shadow-[4px_0_24px_rgba(0,0,0,0.05)]
           transition-transform duration-300 ease-out
-          lg:sticky lg:top-[72px] lg:z-20
-          lg:h-[calc(100vh-72px)] lg:w-[220px] 2xl:w-[260px]
-          lg:shrink-0 lg:translate-x-0 lg:shadow-none
+          lg:sticky lg:top-[72px] lg:z-20 lg:ml-3
+          lg:h-[calc(100vh-84px)] lg:w-[220px] 2xl:w-[260px]
+          lg:shrink-0 lg:translate-x-0
+          lg:rounded-2xl lg:shadow-[0_4px_20px_rgba(30,41,89,0.06)]
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >

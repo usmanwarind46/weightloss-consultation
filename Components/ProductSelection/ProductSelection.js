@@ -4,7 +4,6 @@ import { GetProductsApi } from "@/api/mergeRoutes";
 import useProductId from "@/store/useProductIdStore";
 import { useMutation } from "@tanstack/react-query";
 import ModalProductListCard from "./ModalProductListCard";
-import { Skeleton } from "@mui/material";
 import toast from "react-hot-toast";
 import { userConsultationApi } from "@/api/consultationApi";
 import useCheckoutStore from "@/store/checkoutStore";
@@ -26,15 +25,20 @@ import useReorder from "@/store/useReorderStore";
 const ProductSelection = ({ showProductSelection }) => {
   /* ───────────────  skeleton card ────────────── */
   const SkeletonCard = () => (
-    <div className="p-4 my-3 bg-white rounded-lg shadow-md">
-      <Skeleton
-        variant="rectangular"
-        height={208}
-        className="mb-4 rounded-lg"
-      />
-      <Skeleton variant="text" sx={{ fontSize: "1rem" }} width="80%" />
-      <Skeleton variant="text" sx={{ fontSize: "0.875rem" }} width="60%" />
-      <Skeleton variant="rectangular" height={40} className="mt-4 rounded-md" />
+    <div className="flex h-full select-none flex-col items-stretch gap-2 rounded-2xl border border-slate-200/70 bg-white px-3 py-3 sm:h-auto sm:flex-row sm:items-center sm:gap-4 sm:px-4 sm:py-3.5">
+      <div className="h-12 w-12 shrink-0 animate-pulse rounded-xl bg-[#4565BF]/[0.07] sm:h-[64px] sm:w-[64px]" />
+
+      <div className="min-w-0 sm:flex-1">
+        <div className="h-4 w-2/3 animate-pulse rounded-full bg-[#4565BF]/[0.08]" />
+      </div>
+
+      <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+        <div className="flex flex-col items-end gap-1.5">
+          <div className="h-2.5 w-8 animate-pulse rounded-full bg-[#4565BF]/[0.05]" />
+          <div className="h-4 w-14 animate-pulse rounded-full bg-[#4565BF]/[0.08]" />
+        </div>
+        <div className="h-9 w-full shrink-0 animate-pulse rounded-xl bg-[#4565BF]/[0.06] sm:w-[142px]" />
+      </div>
     </div>
   );
   /* ───────────────  local state ────────────── */
@@ -74,10 +78,17 @@ const ProductSelection = ({ showProductSelection }) => {
 
   /* ───────────────  helper ────────────── */
   const renderSkeletons = () => (
-    <div className="grid grid-cols-2 gap-6">
-      {Array.from({ length: 2 }).map((_, i) => (
-        <SkeletonCard key={i} />
-      ))}
+    <div className="w-full flex flex-col items-center gap-5">
+      <div className="flex flex-col items-center gap-2">
+        <div className="h-6 w-44 animate-pulse rounded-full bg-[#4565BF]/[0.08]" />
+        <div className="h-3 w-72 max-w-full animate-pulse rounded-full bg-[#4565BF]/[0.05]" />
+      </div>
+
+      <div className="grid w-full grid-cols-1 gap-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <SkeletonCard key={i} />
+        ))}
+      </div>
     </div>
   );
 
@@ -119,7 +130,9 @@ const ProductSelection = ({ showProductSelection }) => {
   return (
     <FullScreenModal isOpen={showModal} onClose={() => setShowModal(false)}>
       {isLoading ? (
-        renderSkeletons()
+        <div className="w-full flex flex-col items-center justify-center px-4 py-2">
+          {renderSkeletons()}
+        </div>
       ) : (
         <div className="w-full flex flex-col items-center justify-center px-4 py-2">
           <div className="w-full flex flex-col items-center justify-center gap-5">
@@ -179,7 +192,7 @@ const ProductSelection = ({ showProductSelection }) => {
                         buttonText={
                           selectedProductId === p?.id
                             ? "Selected"
-                            : "Start Consultation"
+                            : "Select Treatment"
                         }
                         isSelected={selectedProductId === p?.id}
                         onClick={() => handleProductSelect(p?.id, "new")}

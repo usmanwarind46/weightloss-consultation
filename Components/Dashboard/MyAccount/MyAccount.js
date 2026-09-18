@@ -332,7 +332,7 @@ const MyAccount = () => {
   }, []);
 
   return (
-    <main className="inter-reg-font min-w-0 flex-1 bg-[#EEF2FA]">
+    <main className="inter-reg-font min-w-0 flex-1 bg-[#E8EDFA]">
       <div className="flex w-full flex-col gap-6 p-4 sm:p-5 lg:p-6 2xl:p-8 2xl:gap-8">
 
         {/* Header */}
@@ -422,8 +422,8 @@ const MyAccount = () => {
 
             <div className="contents">
               <div className="order-2 flex flex-col pb-5 lg:order-3 lg:col-span-6 lg:pb-0">
-                <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white sm:flex-row lg:h-[210px] 2xl:h-[220px]">
-                  <div className="flex h-[150px] w-full shrink-0 items-center justify-center border-b border-slate-100 bg-[#F1F5F9] sm:h-auto sm:w-[150px] sm:border-b-0 sm:border-r lg:w-[130px] xl:w-[150px] 2xl:w-[170px]">
+                <div className="flex flex-col overflow-hidden rounded-2xl border border-[#4565BF]/[0.12] bg-white shadow-[0_4px_20px_rgba(69,101,191,0.08)] sm:flex-row lg:h-[210px] 2xl:h-[220px]">
+                  <div className="flex h-[150px] w-full shrink-0 items-center justify-center border-b border-[#4565BF]/[0.08] bg-[#f2f4fb] sm:h-auto sm:w-[150px] sm:border-b-0 sm:border-r lg:w-[130px] xl:w-[150px] 2xl:w-[170px]">
                     {currentTreatment?.img ? (
                       <img
                         src={currentTreatment.img}
@@ -437,7 +437,10 @@ const MyAccount = () => {
 
                   <div className="flex min-w-0 flex-1 flex-col items-stretch justify-between gap-4 p-4 sm:flex-row sm:items-center sm:gap-5 sm:p-5 lg:p-4 xl:p-5 2xl:gap-6">
                     <div className="min-w-0">
-                      <div className="flex items-center gap-1.5 mb-3">
+                      <span className="inter-semibold-font mb-2 inline-flex items-center rounded-full bg-[#4565BF]/[0.09] px-2 py-0.5 text-[10px] uppercase tracking-[0.08em] text-[#4565BF]">
+                        Your treatment
+                      </span>
+                      <div className="flex items-center gap-1.5 mb-3 mt-1.5">
                         <CalendarDays size={11} strokeWidth={2} className="text-slate-400" />
                         <span className="inter-reg-font text-[11.5px] text-slate-400">
                           Last ordered: <span className="inter-medium-font text-slate-600">{lastOrderDate}</span>
