@@ -130,7 +130,7 @@ const PasswordChange = () => {
 
   return (
     <main className="inter-reg-font min-w-0 flex-1 bg-[#E8EDFA]">
-      <div className="mx-auto flex w-full flex-col gap-6 p-4 sm:p-5 lg:p-6">
+      <div className="mx-auto flex w-full flex-col gap-6 p-4 sm:p-5 lg:p-6 2xl:p-8">
 
         <PageHeader
           label="Password"
