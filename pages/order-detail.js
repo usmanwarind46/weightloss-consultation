@@ -272,7 +272,7 @@ const OrderDetail = () => {
                 title={`Order #${currentOrder?.id}`}
                 subtitle={
                   formattedDate !== "N/A"
-                    ? `Placed on ${formattedDate}${time ? ` at ${time}` : ""}`
+                    ? `Placed on ${formattedDate}`
                     : "Review your treatment items and patient information."
                 }
                 right={
