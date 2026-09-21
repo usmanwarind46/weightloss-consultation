@@ -5,12 +5,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  output: "export",
+  // output: "export",
 
   // equivalent of Vite's base
 
-
-  
   basePath: "/start-consultation",
 };
 
