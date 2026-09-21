@@ -4,6 +4,8 @@
 export const meta_url =
   "https://www.onlineweightlossclinic.co.uk/start-consultation/";
 
+export const indexMeta_url =
+  "https://www.onlineweightlossclinic.co.uk/start-consultation";
 
 // local;
 // export const meta_url = "http://192.168.1.194:6000";
@@ -16,7 +18,7 @@ export const app_url = "https://app.onlineweightlossclinic.co.uk/api";
 // https://staging.mayfairweightlossclinic.co.uk/api
 // export const passwordlink = "http://localhost:3000/email-confirmation"
 
-export const FoundayoProductId =8;
+export const FoundayoProductId = 8;
 export const WegovyPillProductId = 7;
 
 export default { app_url, FoundayoProductId, WegovyPillProductId };

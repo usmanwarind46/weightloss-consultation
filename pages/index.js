@@ -10,7 +10,7 @@ import { useSearchParams } from "next/navigation";
 import useReorder from "@/store/useReorderStore";
 import useAuthStore from "@/store/authStore";
 import MetaLayout from "@/Meta/MetaLayout";
-import { meta_url } from "@/config/constants";
+import { indexMeta_url, meta_url } from "@/config/constants";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import useReorderButtonStore from "@/store/useReorderButton";
 import IntroSvg from "@/public/images/intro.svg";
@@ -72,7 +72,7 @@ export default function Index() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}`} />
+      <MetaLayout canonical={`${indexMeta_url}`} />
 
       <StepsHeader />
 
