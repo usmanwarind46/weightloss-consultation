@@ -187,7 +187,7 @@ export default function GpDetail() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}gp-details/`} />
+      <MetaLayout canonical={`${meta_url}gp-details`} />
 
       <StepsHeader percentage={"90"} />
       <FormWrapper heading={"GP Details"} description="">
@@ -422,10 +422,7 @@ export default function GpDetail() {
               )}
 
               <div className="space-y-3 mt-6">
-                <NextButton
-                  label="Next"
-                  disabled={!isNextEnabled}
-                />
+                <NextButton label="Next" disabled={!isNextEnabled} />
                 <BackButton
                   label="Back"
                   onClick={() => router.push("/patient-consent")}

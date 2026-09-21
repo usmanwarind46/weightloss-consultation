@@ -133,7 +133,7 @@ export default function ResidentialAddress() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}residential-address/`} />
+      <MetaLayout canonical={`${meta_url}residential-address`} />
 
       <StepsHeader percentage="40" />
       <FormWrapper

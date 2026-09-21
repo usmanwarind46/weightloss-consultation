@@ -71,14 +71,23 @@ export default function PregnancyCheck() {
               className={`flex flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3.5 transition-all duration-150 select-none
                 ${isSelected ? "border-[#4565BF] bg-[#4565BF]/[0.05]" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"}`}
             >
-              <input type="radio" value={option} {...register(fieldName, { required: true })} className="hidden" />
+              <input
+                type="radio"
+                value={option}
+                {...register(fieldName, { required: true })}
+                className="hidden"
+              />
               <div
                 className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
                   ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
               >
-                {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                {isSelected && (
+                  <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                )}
               </div>
-              <span className={`inter-medium-font text-[14px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
+              <span
+                className={`inter-medium-font text-[14px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+              >
                 {option}
               </span>
             </label>
@@ -90,7 +99,7 @@ export default function PregnancyCheck() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}pregnancy-check/`} />
+      <MetaLayout canonical={`${meta_url}pregnancy-check`} />
 
       <StepsHeader />
       <FormWrapper
@@ -111,8 +120,9 @@ export default function PregnancyCheck() {
                   {pregnancy === "yes" && (
                     <div className="mt-3 rounded-xl border border-red-200/70 bg-red-50/70 px-4 py-3.5">
                       <p className="inter-reg-font text-[13px] text-red-700">
-                        This treatment is not suitable if you are pregnant, trying to get pregnant or breastfeeding. We recommend you speak to your GP
-                        in person.
+                        This treatment is not suitable if you are pregnant,
+                        trying to get pregnant or breastfeeding. We recommend
+                        you speak to your GP in person.
                       </p>
                     </div>
                   )}
@@ -120,7 +130,10 @@ export default function PregnancyCheck() {
               </div>
 
               <div className="my-5 flex flex-col gap-3">
-                <NextButton disabled={!isValid || pregnancy === "yes"} label="Next" />
+                <NextButton
+                  disabled={!isValid || pregnancy === "yes"}
+                  label="Next"
+                />
                 <BackButton label="Back" onClick={() => router.back()} />
               </div>
             </form>

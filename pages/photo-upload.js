@@ -511,7 +511,7 @@ const PhotoUpload = () => {
   return (
     <>
       <StepsHeader />
-      <MetaLayout canonical={`${meta_url}photo-upload/`} />
+      <MetaLayout canonical={`${meta_url}photo-upload`} />
       {loading && (
         <PageLoader message="Please wait while your photo is being uploaded..." />
       )}
@@ -577,13 +577,16 @@ const PhotoUpload = () => {
 
             {/* Description */}
             <p className="inter-reg-font mt-2 text-[13.5px] leading-6 text-slate-500">
-              Please upload a <span className="inter-semibold-font">full body</span>{" "}
-              picture of yourself.
+              Please upload a{" "}
+              <span className="inter-semibold-font">full body</span> picture of
+              yourself.
             </p>
 
             {/* Bullet Points */}
             <div className="mt-5 rounded-xl border border-[#4565BF]/10 bg-[#f4f6fd] px-4 py-3.5">
-              <p className="inter-semibold-font mb-2 text-[13px] text-slate-800">Why we need this</p>
+              <p className="inter-semibold-font mb-2 text-[13px] text-slate-800">
+                Why we need this
+              </p>
               <ul className="inter-reg-font list-disc space-y-2 pl-5 text-[12.5px] leading-5 text-slate-600 marker:text-[#4565BF]">
                 <li>We will only ask for this once.</li>
                 <li>
@@ -597,7 +600,9 @@ const PhotoUpload = () => {
 
           {/* Example Images */}
           <div className="mb-6">
-            <p className="inter-semibold-font mb-3 text-[13px] text-slate-800">Photo guidance</p>
+            <p className="inter-semibold-font mb-3 text-[13px] text-slate-800">
+              Photo guidance
+            </p>
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               <div className="relative overflow-hidden rounded-xl border-2 border-emerald-400 bg-white">
                 <Image
@@ -605,7 +610,9 @@ const PhotoUpload = () => {
                   alt="correct"
                   className="aspect-[3/4] h-auto w-full object-cover"
                 />
-                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[10px] text-emerald-700 shadow-sm"><FaCheck size={10} /> Good</span>
+                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[10px] text-emerald-700 shadow-sm">
+                  <FaCheck size={10} /> Good
+                </span>
               </div>
               <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white">
                 <Image
@@ -620,7 +627,9 @@ const PhotoUpload = () => {
                   alt="incorrect"
                   className="aspect-[3/4] h-auto w-full object-cover"
                 />
-                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[10px] text-red-600 shadow-sm"><RxCross2 size={10} /> Avoid</span>
+                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[10px] text-red-600 shadow-sm">
+                  <RxCross2 size={10} /> Avoid
+                </span>
               </div>
             </div>
           </div>

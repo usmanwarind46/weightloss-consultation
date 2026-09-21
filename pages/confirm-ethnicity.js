@@ -67,7 +67,7 @@ export default function ConfirmEthnicity() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}confirm-ethnicity/`} />
+      <MetaLayout canonical={`${meta_url}confirm-ethnicity`} />
       <StepsHeader percentage={"55"} />
       <FormWrapper
         heading={"Confirm Ethnicity"}
@@ -92,7 +92,9 @@ export default function ConfirmEthnicity() {
               ].map((ethnicity, index) => (
                 <div key={index} className="flex items-center gap-2.5">
                   <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#4565BF]/80" />
-                  <p className="inter-medium-font text-[13.5px] text-slate-700">{ethnicity}</p>
+                  <p className="inter-medium-font text-[13.5px] text-slate-700">
+                    {ethnicity}
+                  </p>
                 </div>
               ))}
             </div>
@@ -113,7 +115,9 @@ export default function ConfirmEthnicity() {
                           className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
                             ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
                         >
-                          {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                          {isSelected && (
+                            <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                          )}
                         </div>
                         <input
                           type="radio"
@@ -121,7 +125,9 @@ export default function ConfirmEthnicity() {
                           {...register("ethnicity", { required: true })}
                           className="hidden"
                         />
-                        <span className={`inter-medium-font text-[14px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
+                        <span
+                          className={`inter-medium-font text-[14px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                        >
                           {option}
                         </span>
                       </label>

@@ -138,7 +138,7 @@ export default function EmailConfirmation() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}email-confirmation/`} />
+      <MetaLayout canonical={`${meta_url}email-confirmation`} />
 
       <LoginModal
         show={showLoginModal}

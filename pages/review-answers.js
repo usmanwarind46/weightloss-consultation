@@ -177,7 +177,7 @@ const ReviewAnswers = () => {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}review-answers/`} />
+      <MetaLayout canonical={`${meta_url}review-answers`} />
 
       <StepsHeader percentage={"95"} />
       <FormWrapper
@@ -224,7 +224,10 @@ const ReviewAnswers = () => {
                 </div>
               </section>
 
-              <section className="mt-7" aria-labelledby="medical-summary-heading">
+              <section
+                className="mt-7"
+                aria-labelledby="medical-summary-heading"
+              >
                 <div className="mb-3 flex items-end justify-between gap-4">
                   <div>
                     <h2

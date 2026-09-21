@@ -8,7 +8,7 @@ import React from "react";
 const Dashboard = () => {
   return (
     <>
-      <MetaLayout canonical={`${meta_url}dashboard/`} />
+      <MetaLayout canonical={`${meta_url}dashboard`} />
 
       <ProtectedPage>
         <DashBoardLayout>

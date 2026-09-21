@@ -6,16 +6,16 @@ import MetaLayout from "@/Meta/MetaLayout";
 import React from "react";
 
 const orders = () => {
-  return (<>
+  return (
+    <>
+      <MetaLayout canonical={`${meta_url}orders`} />
 
-    <MetaLayout canonical={`${meta_url}orders/`} />
-
-    <ProtectedPage>
-      <DashBoardLayout>
-        <MyOrders />
-      </DashBoardLayout>
-    </ProtectedPage>
-  </>
+      <ProtectedPage>
+        <DashBoardLayout>
+          <MyOrders />
+        </DashBoardLayout>
+      </ProtectedPage>
+    </>
   );
 };
 

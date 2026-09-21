@@ -49,9 +49,7 @@ const Checkout = () => {
   );
   const passwordStepIndex = showPasswordStep ? 0 : null;
   const shippingStepIndex = showPasswordStep ? 1 : 0;
-  const billingStepIndex = billingSameAsShipping
-    ? null
-    : shippingStepIndex + 1;
+  const billingStepIndex = billingSameAsShipping ? null : shippingStepIndex + 1;
   const consentStepIndex = billingSameAsShipping
     ? shippingStepIndex + 1
     : billingStepIndex + 1;
@@ -105,11 +103,9 @@ const Checkout = () => {
     router.push("/dosage-selection");
   };
 
-
-
   return (
     <>
-      <MetaLayout canonical={`${meta_url}checkout/`} />
+      <MetaLayout canonical={`${meta_url}checkout`} />
 
       <StepsHeader />
 
@@ -149,93 +145,121 @@ const Checkout = () => {
       </AnimatePresence>
 
       <div className="min-h-[calc(100vh-66px)] bg-[#EEF2FA]">
-      <div className="max-w-2xl mx-auto px-4 pb-14 space-y-6">
-        <div ref={headingRef} className="pt-6 sm:pt-8">
-          <div className="sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:items-center sm:gap-2">
-            <button
-              type="button"
-              onClick={back}
-              className="inter-medium-font mb-2 inline-flex min-h-11 cursor-pointer items-center justify-start gap-1.5 px-0 text-[13px] text-[#4565BF] transition-colors duration-200 hover:text-[#3550a0] focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4565BF]/25 focus-visible:ring-offset-2 sm:mb-0 sm:min-h-9 sm:w-auto sm:justify-self-start sm:px-1"
-              aria-label="Back to dosage selection"
-            >
-              <ArrowLeft size={15} strokeWidth={2} />
-              <span>Back</span>
-            </button>
-            <h1
-              className={`inter-bold-font text-center text-slate-900 ${
-                reorder
-                  ? "text-[19px] leading-tight sm:whitespace-nowrap sm:text-[30px]"
-                  : "text-[19px] leading-tight sm:text-[30px]"
-              }`}
-            >
-              {reorder ? "Confirm your treatment re-order" : "Checkout to kick-start your weight loss journey"}
-            </h1>
-            <span className="hidden sm:block" aria-hidden="true" />
+        <div className="max-w-2xl mx-auto px-4 pb-14 space-y-6">
+          <div ref={headingRef} className="pt-6 sm:pt-8">
+            <div className="sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:items-center sm:gap-2">
+              <button
+                type="button"
+                onClick={back}
+                className="inter-medium-font mb-2 inline-flex min-h-11 cursor-pointer items-center justify-start gap-1.5 px-0 text-[13px] text-[#4565BF] transition-colors duration-200 hover:text-[#3550a0] focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4565BF]/25 focus-visible:ring-offset-2 sm:mb-0 sm:min-h-9 sm:w-auto sm:justify-self-start sm:px-1"
+                aria-label="Back to dosage selection"
+              >
+                <ArrowLeft size={15} strokeWidth={2} />
+                <span>Back</span>
+              </button>
+              <h1
+                className={`inter-bold-font text-center text-slate-900 ${
+                  reorder
+                    ? "text-[19px] leading-tight sm:whitespace-nowrap sm:text-[30px]"
+                    : "text-[19px] leading-tight sm:text-[30px]"
+                }`}
+              >
+                {reorder
+                  ? "Confirm your treatment re-order"
+                  : "Checkout to kick-start your weight loss journey"}
+              </h1>
+              <span className="hidden sm:block" aria-hidden="true" />
+            </div>
+
+            <div className="text-center sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:gap-2">
+              <p className="inter-reg-font mt-3 text-[13.5px] leading-5 text-slate-500 sm:col-start-2">
+                {reorder
+                  ? "You're almost done. Complete your checkout to continue your weight loss journey without interruption."
+                  : "Complete your details below to secure your consultation. If you decide not to proceed after your consult for any reason, you will be fully refunded."}
+              </p>
+            </div>
           </div>
 
-          <div className="text-center sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:gap-2">
-            <p className="inter-reg-font mt-3 text-[13.5px] leading-5 text-slate-500 sm:col-start-2">
-              {reorder
-                ? "You're almost done. Complete your checkout to continue your weight loss journey without interruption."
-                : "Complete your details below to secure your consultation. If you decide not to proceed after your consult for any reason, you will be fully refunded."}
-            </p>
-          </div>
+          {/* Sections */}
+          {showPasswordStep && (
+            <motion.div
+              ref={personalRef}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <SetAPassword
+                onComplete={() => goToNextStep(passwordStepIndex)}
+                isCompleted={
+                  completedSteps[passwordStepIndex] || !isPasswordReset
+                }
+              />
+            </motion.div>
+          )}
+
+          {(!showPasswordStep || completedSteps[passwordStepIndex]) && (
+            <motion.div
+              ref={addressRef}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+            >
+              <ShippingAddress
+                onComplete={() => goToNextStep(shippingStepIndex)}
+                isCompleted={completedSteps[shippingStepIndex] || closeShipping}
+                setIsShippingCheck={setIsShippingCheck}
+                setIsBillingCheck={setIsBillingCheck}
+                setCloseShipping={setCloseShipping}
+              />
+            </motion.div>
+          )}
+
+          {!billingSameAsShipping && shippingDone && (
+            <motion.div
+              ref={billingRef}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+            >
+              <BillingAddress
+                onComplete={() => goToNextStep(billingStepIndex)}
+                isCompleted={completedSteps[billingStepIndex] || closeBilling}
+                setIsBillingCheck={setIsBillingCheck}
+                setCloseBilling={setCloseBilling}
+              />
+            </motion.div>
+          )}
+
+          {shippingDone && billingDone && (
+            <motion.div
+              ref={paymentRef}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+            >
+              <ProductConsent
+                onComplete={() => goToNextStep(consentStepIndex)}
+                setIsConcentCheck={setIsConcentCheck}
+                isCompleted={setIsConcentCheck}
+              />
+            </motion.div>
+          )}
+
+          {isConcentCheck && (
+            <motion.div
+              ref={summaryRef}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+            >
+              <OrderSummary
+                onComplete={isConcentCheck}
+                isConcentCheck={isConcentCheck}
+                isShippingCheck={isShippingCheck}
+                isBillingCheck={isBillingCheck}
+              />
+            </motion.div>
+          )}
         </div>
-
-        {/* Sections */}
-        {showPasswordStep && (
-          <motion.div ref={personalRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
-            <SetAPassword
-              onComplete={() => goToNextStep(passwordStepIndex)}
-              isCompleted={completedSteps[passwordStepIndex] || !isPasswordReset}
-            />
-          </motion.div>
-        )}
-
-        {(!showPasswordStep || completedSteps[passwordStepIndex]) && (
-        <motion.div ref={addressRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-          <ShippingAddress
-            onComplete={() => goToNextStep(shippingStepIndex)}
-            isCompleted={completedSteps[shippingStepIndex] || closeShipping}
-            setIsShippingCheck={setIsShippingCheck}
-            setIsBillingCheck={setIsBillingCheck}
-            setCloseShipping={setCloseShipping}
-          />
-        </motion.div>
-        )}
-
-        {!billingSameAsShipping && shippingDone && (
-          <motion.div ref={billingRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-            <BillingAddress
-              onComplete={() => goToNextStep(billingStepIndex)}
-              isCompleted={completedSteps[billingStepIndex] || closeBilling}
-              setIsBillingCheck={setIsBillingCheck}
-              setCloseBilling={setCloseBilling}
-            />
-          </motion.div>
-        )}
-
-        {shippingDone && billingDone && (
-        <motion.div ref={paymentRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-          <ProductConsent
-            onComplete={() => goToNextStep(consentStepIndex)}
-            setIsConcentCheck={setIsConcentCheck}
-            isCompleted={setIsConcentCheck}
-          />
-        </motion.div>
-        )}
-
-        {isConcentCheck && (
-        <motion.div ref={summaryRef} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-          <OrderSummary
-            onComplete={isConcentCheck}
-            isConcentCheck={isConcentCheck}
-            isShippingCheck={isShippingCheck}
-            isBillingCheck={isBillingCheck}
-          />
-        </motion.div>
-        )}
-      </div>
       </div>
     </>
   );

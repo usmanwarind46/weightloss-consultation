@@ -205,7 +205,7 @@ export default function GatherData() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}gathering-data/`} />
+      <MetaLayout canonical={`${meta_url}gathering-data`} />
       <StepsHeader />
       {showLoader && (
         <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">

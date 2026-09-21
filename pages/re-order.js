@@ -108,7 +108,7 @@ export default function ReOrder() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}re-order/`} />
+      <MetaLayout canonical={`${meta_url}re-order`} />
 
       <StepsHeader />
       <FormWrapper heading="Reorder Confirmation" description="" percentage="0">

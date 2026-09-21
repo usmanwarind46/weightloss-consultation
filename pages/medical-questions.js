@@ -34,7 +34,9 @@ const MedicalQuestions = () => {
       console.log("✅ Loading questions from medicalInfo (saved user answers)");
       setQuestions(medicalInfo);
     } else if (medicalQuestions && medicalQuestions.length) {
-      console.log("🟡 Loading questions from medicalQuestions (API or fallback)");
+      console.log(
+        "🟡 Loading questions from medicalQuestions (API or fallback)",
+      );
       const initialized = medicalQuestions.map((q) => ({
         ...q,
         subfield_response: "",
@@ -58,7 +60,15 @@ const MedicalQuestions = () => {
   }, [questions]);
 
   const handleAnswerChange = (id, value) => {
-    const updated = questions.map((q) => (q.id === id ? { ...q, answer: value, subfield_response: value === "no" ? "" : q.subfield_response } : q));
+    const updated = questions.map((q) =>
+      q.id === id
+        ? {
+            ...q,
+            answer: value,
+            subfield_response: value === "no" ? "" : q.subfield_response,
+          }
+        : q,
+    );
     setQuestions(updated);
     setValue(`responses[${id}].answer`, value);
     if (value === "no") {
@@ -67,7 +77,9 @@ const MedicalQuestions = () => {
   };
 
   const handleSubFieldChange = (id, value) => {
-    const updated = questions.map((q) => (q.id === id ? { ...q, subfield_response: value } : q));
+    const updated = questions.map((q) =>
+      q.id === id ? { ...q, subfield_response: value } : q,
+    );
     setQuestions(updated);
     setValue(`responses[${id}].subfield_response`, value);
   };
@@ -77,8 +89,10 @@ const MedicalQuestions = () => {
     const subfield = watch(`responses[${q.id}].subfield_response`);
 
     if (answer === "no") return true;
-    if (answer === "yes" && q.has_sub_field) return subfield && subfield.trim() !== "";
-    if (answer === "yes" && !q.has_sub_field && q.validation_error_msg) return false;
+    if (answer === "yes" && q.has_sub_field)
+      return subfield && subfield.trim() !== "";
+    if (answer === "yes" && !q.has_sub_field && q.validation_error_msg)
+      return false;
 
     return false;
   });
@@ -94,18 +108,24 @@ const MedicalQuestions = () => {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}medical-questions/`} />
-
+      <MetaLayout canonical={`${meta_url}medical-questions`} />
 
       <StepsHeader percentage={"80"} />
-      <FormWrapper heading={"Medical Questions"} >
+      <FormWrapper heading={"Medical Questions"}>
         <PageAnimationWrapper>
-          <div className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}>
+          <div
+            className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
+          >
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
               {questions.map((q) => {
                 const selectedAnswer = watch(`responses[${q.id}].answer`);
-                const subfieldValue = watch(`responses[${q.id}].subfield_response`);
-                const showValidationError = selectedAnswer === "yes" && !q.has_sub_field && q.validation_error_msg;
+                const subfieldValue = watch(
+                  `responses[${q.id}].subfield_response`,
+                );
+                const showValidationError =
+                  selectedAnswer === "yes" &&
+                  !q.has_sub_field &&
+                  q.validation_error_msg;
 
                 return (
                   <div
@@ -136,7 +156,9 @@ const MedicalQuestions = () => {
                                   {...field}
                                   value={option}
                                   checked={field.value === option}
-                                  onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                  onChange={(e) =>
+                                    handleAnswerChange(q.id, e.target.value)
+                                  }
                                   className="hidden"
                                 />
                               )}
@@ -145,9 +167,13 @@ const MedicalQuestions = () => {
                               className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150
                                 ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}
                             >
-                              {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                              {isSelected && (
+                                <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                              )}
                             </div>
-                            <span className={`inter-medium-font text-[14px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
+                            <span
+                              className={`inter-medium-font text-[14px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                            >
                               {option.charAt(0).toUpperCase() + option.slice(1)}
                             </span>
                           </label>
@@ -157,7 +183,9 @@ const MedicalQuestions = () => {
 
                     {showValidationError && (
                       <div className="mt-3 rounded-lg border border-red-100 bg-red-50 px-3 py-2.5">
-                        <p className="inter-reg-font text-[12px] text-red-600">{q.validation_error_msg}</p>
+                        <p className="inter-reg-font text-[12px] text-red-600">
+                          {q.validation_error_msg}
+                        </p>
                       </div>
                     )}
 
@@ -166,7 +194,9 @@ const MedicalQuestions = () => {
                         className="inter-reg-font mt-4 min-h-[104px] w-full resize-y rounded-xl border border-slate-200 bg-white px-4 py-3 text-[14px] leading-relaxed text-slate-800 shadow-[0_1px_3px_rgba(15,23,42,0.03)] transition-all duration-200 placeholder:text-slate-400 focus:border-[#4565BF]/40 focus:outline-none focus:ring-[3px] focus:ring-[#4565BF]/10"
                         placeholder={q.sub_field_prompt}
                         value={subfieldValue}
-                        onChange={(e) => handleSubFieldChange(q.id, e.target.value)}
+                        onChange={(e) =>
+                          handleSubFieldChange(q.id, e.target.value)
+                        }
                       />
                     )}
                   </div>
@@ -175,7 +205,10 @@ const MedicalQuestions = () => {
 
               <div className="mt-6 flex flex-col gap-3">
                 <NextButton disabled={!isNextEnabled} label="Next" />
-                <BackButton label="Back" onClick={() => router.push("/bmi-detail")} />
+                <BackButton
+                  label="Back"
+                  onClick={() => router.push("/bmi-detail")}
+                />
               </div>
             </form>
 

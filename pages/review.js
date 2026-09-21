@@ -142,7 +142,7 @@ export default function ReviewScreen() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}review/`} noIndex />
+      <MetaLayout canonical={`${meta_url}review`} noIndex />
 
       <section className="review-container ">
         <div className="review-shell">

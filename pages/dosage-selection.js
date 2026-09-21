@@ -39,8 +39,14 @@ export default function DosageSelection() {
   const [prevDose, setPrevDose] = useState("");
   const [lastTakenDate, setLastTakenDate] = useState("");
   const router = useRouter();
-  const { addToCart, increaseQuantity, decreaseQuantity, items, totalAmount, setConsentGiven } =
-    useCartStore();
+  const {
+    addToCart,
+    increaseQuantity,
+    decreaseQuantity,
+    items,
+    totalAmount,
+    setConsentGiven,
+  } = useCartStore();
   const { productId } = useProductId();
   const [showModal, setShowModal] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null); // { id, type }
@@ -374,7 +380,7 @@ export default function DosageSelection() {
         )}
       </AnimatePresence>
 
-      <MetaLayout canonical={`${meta_url}dosage-selection/`} />
+      <MetaLayout canonical={`${meta_url}dosage-selection`} />
       <StepsHeader />
 
       <AnimatePresence>
@@ -408,8 +414,19 @@ export default function DosageSelection() {
                   }}
                   className="absolute right-4 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 transition-all duration-150 hover:border-[#4565BF]/20 hover:bg-[#4565BF]/[0.05] hover:text-[#4565BF] active:scale-95"
                 >
-                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M1.5 1.5L12.5 12.5M12.5 1.5L1.5 12.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M1.5 1.5L12.5 12.5M12.5 1.5L1.5 12.5"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -428,9 +445,7 @@ export default function DosageSelection() {
                       type="text"
                       value={prevMedication}
                       onChange={(e) =>
-                        setPrevMedication(
-                          e.target.value.replace(/[0-9]/g, ""),
-                        )
+                        setPrevMedication(e.target.value.replace(/[0-9]/g, ""))
                       }
                       placeholder="e.g. Ozempic, Mounjaro, Wegovy"
                       className="inter-reg-font h-12 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 text-[14px] text-slate-800 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-[#4565BF] focus:bg-white focus:ring-4 focus:ring-[#4565BF]/[0.08]"
@@ -453,80 +468,91 @@ export default function DosageSelection() {
                       When did you last take it?
                     </label>
                     <ThemeProvider theme={brandTheme}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DatePicker
-                        value={
-                          lastTakenDate
-                            ? parse(lastTakenDate, "yyyy-MM-dd", new Date())
-                            : null
-                        }
-                        onChange={(date) =>
-                          setLastTakenDate(date ? format(date, "yyyy-MM-dd") : "")
-                        }
-                        maxDate={new Date()}
-                        format="dd/MM/yyyy"
-                        className="inter-reg-font"
-                        slotProps={{
-                          popper: {
-                            sx: { zIndex: 10000 },
-                          },
-                          dialog: {
-                            sx: { zIndex: 10000 },
-                          },
-                          desktopPaper: {
-                            sx: {
-                              borderRadius: "16px",
-                              "& .MuiPickersDay-root.Mui-selected": {
-                                backgroundColor: "#4565BF",
-                                "&:hover, &:focus": { backgroundColor: "#3550a0" },
-                              },
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                          value={
+                            lastTakenDate
+                              ? parse(lastTakenDate, "yyyy-MM-dd", new Date())
+                              : null
+                          }
+                          onChange={(date) =>
+                            setLastTakenDate(
+                              date ? format(date, "yyyy-MM-dd") : "",
+                            )
+                          }
+                          maxDate={new Date()}
+                          format="dd/MM/yyyy"
+                          className="inter-reg-font"
+                          slotProps={{
+                            popper: {
+                              sx: { zIndex: 10000 },
                             },
-                          },
-                          mobilePaper: {
-                            sx: {
-                              borderRadius: "16px",
-                              "& .MuiPickersDay-root.Mui-selected": {
-                                backgroundColor: "#4565BF",
-                                "&:hover, &:focus": { backgroundColor: "#3550a0" },
-                              },
+                            dialog: {
+                              sx: { zIndex: 10000 },
                             },
-                          },
-                          textField: {
-                            fullWidth: true,
-                            placeholder: "DD/MM/YYYY",
-                            sx: {
-                              "& .MuiOutlinedInput-root, & .MuiPickersOutlinedInput-root": {
-                                borderRadius: "12px",
-                                backgroundColor: "rgba(248,250,252,0.5)",
-                                fontFamily: "var(--inter-reg)",
-                                fontSize: "14px",
-                                transition: "box-shadow 180ms ease",
-                                "&.Mui-focused": {
-                                  backgroundColor: "#ffffff",
-                                  boxShadow: "0 0 0 3px rgba(69, 101, 191, 0.10)",
+                            desktopPaper: {
+                              sx: {
+                                borderRadius: "16px",
+                                "& .MuiPickersDay-root.Mui-selected": {
+                                  backgroundColor: "#4565BF",
+                                  "&:hover, &:focus": {
+                                    backgroundColor: "#3550a0",
+                                  },
                                 },
                               },
-                              "& .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-notchedOutline": {
-                                borderColor: "#e2e8f0",
-                                borderWidth: "2px",
-                                borderRadius: "0.75rem",
-                                transition: "border-color 180ms ease",
-                              },
-                              "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-root:hover .MuiPickersOutlinedInput-notchedOutline": {
-                                borderColor: "#4565BF !important",
-                              },
-                              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-root.Mui-focused .MuiPickersOutlinedInput-notchedOutline": {
-                                borderColor: "#4565BF !important",
-                                borderWidth: "2px",
-                              },
-                              "& .MuiIconButton-root": {
-                                color: "#4565BF !important",
+                            },
+                            mobilePaper: {
+                              sx: {
+                                borderRadius: "16px",
+                                "& .MuiPickersDay-root.Mui-selected": {
+                                  backgroundColor: "#4565BF",
+                                  "&:hover, &:focus": {
+                                    backgroundColor: "#3550a0",
+                                  },
+                                },
                               },
                             },
-                          },
-                        }}
-                      />
-                    </LocalizationProvider>
+                            textField: {
+                              fullWidth: true,
+                              placeholder: "DD/MM/YYYY",
+                              sx: {
+                                "& .MuiOutlinedInput-root, & .MuiPickersOutlinedInput-root":
+                                  {
+                                    borderRadius: "12px",
+                                    backgroundColor: "rgba(248,250,252,0.5)",
+                                    fontFamily: "var(--inter-reg)",
+                                    fontSize: "14px",
+                                    transition: "box-shadow 180ms ease",
+                                    "&.Mui-focused": {
+                                      backgroundColor: "#ffffff",
+                                      boxShadow:
+                                        "0 0 0 3px rgba(69, 101, 191, 0.10)",
+                                    },
+                                  },
+                                "& .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-notchedOutline":
+                                  {
+                                    borderColor: "#e2e8f0",
+                                    borderWidth: "2px",
+                                    borderRadius: "0.75rem",
+                                    transition: "border-color 180ms ease",
+                                  },
+                                "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-root:hover .MuiPickersOutlinedInput-notchedOutline":
+                                  {
+                                    borderColor: "#4565BF !important",
+                                  },
+                                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-root.Mui-focused .MuiPickersOutlinedInput-notchedOutline":
+                                  {
+                                    borderColor: "#4565BF !important",
+                                    borderWidth: "2px",
+                                  },
+                                "& .MuiIconButton-root": {
+                                  color: "#4565BF !important",
+                                },
+                              },
+                            },
+                          }}
+                        />
+                      </LocalizationProvider>
                     </ThemeProvider>
                   </div>
                 </div>

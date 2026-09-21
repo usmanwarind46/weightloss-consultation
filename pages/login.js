@@ -261,7 +261,7 @@ export default function LoginScreen() {
   }, [token, review, abandonCard?.type]);
   return (
     <>
-      <MetaLayout canonical={`${meta_url}login/`} />
+      <MetaLayout canonical={`${meta_url}login`} />
 
       <StepsHeader />
       {/* <FormWrapper
@@ -275,12 +275,16 @@ export default function LoginScreen() {
         </div>
       ) : (
         <>
-          <div className={`flex justify-center bg-[#EEF2FA] px-4 py-8 sm:py-16`}>
+          <div
+            className={`flex justify-center bg-[#EEF2FA] px-4 py-8 sm:py-16`}
+          >
             <div
               className={`bg-white rounded-xl shadow-md w-full max-w-lg p-5 sm:p-8`}
             >
               {/* Title */}
-              <h1 className="inter-bold-font text-[22px] text-slate-900 mb-2">Login</h1>
+              <h1 className="inter-bold-font text-[22px] text-slate-900 mb-2">
+                Login
+              </h1>
 
               {/* Description */}
               <p className="inter-reg-font text-[14px] text-slate-500 mb-6">

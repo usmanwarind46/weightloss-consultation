@@ -82,7 +82,9 @@ export default function Acknowledgment() {
                       : "border-slate-300 bg-white"
                   }`}
               >
-                {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                {isSelected && (
+                  <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                )}
               </div>
               <span
                 className={`inter-medium-font text-[14px] capitalize ${
@@ -100,7 +102,7 @@ export default function Acknowledgment() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}acknowledgment/`} />
+      <MetaLayout canonical={`${meta_url}acknowledgment`} />
 
       <StepsHeader percentage={"0"} />
       <FormWrapper heading={"Patient Acknowledgment"} description={""}>
@@ -151,7 +153,12 @@ export default function Acknowledgment() {
                           }`}
                       >
                         {confirmConsent && (
-                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                          <svg
+                            width="10"
+                            height="8"
+                            viewBox="0 0 10 8"
+                            fill="none"
+                          >
                             <path
                               d="M1 4L3.5 6.5L9 1"
                               stroke="white"
@@ -170,9 +177,10 @@ export default function Acknowledgment() {
                     <div className="rounded-xl border border-[#4565BF]/[0.14] bg-[#f7f8fc] p-4 sm:p-5">
                       <ul className="inter-reg-font list-disc list-outside pl-5 text-[13.5px] leading-[1.8] text-slate-700 space-y-2">
                         <li>
-                          You consent for your medical information to be assessed
-                          by the clinical team at Online Weight Loss Clinic and
-                          its pharmacy and to be prescribed medication.
+                          You consent for your medical information to be
+                          assessed by the clinical team at Online Weight Loss
+                          Clinic and its pharmacy and to be prescribed
+                          medication.
                         </li>
                         <li>
                           You consent to an age and ID check when placing your
@@ -184,14 +192,15 @@ export default function Acknowledgment() {
                           information.
                         </li>
                         <li>
-                          You have capacity to understand all about the condition
-                          and medication information we have provided and that you
-                          give fully informed consent to the treatment option
-                          provided.
+                          You have capacity to understand all about the
+                          condition and medication information we have provided
+                          and that you give fully informed consent to the
+                          treatment option provided.
                         </li>
                         <li>
                           You understand that the treatment or medical advice
-                          provided is based on the information you have provided.
+                          provided is based on the information you have
+                          provided.
                         </li>
                       </ul>
                     </div>

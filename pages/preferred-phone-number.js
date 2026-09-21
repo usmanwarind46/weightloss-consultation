@@ -52,32 +52,28 @@ export default function SignUp() {
 
     // Wait 2s
     if (isReturningPatient) {
-
       router.push("/calculate-bmi/");
     } else {
       router.push("/confirm-ethnicity");
-
     }
   };
 
-
-
-
-
   return (
     <>
-      <MetaLayout canonical={`${meta_url}preferred-phone-number/`} />
-
+      <MetaLayout canonical={`${meta_url}preferred-phone-number`} />
 
       <StepsHeader percentage={"50"} />
       <FormWrapper
         heading={"Enter your phone number"}
-        description={"Please provide an active phone number to ensure smooth delivery of your order."}
-
+        description={
+          "Please provide an active phone number to ensure smooth delivery of your order."
+        }
       >
         <PageAnimationWrapper>
           <div>
-            <div className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}>
+            <div
+              className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
+            >
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Phone Number */}
 
@@ -88,18 +84,24 @@ export default function SignUp() {
                     required: "Phone number is required",
                     validate: (value) => {
                       const onlyDigits = value?.replace(/\D/g, "");
-                      if (!onlyDigits || onlyDigits.length <= 5) return "Enter a valid phone number";
+                      if (!onlyDigits || onlyDigits.length <= 5)
+                        return "Enter a valid phone number";
                       return true;
                     },
                   }}
                   render={({ field }) => (
                     <div className="mb-4">
-                      <label htmlFor="phoneNo" className="inter-medium-font mb-1.5 block text-[13px] text-slate-700">
+                      <label
+                        htmlFor="phoneNo"
+                        className="inter-medium-font mb-1.5 block text-[13px] text-slate-700"
+                      >
                         Phone Number <span className="text-red-500">*</span>
                       </label>
 
-                      <div className={`w-full border-b-2 pb-1 transition-colors duration-200
-                        ${errors.phoneNo ? "border-red-400" : "border-slate-200 focus-within:border-[#4565BF]"}`}>
+                      <div
+                        className={`w-full border-b-2 pb-1 transition-colors duration-200
+                        ${errors.phoneNo ? "border-red-400" : "border-slate-200 focus-within:border-[#4565BF]"}`}
+                      >
                         <PhoneInput
                           {...field}
                           country="gb"
@@ -147,7 +149,10 @@ export default function SignUp() {
                     disabled={!isValid} // ✅ disables until valid
                     type="submit"
                   />
-                  <BackButton label="Back" onClick={() => router.push("/residential-address")} />
+                  <BackButton
+                    label="Back"
+                    onClick={() => router.push("/residential-address")}
+                  />
                 </div>
               </form>
 

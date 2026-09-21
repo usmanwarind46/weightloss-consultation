@@ -68,21 +68,38 @@ export default function SignUp() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}signup/`} />
+      <MetaLayout canonical={`${meta_url}signup`} />
 
       <StepsHeader percentage={"10"} />
       <FormWrapper
         heading={"Enter your full legal name"}
-        description={"We require this to generate your prescription if you qualify for the treatment."}
-
+        description={
+          "We require this to generate your prescription if you qualify for the treatment."
+        }
       >
         <PageAnimationWrapper>
           <div className="">
-            <div className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}>
+            <div
+              className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
+            >
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <TextField label="First Name" name="firstName" placeholder="First Name" register={register} required errors={errors} />
-                  <TextField label="Last Name" name="lastName" placeholder="Last Name" register={register} required errors={errors} />
+                  <TextField
+                    label="First Name"
+                    name="firstName"
+                    placeholder="First Name"
+                    register={register}
+                    required
+                    errors={errors}
+                  />
+                  <TextField
+                    label="Last Name"
+                    name="lastName"
+                    placeholder="Last Name"
+                    register={register}
+                    required
+                    errors={errors}
+                  />
                 </div>
 
                 <div className="mt-6 flex flex-col gap-3">
@@ -91,7 +108,10 @@ export default function SignUp() {
                     disabled={!isValid} // ✅ disables until valid
                     type="submit"
                   />
-                  <BackButton label="Back" onClick={() => router.push("/acknowledgment")} />
+                  <BackButton
+                    label="Back"
+                    onClick={() => router.push("/acknowledgment")}
+                  />
                 </div>
               </form>
 

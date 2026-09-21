@@ -314,7 +314,9 @@ const IdVerification = () => {
                 <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-[#4565BF]/10">
                   <AiOutlineLoading3Quarters className="h-5 w-5 animate-spin text-[#4565BF]" />
                 </div>
-                <p className="inter-medium-font text-sm text-slate-700">Uploading...</p>
+                <p className="inter-medium-font text-sm text-slate-700">
+                  Uploading...
+                </p>
               </div>
             ) : !photo ? (
               /* 📤 Upload UI */
@@ -356,7 +358,7 @@ const IdVerification = () => {
   return (
     <>
       <StepsHeader />
-      <MetaLayout canonical={`${meta_url}photo-upload/`} />
+      <MetaLayout canonical={`${meta_url}photo-upload`} />
       {loading && (
         <PageLoader message="Please wait while your ID images are being uploaded..." />
       )}

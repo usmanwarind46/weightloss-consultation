@@ -14,7 +14,11 @@ import { differenceInYears, format, parse } from "date-fns";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import useProductId from "@/store/useProductIdStore";
 import MetaLayout from "@/Meta/MetaLayout";
-import { FoundayoProductId, meta_url, WegovyPillProductId } from "@/config/constants";
+import {
+  FoundayoProductId,
+  meta_url,
+  WegovyPillProductId,
+} from "@/config/constants";
 
 export default function PersonalDetails() {
   const [showLoader, setShowLoader] = useState(false);
@@ -93,7 +97,7 @@ export default function PersonalDetails() {
       const parsedDate = parse(patientInfo.dob, "dd-MM-yyyy", new Date());
       const fixedGender = patientInfo?.gender
         ? patientInfo.gender.charAt(0).toUpperCase() +
-        patientInfo.gender.slice(1).toLowerCase()
+          patientInfo.gender.slice(1).toLowerCase()
         : "";
 
       setValue("dob", parsedDate);
@@ -132,7 +136,7 @@ export default function PersonalDetails() {
 
   return (
     <>
-      <MetaLayout canonical={`${meta_url}personal-details/`} />
+      <MetaLayout canonical={`${meta_url}personal-details`} />
 
       <StepsHeader percentage={"30"} />
 
@@ -235,7 +239,9 @@ export default function PersonalDetails() {
                                 </div>
                                 <span
                                   className={`inter-medium-font text-[14px] capitalize ${
-                                    isSelected ? "text-[#4565BF]" : "text-slate-700"
+                                    isSelected
+                                      ? "text-[#4565BF]"
+                                      : "text-slate-700"
                                   }`}
                                 >
                                   {option}
@@ -248,9 +254,9 @@ export default function PersonalDetails() {
                         {pregnancy === "yes" && (
                           <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
                             <p className="inter-reg-font text-[13px] text-red-600">
-                              This treatment is not suitable if you are pregnant,
-                              trying to get pregnant or breastfeeding. We
-                              recommend you speak to your GP in person.
+                              This treatment is not suitable if you are
+                              pregnant, trying to get pregnant or breastfeeding.
+                              We recommend you speak to your GP in person.
                             </p>
                           </div>
                         )}
