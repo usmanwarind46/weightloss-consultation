@@ -8,6 +8,9 @@ const nextConfig = {
   output: "export",
 
   // equivalent of Vite's base
+
+
+  
   basePath: "/start-consultation",
 };
 
