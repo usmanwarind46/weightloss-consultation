@@ -427,7 +427,11 @@ export default function DosageSelection() {
                     <input
                       type="text"
                       value={prevMedication}
-                      onChange={(e) => setPrevMedication(e.target.value)}
+                      onChange={(e) =>
+                        setPrevMedication(
+                          e.target.value.replace(/[0-9]/g, ""),
+                        )
+                      }
                       placeholder="e.g. Ozempic, Mounjaro, Wegovy"
                       className="inter-reg-font h-12 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 text-[14px] text-slate-800 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-[#4565BF] focus:bg-white focus:ring-4 focus:ring-[#4565BF]/[0.08]"
                     />

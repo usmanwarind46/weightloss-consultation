@@ -77,10 +77,7 @@ export default function StepsInformation() {
   /* ───────────────  product id store ────────────── */
   const consultationMutation = useMutation(userConsultationApi, {
     onSuccess: (data) => {
-      console.log(data, "Dataaaaaaaaaa");
-
       if (data?.data?.data == null) {
-        console.log("true");
         clearBmi();
         clearCheckout();
         clearConfirmationInfo();
@@ -108,16 +105,15 @@ export default function StepsInformation() {
           if (authUserDetail?.isReturning) {
           }
           router.push("/personal-details");
-        } else {
           return;
         }
       }
 
+      setShowLoader(false);
       return;
     },
     onError: (error) => {
-      // setLoading(false);
-      console.log("error", error?.response?.data?.message);
+      setShowLoader(false);
       if (error?.response?.data?.message == "Unauthenticated.") {
         toast.error("Session Expired");
         clearBmi();
@@ -145,17 +141,14 @@ export default function StepsInformation() {
     },
   });
 
-  console.log(showProductSelection, "showProductSelection");
-
   /* ───────────────  medical questions mutation ────────────── */
   const medicalQuestionsMutation = useMutation(getMedicalQuestions, {
     onSuccess: (data) => {
-      console.log(data, "Medical Questions");
-
       if (data) {
         setMedicalQuestions(data?.data?.data?.medical_question);
         setConfirmationQuestions(data?.data?.data?.confirmation_question);
       }
+      setShowLoader(false);
       return;
     },
     onError: (error) => {
@@ -171,8 +164,8 @@ export default function StepsInformation() {
       clinic_id: 2,
       product_id: productId,
     };
-    setShowLoader(true);
     if (productId != null) {
+      setShowLoader(true);
       consultationMutation.mutate(formData);
       if (productId == WegovyPillProductId || productId == FoundayoProductId) {
 

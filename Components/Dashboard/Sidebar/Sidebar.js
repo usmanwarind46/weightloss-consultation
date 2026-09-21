@@ -44,8 +44,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           rounded-r-2xl bg-white border border-slate-100
           shadow-[4px_0_24px_rgba(0,0,0,0.05)]
           transition-transform duration-300 ease-out
-          lg:sticky lg:top-[72px] lg:z-20 lg:ml-3
-          lg:h-[calc(100vh-84px)] lg:w-[220px] 2xl:w-[260px]
+          lg:relative lg:top-0 lg:z-20 lg:mt-6 lg:mb-6 lg:ml-3 2xl:mt-8 2xl:mb-8
+          lg:h-auto lg:self-stretch lg:w-[220px] 2xl:w-[260px]
           lg:shrink-0 lg:translate-x-0
           lg:rounded-2xl lg:shadow-[0_4px_20px_rgba(30,41,89,0.06)]
           ${isOpen ? "translate-x-0" : "-translate-x-full"}

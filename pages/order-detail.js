@@ -399,41 +399,25 @@ const OrderDetail = () => {
                           ))}
 
                           {hasDiscount && (
-                            <>
-                              <tr className="border-b border-[#4565BF]/[0.06] bg-[#f7f8fc]/60">
-                                <td className="px-5 py-4">
-                                  <span className="inter-medium-font text-[13px] text-slate-600 lg:text-[14px]">Discount Amount</span>
-                                </td>
-                                <td />
-                                <td className="px-5 py-4 text-right">
-                                  <span className="inter-semibold-font text-[13px] text-emerald-600 lg:text-[14px]">
-                                    {isFixedDiscount
-                                      ? `-£${formatCurrency(discountData?.discount_value)}`
-                                      : `-${parseFloat(discountData?.discount_value).toFixed(1)}%`}
-                                  </span>
-                                </td>
-                              </tr>
-                              <tr className="border-b border-[#4565BF]/[0.06] bg-[#f7f8fc]/60">
-                                <td className="px-5 py-4">
-                                  <span className="inter-medium-font text-[13px] lg:text-[14px] text-slate-600">Coupon code</span>
-                                </td>
-                                <td />
-                                <td className="px-5 py-4 text-right">
-                                  <span className="inter-medium-font text-[13px] lg:text-[14px] text-slate-900">{discountData?.code || "N/A"}</span>
-                                </td>
-                              </tr>
-                              <tr className="border-b border-[#4565BF]/[0.06] bg-[#f7f8fc]/60">
-                                <td className="px-5 py-4">
-                                  <span className="inter-medium-font text-[13px] lg:text-[14px] text-slate-600">Discount type</span>
-                                </td>
-                                <td />
-                                <td className="px-5 py-4 text-right">
-                                  <span className="inter-medium-font text-[13px] lg:text-[14px] text-slate-900">
-                                    {isFixedDiscount ? "Fixed" : "Percentage"}
-                                  </span>
-                                </td>
-                              </tr>
-                            </>
+                            <tr className="border-b border-[#4565BF]/[0.06] bg-[#f7f8fc]/60">
+                              <td className="px-5 py-4">
+                                <span className="inter-medium-font text-[13px] text-slate-600 lg:text-[14px]">
+                                  Discount
+                                  {isFixedDiscount
+                                    ? " (Fixed)"
+                                    : ` (${parseInt(discountData?.discount)}%)`}
+                                  {discountData?.code && ` - Code: ${discountData.code}`}
+                                </span>
+                              </td>
+                              <td />
+                              <td className="px-5 py-4 text-right">
+                                <span className="inter-semibold-font text-[13px] text-[#4565BF] lg:text-[14px]">
+                                  {isFixedDiscount
+                                    ? `-£${formatCurrency(discountData?.discount_value)}`
+                                    : `-£${parseFloat(discountData?.discount_value).toFixed(1)}`}
+                                </span>
+                              </td>
+                            </tr>
                           )}
 
                           <tr className="border-b border-[#4565BF]/[0.07] bg-[#f7f8fc]/60">
@@ -491,20 +475,20 @@ const OrderDetail = () => {
                       <div className="border-t border-[#4565BF]/[0.07] bg-[#f7f8fc] p-4">
                         <div className="space-y-3.5">
                           {hasDiscount && (
-                            <>
-                              <div className="flex items-center justify-between gap-4">
-                                <span className="inter-reg-font text-[12px] text-slate-500">Discount Amount</span>
-                                <span className="inter-semibold-font text-[12px] text-emerald-600">
-                                  {isFixedDiscount
-                                    ? `-£${formatCurrency(discountData?.discount_value)}`
-                                    : `-${parseFloat(discountData?.discount_value).toFixed(1)}%`}
-                                </span>
-                              </div>
-                              <div className="flex items-center justify-between gap-4">
-                                <span className="inter-reg-font text-[12px] text-slate-500">Coupon code</span>
-                                <span className="inter-medium-font text-[12px] text-slate-900">{discountData?.code || "N/A"}</span>
-                              </div>
-                            </>
+                            <div className="flex items-center justify-between gap-4">
+                              <span className="inter-reg-font text-[12px] text-slate-500">
+                                Discount
+                                {isFixedDiscount
+                                  ? " (Fixed)"
+                                  : ` (${parseInt(discountData?.discount)}%)`}
+                                {discountData?.code && ` - Code: ${discountData.code}`}
+                              </span>
+                              <span className="inter-semibold-font text-[12px] text-[#4565BF]">
+                                {isFixedDiscount
+                                  ? `-£${formatCurrency(discountData?.discount_value)}`
+                                  : `-${parseFloat(discountData?.discount_value).toFixed(1)}%`}
+                              </span>
+                            </div>
                           )}
                           <div className="flex items-center justify-between gap-4">
                             <span className="inter-reg-font text-[12px] text-slate-500">Shipping fee</span>
