@@ -219,7 +219,7 @@ const Dose = ({
           </div>
 
           {/* Right Side */}
-          <div className={`flex items-center gap-2 transition-opacity sm:w-auto sm:gap-3 ${isSelected ? "w-full justify-between border-t border-slate-100 pt-3 sm:border-t-0 sm:pt-0" : "w-auto justify-end border-0 p-0"} ${isOutOfStock || (!isSelected && isAllowExceeded) ? "opacity-60 grayscale" : ""}`}>
+          <div className={`flex items-center gap-2 transition-opacity sm:w-auto sm:gap-3 ${isSelected ? "w-full justify-between" : "w-auto justify-end"} ${isOutOfStock || (!isSelected && isAllowExceeded) ? "opacity-60 grayscale" : ""}`}>
             <span
               className={`inter-semibold-font shrink-0 text-[16px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
             >

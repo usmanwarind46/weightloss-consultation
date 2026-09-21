@@ -561,7 +561,7 @@ export default function DosageSelection() {
         )}
       </AnimatePresence>
 
-      <div className="w-full bg-[#EEF2FA] rounded-xl px-4 sm:px-8">
+      <div className="w-full bg-[#EEF2FA] rounded-xl px-4 pb-10 sm:px-8">
         <div className="w-full max-w-screen-xl mx-auto rounded-md">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-12 gap-4 w-full max-w-3xl mx-auto">
