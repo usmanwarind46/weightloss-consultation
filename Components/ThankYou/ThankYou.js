@@ -412,14 +412,13 @@ const ThankYou = () => {
               </h2>
               <p className="inter-reg-font text-[13px] leading-relaxed text-slate-600">
                 As part of our ongoing commitment to patient safety and
-                compliance with current regulatory requirements, we are
-                required to verify your BMI as part of our prescribing
-                process.
+                compliance with current regulatory requirements, we are required
+                to verify your BMI as part of our prescribing process.
               </p>
               <p className="inter-reg-font mt-3 text-[13px] leading-relaxed text-slate-600">
-                Please upload a clear, recent full-body photograph. This is
-                one of the methods we use to verify your BMI and ensure that
-                your treatment remains safe and appropriate for you.
+                Please upload a clear, recent full-body photograph. This is one
+                of the methods we use to verify your BMI and ensure that your
+                treatment remains safe and appropriate for you.
               </p>
               <p className="inter-reg-font mt-3 text-[13px] leading-relaxed text-slate-600">
                 Once your photo has been reviewed and approved by our clinical
@@ -427,9 +426,9 @@ const ThankYou = () => {
                 pharmacy.
               </p>
               <p className="inter-reg-font mt-3 text-[13px] leading-relaxed text-slate-600">
-                Your privacy is important to us, therefore all photos are
-                stored securely, encrypted, and handled in strict confidence
-                in accordance with applicable data protection regulations.
+                Your privacy is important to us, therefore all photos are stored
+                securely, encrypted, and handled in strict confidence in
+                accordance with applicable data protection regulations.
               </p>
             </blockquote>
           )}
@@ -531,18 +530,17 @@ const ThankYou = () => {
               legislation around prescription-only medication.
             </p>
           </div>
-          {imageUploaded && idVerificationUpload && (
-            <>
-              <div className="">
-                <NextButton
-                  className=""
-                  onClick={handleGoBack}
-                  label="Continue to view order details"
-                  // disabled={!imageUploaded}
-                />
-              </div>
-            </>
-          )}
+
+          <>
+            <div className="">
+              <NextButton
+                className=""
+                onClick={handleGoBack}
+                label="Continue to view order details"
+                // disabled={!imageUploaded}
+              />
+            </div>
+          </>
         </div>
       </div>
     </div>
