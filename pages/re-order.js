@@ -13,6 +13,8 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderButtonStore from "@/store/useReorderButton";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
+import usePatientInfoStore from "@/store/patientInfoStore";
+import { isFemalePatient } from "@/utils/patientChecks";
 
 export default function ReOrder() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function ReOrder() {
   const [showLoader, setShowLoader] = useState(false);
   const { setIsFromReorder } = useReorderButtonStore();
   const { setReorderBackProcess } = useReorderBackProcessStore();
+  const { patientInfo } = usePatientInfoStore();
 
   const {
     register,
@@ -50,10 +53,15 @@ export default function ReOrder() {
       router.push("/signup");
       setReorderStatus(true);
     } else {
-      router.push("/calculate-bmi");
-      setReorderBackProcess(true);
       setReorderStatus(false);
       setReorderBackProcess(true);
+      // Female patients ko pregnancy question poochna zaroori hai — ye step
+      // normally personal-details pe hota hai jo reorder me skip ho jata hai.
+      if (isFemalePatient(patientInfo)) {
+        router.push("/pregnancy-check");
+      } else {
+        router.push("/calculate-bmi");
+      }
     }
   };
 

@@ -31,6 +31,7 @@ import useUserDataStore from "@/store/userDataStore";
 import useNeedleConsent from "@/store/needleConsent";
 import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
+import { isPregnancyBlocked, PREGNANCY_BLOCK_MESSAGE } from "@/utils/patientChecks";
 
 const OrderSummary = ({
   isConcentCheck,
@@ -212,6 +213,10 @@ const OrderSummary = ({
       }
     },
   });
+  // Female patient jisne pregnancy question ka jawab "no" nahi diya (yes diya
+  // ya URL paste karke step skip kar diya) — payment allow nahi karna.
+  const pregnancyBlocked = isPregnancyBlocked(patientInfo);
+
   // hanlde payment ✔✔✔✌✌
   const handlePayment = () => {
     setIsButtonLoading(true);
@@ -471,12 +476,20 @@ const OrderSummary = ({
                 <div className="mb-1 mt-4">
                   <NextButton
                     disabled={
-                      !(isConcentCheck && isShippingCheck && isBillingCheck)
+                      !(isConcentCheck && isShippingCheck && isBillingCheck) ||
+                      pregnancyBlocked
                     }
                     label="Proceed to Payment "
                     onClick={handlePayment}
                     loading={isButtonLoading}
                   />
+                  {pregnancyBlocked && (
+                    <div className="mt-3 rounded-xl border border-red-100 bg-red-50 px-4 py-3">
+                      <p className="inter-reg-font text-[13px] text-red-600">
+                        {PREGNANCY_BLOCK_MESSAGE}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 </div>
               </div>

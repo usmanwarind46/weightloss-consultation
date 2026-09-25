@@ -18,6 +18,8 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 import useReorderBackProcessStore from "@/store/useReorderBackProcess";
 import useReturning from "@/store/useReturningPatient";
+import usePatientInfoStore from "@/store/patientInfoStore";
+import { isFemalePatient } from "@/utils/patientChecks";
 
 const validateRange = (value, min, max, wholeOnly, message) => {
   const num = Number(value);
@@ -38,6 +40,7 @@ export default function CalculateBmi() {
   const { reorder, reorderStatus } = useReorder();
   const { lastBmi } = useLastBmi();
   const { reorderBackProcess } = useReorderBackProcessStore();
+  const { patientInfo } = usePatientInfoStore();
 
   const { bmi, setBmi } = useBmiStore();
   const router = useRouter();
@@ -294,7 +297,7 @@ export default function CalculateBmi() {
 
   const back = () => {
     if (reorderBackProcess == true) {
-      router.push("/re-order");
+      router.push(isFemalePatient(patientInfo) ? "/pregnancy-check" : "/re-order");
     } else if (isReturningPatient) {
       router.push("/preferred-phone-number");
     } else {
