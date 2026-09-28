@@ -30,7 +30,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PageLoader from "@/Components/PageLoader/PageLoader";
 
 const IdVerification = () => {
-  const MAX_SIZE_MB = 5;
+  const MAX_SIZE_MB = 30;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   // ✅ Compress image using <canvas>
@@ -64,13 +64,13 @@ const IdVerification = () => {
     });
   };
 
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(",")[1]); // remove `data:image/...;base64,`
-      reader.onerror = reject;
-    });
+  // const toBase64 = (file) =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result.split(",")[1]); // remove `data:image/...;base64,`
+  //     reader.onerror = reject;
+  //   });
 
   const GO = useRouter();
   const [open, setOpen] = useState(false);
@@ -150,9 +150,24 @@ const IdVerification = () => {
     setLoadingPhoto((prev) => ({ ...prev, [type]: true }));
 
     try {
-      if (!file.type.startsWith("image/") && !isHeic(file)) {
-        toast.error("Please upload a valid image (JPEG, PNG, or HEIC).");
+      const isPdf = file.type === "application/pdf";
+
+      if (!isPdf && !file.type.startsWith("image/") && !isHeic(file)) {
+        toast.error(
+          "Please upload a valid image (JPEG, PNG, HEIC) or a PDF.",
+        );
         e.target.value = "";
+        return;
+      }
+
+      // ✅ PDF — skip HEIC conversion & compression, only check size
+      if (isPdf) {
+        if (file.size > MAX_SIZE_BYTES) {
+          toast.error(`PDF too large (max ${MAX_SIZE_MB} MB).`);
+          e.target.value = "";
+          return;
+        }
+        setValue(type, file);
         return;
       }
 
@@ -210,22 +225,26 @@ const IdVerification = () => {
 
       setLoading(true);
 
-      const frontBase64 = await toBase64(data.frontPhoto);
+      // const frontBase64 = await toBase64(data.frontPhoto);
 
-      let payload = {
-        front: frontBase64,
-        order_id: orderIdGetUrl ? orderIdGetUrl : orderId,
-        type: selectedId,
-      };
+      // let payload = {
+      //   front: frontBase64,
+      //   order_id: orderIdGetUrl ? orderIdGetUrl : orderId,
+      //   type: selectedId,
+      // };
 
-      if (data.sidePhoto) {
-        const sideBase64 = await toBase64(data.sidePhoto);
-        payload.side = sideBase64; // ✅ Only include if uploaded
-      }
+      // if (data.sidePhoto) {
+      //   const sideBase64 = await toBase64(data.sidePhoto);
+      //   payload.side = sideBase64; // ✅ Only include if uploaded
+      // }
 
-      console.log(payload, "Form Data");
+      const formData = new FormData();
+      formData.append("front", data.frontPhoto);
+      formData.append("order_id", orderIdGetUrl ? orderIdGetUrl : orderId);
+      formData.append("type", selectedId);
+      if (data.sidePhoto) formData.append("side", data.sidePhoto);
 
-      const res = await IdVerificationUpload(payload);
+      const res = await IdVerificationUpload(formData);
 
       if (res?.status === 200) {
         setOpen(true);
@@ -269,11 +288,14 @@ const IdVerification = () => {
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
         const file = e.dataTransfer.files[0];
 
-        // ✅ Only allow images
-        if (file.type.startsWith("image/")) {
+        // ✅ Allow images and PDF
+        if (
+          file.type.startsWith("image/") ||
+          file.type === "application/pdf"
+        ) {
           setValue(type, file);
         } else {
-          toast.error("Only image files are allowed.");
+          toast.error("Only image or PDF files are allowed.");
         }
       }
     };
@@ -303,7 +325,7 @@ const IdVerification = () => {
           >
             <input
               type="file"
-              accept="image/*"
+              accept="image/*,application/pdf"
               onChange={(e) => handleUpload(e, type)}
               className="hidden"
             />
@@ -334,16 +356,37 @@ const IdVerification = () => {
             ) : (
               /* 🖼️ Preview UI */
               <div className="relative my-1 w-full max-w-[240px]">
-                <img
-                  src={URL.createObjectURL(photo)}
-                  alt={`${label} preview`}
-                  className="h-36 w-full rounded-xl bg-white object-contain shadow-sm ring-1 ring-slate-200"
-                />
+                {photo?.type === "application/pdf" ? (
+                  <div className="flex h-36 w-full flex-col items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="mb-2 h-9 w-9 text-red-500"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z" />
+                    </svg>
+                    <p className="inter-reg-font w-full truncate px-3 text-center text-xs text-slate-600">
+                      {photo?.name}
+                    </p>
+                  </div>
+                ) : (
+                  <img
+                    src={URL.createObjectURL(photo)}
+                    alt={`${label} preview`}
+                    className="h-36 w-full rounded-xl bg-white object-contain shadow-sm ring-1 ring-slate-200"
+                  />
+                )}
                 <AiOutlineCheckCircle className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-white text-emerald-500" />
               </div>
             )}
           </div>
         </label>
+
+        {/* 📎 Accepted formats / size helper */}
+        <p className="inter-reg-font mt-3 text-center text-[11px] leading-5 text-slate-500">
+          {`JPEG, PNG, WEBP, HEIC, HEIF, AVIF or PDF · Maximum ${MAX_SIZE_MB} MB`}
+        </p>
 
         {/* 💡 Suggestion / helper text */}
         {suggestion && (
