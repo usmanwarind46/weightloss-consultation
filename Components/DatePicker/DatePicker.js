@@ -47,7 +47,7 @@ const MuiDatePickerField = ({ name, label, control, rules, required = true, erro
                       borderRadius: "12px",
                       backgroundColor: "#fff",
                       fontFamily: "var(--inter-reg)",
-                      fontSize: "14px",
+                      fontSize: { xs: "16px", sm: "14px" },
                       transition: "box-shadow 180ms ease",
                       "&.Mui-focused": {
                         boxShadow: "0 0 0 3px rgba(69, 101, 191, 0.10)",
@@ -72,7 +72,7 @@ const MuiDatePickerField = ({ name, label, control, rules, required = true, erro
                     },
                     "& .MuiInputLabel-root": {
                       fontFamily: "var(--inter-medium)",
-                      fontSize: "14px",
+                      fontSize: { xs: "16px", sm: "14px" },
                       color: "#475569 !important",
                     },
                     "& .MuiInputLabel-root.Mui-focused": {

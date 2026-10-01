@@ -529,7 +529,7 @@ export default function DosageSelection() {
                                     borderRadius: "12px",
                                     backgroundColor: "rgba(248,250,252,0.5)",
                                     fontFamily: "var(--inter-reg)",
-                                    fontSize: "14px",
+                                    fontSize: { xs: "16px", sm: "14px" },
                                     transition: "box-shadow 180ms ease",
                                     "&.Mui-focused": {
                                       backgroundColor: "#ffffff",

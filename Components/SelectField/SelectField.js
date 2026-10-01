@@ -62,7 +62,7 @@ const MUISelectField = ({
                     padding: "10px 12px",
                     lineHeight: 1.5,
                     fontFamily: "var(--inter-reg)",
-                    fontSize: "14px",
+                    fontSize: { xs: "16px", sm: "14px" },
                   },
                   "& .Mui-selected": {
                     backgroundColor: "rgba(69,101,191,0.08) !important",
@@ -95,16 +95,16 @@ const MUISelectField = ({
               padding: isUnderline ? "12px 28px 12px 0" : "13px 14px",
               color: "#0f172a",
               fontFamily: "var(--inter-reg)",
-              fontSize: isUnderline ? "14px" : "14px",
+              fontSize: { xs: "16px", sm: "14px" },
               minHeight: isUnderline ? undefined : "22px",
             },
           }}
         >
-          <MenuItem value="" disabled={placeholderDisabled} sx={{ fontFamily: "var(--inter-reg)", fontSize: "14px" }}>
+          <MenuItem value="" disabled={placeholderDisabled} sx={{ fontFamily: "var(--inter-reg)", fontSize: { xs: "16px", sm: "14px" } }}>
             {placeholder}
           </MenuItem>
           {options.map((option, idx) => (
-            <MenuItem key={idx} value={option.value} sx={{ fontFamily: "var(--inter-reg)", fontSize: "14px" }}>
+            <MenuItem key={idx} value={option.value} sx={{ fontFamily: "var(--inter-reg)", fontSize: { xs: "16px", sm: "14px" } }}>
               {option.label}
             </MenuItem>
           ))}

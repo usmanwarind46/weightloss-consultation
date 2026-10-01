@@ -672,3 +672,12 @@ body {
     font-size: 16px;
   }
 }
+
+/* Mobile: phone input (react-phone-input-2) and its dropdown use inline px sizes */
+@media (max-width: 639px) {
+  .react-tel-input .form-control,
+  .react-tel-input .country-list,
+  .react-tel-input .country-list .country-name {
+    font-size: 16px !important;
+  }
+}

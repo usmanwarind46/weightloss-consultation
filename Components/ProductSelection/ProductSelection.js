@@ -209,9 +209,14 @@ const ProductSelection = ({ showProductSelection }) => {
                         }
                       />
                     ))}
-                  {productData.products
-                    .filter((p) => p?.inventories?.[0]?.status === 1)
-                    .sort((a, b) => (a.sequence || 0) - (b.sequence || 0))
+                  {[...productData.products]
+                    .sort((a, b) => {
+                      // in-stock first, then by sequence
+                      const aOut = a?.inventories?.[0]?.status === 1 ? 0 : 1;
+                      const bOut = b?.inventories?.[0]?.status === 1 ? 0 : 1;
+                      if (aOut !== bOut) return aOut - bOut;
+                      return (a.sequence || 0) - (b.sequence || 0);
+                    })
                     .map((p) => (
                       <ModalProductListCard
                         key={p?.id}
