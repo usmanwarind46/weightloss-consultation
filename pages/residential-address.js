@@ -145,7 +145,7 @@ export default function ResidentialAddress() {
               className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
             >
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="space-y-6 max-sm:space-y-2">
+                <div className="space-y-2">
                   <div className="relative">
                     <div className="min-w-0">
                       <TextField

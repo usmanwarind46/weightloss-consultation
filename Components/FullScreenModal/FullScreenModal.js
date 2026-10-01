@@ -15,7 +15,7 @@ export default function FullScreenModal({ isOpen, onClose, children }) {
             initial={{ y: "100vh" }}
             animate={{ y: 0 }}
             exit={{ y: "100vh" }}
-            transition={{ type: "spring", stiffness: 80 }}
+            transition={{ type: "spring", stiffness: 260, damping: 30 }}
           >
             {children}
           </motion.div>

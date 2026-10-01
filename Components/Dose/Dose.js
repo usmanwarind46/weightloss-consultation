@@ -231,13 +231,13 @@ const Dose = ({
 
           {/* Controls: quantity left, delete right (mobile row below) */}
           {isSelected && (
-            <div className="mt-3 flex items-center justify-between sm:mt-0 sm:justify-start sm:gap-3">
-              <div className="flex items-center gap-0.5 rounded-full border border-slate-200 bg-white p-1 shadow-sm sm:gap-1">
+            <div className="mt-3 flex items-center justify-between sm:mt-0 sm:ml-5 sm:justify-start sm:gap-4">
+              <div className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white p-1.5 shadow-sm sm:gap-2">
                 <button type="button" onClick={handleDecrement}
                   className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors">
                   <FaMinus size={9} className="text-slate-600" />
                 </button>
-                <span className="inter-semibold-font w-6 text-center text-[13px] text-slate-900">{qty}</span>
+                <span className="inter-semibold-font w-8 text-center text-[13px] text-slate-900">{qty}</span>
                 <button type="button" onClick={handleIncrement}
                   className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors
                     ${qty >= allowed ? "cursor-not-allowed bg-slate-100 opacity-40" : "bg-slate-100 hover:bg-slate-200 cursor-pointer"}`}>

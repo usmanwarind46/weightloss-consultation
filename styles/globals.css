@@ -653,22 +653,22 @@ body {
 
 /* Mobile: no text smaller than 16px (unless an explicit max-sm:text-* is set) */
 @media (max-width: 639px) {
-  .text-xs:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-sm:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[9px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[9\.5px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[10px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[10\.5px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[11px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[11\.5px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[12px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[12\.5px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[13px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[13\.5px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[14px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[14\.5px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[15px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]),
-  .text-\[15\.5px\]:not([class*="max-sm:text-"]):not([class*="max-sm:!text-"]) {
+  .text-xs:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-sm:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[9px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[9\.5px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[10px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[10\.5px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[11px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[11\.5px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[12px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[12\.5px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[13px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[13\.5px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[14px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[14\.5px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[15px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]),
+  .text-\[15\.5px\]:not([class*="max-sm:text-["]):not([class*="max-sm:!text-["]) {
     font-size: 16px;
   }
 }
@@ -679,5 +679,14 @@ body {
   .react-tel-input .country-list,
   .react-tel-input .country-list .country-name {
     font-size: 16px !important;
+  }
+}
+
+/* Mobile: global helper classes and review screen must not go below 16px */
+@media (max-width: 639px) {
+  .paragraph,
+  .review-btn-subtitle,
+  .textarea-box textarea {
+    font-size: 16px;
   }
 }

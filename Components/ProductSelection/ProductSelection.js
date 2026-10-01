@@ -52,6 +52,7 @@ const ProductSelection = ({ showProductSelection }) => {
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [redirection, setRedirection] = useState("");
   const [loadError, setLoadError] = useState("");
+  const [isSlow, setIsSlow] = useState(false);
   const isMounted = useIsMounted();
 
   /* ───────────────  stores (init only what we SET/CLEAR) ────────────── */
@@ -86,6 +87,16 @@ const ProductSelection = ({ showProductSelection }) => {
       setIsLoading(false);
     },
   });
+
+  // tell the user when loading takes unusually long
+  useEffect(() => {
+    if (!isLoading) {
+      setIsSlow(false);
+      return;
+    }
+    const timer = setTimeout(() => setIsSlow(true), 5000);
+    return () => clearTimeout(timer);
+  }, [isLoading]);
 
   const fetchProducts = () => {
     setLoadError("");
@@ -153,7 +164,12 @@ const ProductSelection = ({ showProductSelection }) => {
   return (
     <FullScreenModal isOpen={showModal} onClose={() => setShowModal(false)}>
       {isLoading ? (
-        <div className="w-full flex flex-col items-center justify-center px-4 py-2">
+        <div className="w-full flex flex-col items-center justify-center gap-3 px-4 py-2">
+          {isSlow && (
+            <p className="inter-medium-font w-full rounded-xl bg-amber-50 px-3 py-2 text-center text-[13px] text-amber-800">
+              Your internet connection seems slow. Please wait…
+            </p>
+          )}
           {renderSkeletons()}
         </div>
       ) : loadError ? (
