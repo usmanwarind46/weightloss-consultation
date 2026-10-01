@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import StepsHeader from "@/layout/stepsHeader";
+import Image from "next/image";
+import IntroSvg from "@/public/images/intro.svg";
 import NextButton from "@/Components/NextButton/NextButton";
 import useProductId from "@/store/useProductIdStore";
 import { useSearchParams } from "next/navigation";
@@ -73,19 +75,30 @@ export default function Index() {
 
       <section className="min-h-[calc(100dvh-66px)] px-4 py-4 max-sm:flex max-sm:items-center sm:py-12">
         <div className="relative mx-auto w-full max-w-[580px] overflow-hidden rounded-2xl border border-[#4565BF]/10 bg-white px-4 py-4 shadow-[0_12px_36px_rgba(69,101,191,0.09)] sm:px-8 sm:py-8 max-sm:w-full">
+          {/* Icon (hidden on mobile) */}
+          <div className="mb-4 flex justify-center max-sm:hidden">
+            <Image
+              src={IntroSvg}
+              alt="Online Weight Loss Icon"
+              width={200}
+              height={50}
+              className="rounded-lg"
+            />
+          </div>
+
           {/* Heading */}
-          <h2 className="max-sm:text-[24px] inter-semibold-font mb-1.5 text-start text-[21px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[24px]">
+          <h2 className="inter-semibold-font mb-1.5 text-start text-[24px] leading-[1.3] tracking-[-0.02em] text-slate-900">
             Let's get you started on your weight loss journey.
           </h2>
 
-          <p className="inter-reg-font mb-3 text-start text-[13.5px] max-sm:text-[16px] leading-[1.5] text-slate-500 sm:mb-6 sm:leading-6">
+          <p className="inter-reg-font mb-3 text-start text-[16px] leading-[1.5] text-slate-500 sm:mb-6 sm:leading-6">
             We’ll now ask a few questions about you and your health.
           </p>
 
           {/* Good to know */}
           <div className="mb-4 sm:mb-6">
-            <p className="inter-semibold-font mb-1 text-[13px] max-sm:text-[16px] text-slate-800">Good to know</p>
-            <ul className="inter-reg-font list-outside list-disc divide-y divide-slate-100 border-y border-slate-100 pl-4 text-[13px] max-sm:text-[16px] leading-[1.4] text-slate-600 marker:text-[#4565BF] [&>li]:py-1.5 sm:[&>li]:py-3">
+            <p className="inter-semibold-font mb-1 text-[16px] text-slate-800">Good to know</p>
+            <ul className="inter-reg-font list-outside list-disc divide-y divide-slate-100 border-y border-slate-100 pl-4 text-[16px] leading-[1.4] text-slate-600 marker:text-[#4565BF] [&>li]:py-1.5 sm:[&>li]:py-3">
               <li>
                 Your consultation will take about five minutes to complete.
               </li>
@@ -116,9 +129,18 @@ export default function Index() {
               className="group inter-medium-font mt-2 flex min-h-[54px] w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-[#4565BF]/30 bg-white px-6 py-2.5 text-[#4565BF] transition-all hover:border-[#4565BF] hover:bg-[#4565BF]/[0.04] disabled:cursor-not-allowed max-sm:min-h-[48px] sm:mt-3 sm:py-3 disabled:border-slate-200 disabled:text-slate-400"
             >
               {loadingAction === "returning" ? (
-                <span className="flex items-center gap-2 whitespace-nowrap">
-                  <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-[#4565BF] border-t-transparent" />
-                  Please wait...
+                <span className="relative flex flex-col items-center">
+                  {/* invisible copy keeps the same button height; spinner is centered over it */}
+                  <span aria-hidden="true" className="invisible flex flex-col items-center whitespace-nowrap">
+                    <span>Returning Patient</span>
+                    <span className="mt-0.5 text-[12px] max-sm:hidden">
+                      Click here - your previous details will be saved
+                    </span>
+                  </span>
+                  <span className="absolute inset-0 flex items-center justify-center gap-2 whitespace-nowrap">
+                    <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-[#4565BF] border-t-transparent" />
+                    Please wait...
+                  </span>
                 </span>
               ) : (
                 <>

@@ -24,15 +24,15 @@ const MUISelectField = ({
           htmlFor={name}
           className={
             isUnderline
-              ? "inter-medium-font mb-1.5 flex items-center gap-1 text-[13px] text-slate-700"
-              : "inter-medium-font mb-2 block text-[13px] text-slate-700"
+              ? "inter-medium-font mb-1.5 flex items-center gap-1 text-[16px] text-slate-700"
+              : "inter-medium-font mb-2 block text-[16px] text-slate-700"
           }
         >
           {label}
           {required ? (
-            <span className={isUnderline ? "text-[14px] leading-none text-red-400" : "ms-1 text-red-500"}> *</span>
+            <span className={isUnderline ? "text-[16px] leading-none text-red-400" : "ms-1 text-red-500"}> *</span>
           ) : (
-            <span className={isUnderline ? "inter-reg-font text-[12px] text-slate-400" : "ml-1 text-[12px] font-normal text-slate-400"}>
+            <span className={isUnderline ? "inter-reg-font text-[16px] text-slate-400" : "ml-1 text-[16px] font-normal text-slate-400"}>
               (optional)
             </span>
           )}

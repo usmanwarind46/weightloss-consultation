@@ -222,7 +222,7 @@ export default function GpDetail() {
                         )}
                       </div>
                       <span
-                        className={`inter-medium-font text-[14px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                        className={`inter-medium-font text-[16px] capitalize ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
                       >
                         {option}
                       </span>
@@ -234,7 +234,7 @@ export default function GpDetail() {
               {/* This was missing (✅ FIXED now) */}
               {gpDetails === "no" && (
                 <div className="rounded-xl border border-amber-200/70 bg-amber-50/70 px-4 py-3.5 mt-6">
-                  <p className="inter-reg-font text-[13px] text-amber-800">
+                  <p className="inter-reg-font text-[16px] text-amber-800">
                     You should inform your doctor of any medication you take.
                     Contact us if you want us to email a letter for your doctor.
                   </p>
@@ -282,7 +282,7 @@ export default function GpDetail() {
                           </div>
 
                           <span
-                            className={`inter-medium-font text-[13px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                            className={`inter-medium-font text-[16px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
                           >
                             {option.label}
                           </span>
@@ -317,7 +317,7 @@ export default function GpDetail() {
                       type="button"
                       onClick={handleAddressFetch}
                       disabled={searchLoading}
-                      className="inter-medium-font mb-4 flex h-[42px] shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#4565BF] px-4 text-[13px] text-white transition-colors duration-150 hover:bg-[#3550a0] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inter-medium-font mb-4 flex h-[42px] shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#4565BF] px-4 text-[16px] text-white transition-colors duration-150 hover:bg-[#3550a0] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {searchLoading ? (
                         <motion.div
@@ -374,7 +374,7 @@ export default function GpDetail() {
                     </div>
                   )}
 
-                  <div className="text-sm  text-center sm:text-right mt-4">
+                  <div className="text-[16px]  text-center sm:text-right mt-4">
                     <button
                       type="button"
                       onClick={() => setManual(!manual)}

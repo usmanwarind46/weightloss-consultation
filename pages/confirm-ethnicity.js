@@ -75,7 +75,7 @@ export default function ConfirmEthnicity() {
         }
       >
         <PageAnimationWrapper>
-          <p className="inter-medium-font my-3 text-[14px] text-slate-800">
+          <p className="inter-medium-font my-3 text-[16px] text-slate-800">
             Does one of the following options describe your ethnic group or
             background?
           </p>
@@ -91,7 +91,7 @@ export default function ConfirmEthnicity() {
               ].map((ethnicity, index) => (
                 <div key={index} className="flex items-center gap-2.5">
                   <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#4565BF]/80" />
-                  <p className="inter-medium-font text-[13.5px] text-slate-700">
+                  <p className="inter-medium-font text-[16px] text-slate-700">
                     {ethnicity}
                   </p>
                 </div>
@@ -125,7 +125,7 @@ export default function ConfirmEthnicity() {
                           className="hidden"
                         />
                         <span
-                          className={`inter-medium-font text-[14px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                          className={`inter-medium-font text-[16px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
                         >
                           {option}
                         </span>

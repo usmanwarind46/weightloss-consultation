@@ -192,16 +192,16 @@ const ReviewAnswers = () => {
               <section aria-labelledby="contact-summary-heading">
                 <h2
                   id="contact-summary-heading"
-                  className="inter-semibold-font text-[15px] text-slate-900"
+                  className="inter-semibold-font text-[16px] text-slate-900"
                 >
                   Contact details
                 </h2>
                 <div className="mt-3 grid overflow-hidden rounded-xl border border-slate-200 bg-[#FBFBFD] sm:grid-cols-[1.4fr_0.6fr] sm:divide-x sm:divide-slate-200">
                   <div className="px-4 py-4 sm:px-5">
-                    <p className="inter-medium-font text-[10px] uppercase tracking-[0.1em] text-slate-400">
+                    <p className="inter-medium-font text-[16px] uppercase tracking-[0.1em] text-slate-400">
                       Residential address
                     </p>
-                    <address className="inter-reg-font mt-2 not-italic text-[13px] leading-6 text-slate-700">
+                    <address className="inter-reg-font mt-2 not-italic text-[16px] leading-6 text-slate-700">
                       {[
                         patientInfo?.address?.addressone,
                         patientInfo?.address?.addresstwo,
@@ -214,10 +214,10 @@ const ReviewAnswers = () => {
                     </address>
                   </div>
                   <div className="border-t border-slate-200 px-4 py-4 sm:border-t-0 sm:px-5">
-                    <p className="inter-medium-font text-[10px] uppercase tracking-[0.1em] text-slate-400">
+                    <p className="inter-medium-font text-[16px] uppercase tracking-[0.1em] text-slate-400">
                       Phone number
                     </p>
-                    <p className="inter-medium-font mt-2 break-words text-[13px] text-slate-700">
+                    <p className="inter-medium-font mt-2 break-words text-[16px] text-slate-700">
                       {patientInfo?.phoneNo || "Not provided"}
                     </p>
                   </div>
@@ -232,7 +232,7 @@ const ReviewAnswers = () => {
                   <div>
                     <h2
                       id="medical-summary-heading"
-                      className="inter-semibold-font text-[15px] text-slate-900"
+                      className="inter-semibold-font text-[16px] text-slate-900"
                     >
                       Medical questionnaire
                     </h2>
@@ -243,27 +243,27 @@ const ReviewAnswers = () => {
                   {medicalInfo.map((item, index) => (
                     <article key={index} className="px-4 py-5 sm:px-5">
                       <div className="flex items-start gap-3">
-                        <span className="inter-semibold-font flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#4565BF]/[0.07] text-[11px] text-[#4565BF]">
+                        <span className="inter-semibold-font flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#4565BF]/[0.07] text-[16px] text-[#4565BF]">
                           {index + 1}
                         </span>
                         <div
-                          className="inter-medium-font min-w-0 flex-1 text-[13.5px] leading-[1.65] text-slate-800 [&>ul]:ml-5 [&>ul]:mt-2 [&>ul]:list-disc [&>li]:mt-1 [&>li]:font-normal [&>li]:text-slate-600"
+                          className="inter-medium-font min-w-0 flex-1 text-[16px] leading-[1.65] text-slate-800 [&>ul]:ml-5 [&>ul]:mt-2 [&>ul]:list-disc [&>li]:mt-1 [&>li]:font-normal [&>li]:text-slate-600"
                           dangerouslySetInnerHTML={{ __html: item.question }}
                         />
                       </div>
 
                       <div className="ml-9 mt-3 border-l-2 border-[#4565BF]/25 pl-3.5">
                         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                          <span className="inter-medium-font text-[10px] uppercase tracking-[0.09em] text-slate-400">
+                          <span className="inter-medium-font text-[16px] uppercase tracking-[0.09em] text-slate-400">
                             Your answer
                           </span>
-                          <span className="inter-semibold-font text-[14px] capitalize text-[#4565BF]">
+                          <span className="inter-semibold-font text-[16px] capitalize text-[#4565BF]">
                             {item?.answer || "Not answered"}
                           </span>
                         </div>
 
                         {String(item?.subfield_response || "").trim() && (
-                          <p className="inter-reg-font mt-1.5 text-[13px] leading-relaxed text-slate-600">
+                          <p className="inter-reg-font mt-1.5 text-[16px] leading-relaxed text-slate-600">
                             {item.subfield_response}
                           </p>
                         )}

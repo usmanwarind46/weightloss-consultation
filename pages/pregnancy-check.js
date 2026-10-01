@@ -76,10 +76,10 @@ export default function PregnancyCheck() {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
                 <div className="rounded-xl border border-slate-100 bg-[#FBFBFD] p-5 space-y-4">
-                  <p className="inter-semibold-font text-[15px] text-slate-900">
+                  <p className="inter-semibold-font text-[16px] text-slate-900">
                     Are you pregnant, breastfeeding, or trying to conceive?
                   </p>
-                  <p className="inter-reg-font text-[13px] text-slate-600">
+                  <p className="inter-reg-font text-[16px] text-slate-600">
                     Our treatment programme is not suitable while breastfeeding,
                     pregnant, or trying to conceive.
                   </p>
@@ -120,7 +120,7 @@ export default function PregnancyCheck() {
                             )}
                           </div>
                           <span
-                            className={`inter-medium-font text-[15px] capitalize ${
+                            className={`inter-medium-font text-[16px] capitalize ${
                               isSelected ? "text-[#4565BF]" : "text-slate-700"
                             }`}
                           >
@@ -133,7 +133,7 @@ export default function PregnancyCheck() {
 
                   {pregnancy === "yes" && (
                     <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
-                      <p className="inter-reg-font text-[13px] text-red-600">
+                      <p className="inter-reg-font text-[16px] text-red-600">
                         This treatment is not suitable if you are pregnant,
                         trying to get pregnant or breastfeeding. We recommend
                         you speak to your GP in person.

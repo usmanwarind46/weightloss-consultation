@@ -86,7 +86,7 @@ export default function Acknowledgment() {
                 )}
               </div>
               <span
-                className={`inter-medium-font text-[15px] capitalize ${
+                className={`inter-medium-font text-[16px] capitalize ${
                   isSelected ? "text-[#4565BF]" : "text-slate-700"
                 }`}
               >
@@ -111,7 +111,7 @@ export default function Acknowledgment() {
               {/* Questions */}
               <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">
-                  <p className="inter-reg-font text-sm text-slate-700">
+                  <p className="inter-reg-font text-[16px] text-slate-700">
                     Are you purchasing this medication for yourself, of your own
                     free will and the medicine is for your personal use only?
                   </p>
@@ -119,7 +119,7 @@ export default function Acknowledgment() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="inter-reg-font text-sm text-slate-700">
+                  <p className="inter-reg-font text-[16px] text-slate-700">
                     Do you believe you have the ability to make healthcare
                     decisions for yourself?
                   </p>
@@ -128,7 +128,7 @@ export default function Acknowledgment() {
 
                 {isNoSelected && (
                   <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
-                    <p className="inter-reg-font text-[13px] text-red-600">
+                    <p className="inter-reg-font text-[16px] text-red-600">
                       Unfortunately, based on your answer, we are unable to
                       proceed with your consultation at this time.
                     </p>
@@ -138,7 +138,7 @@ export default function Acknowledgment() {
                 {showConsentBox && (
                   <div className="bg-white space-y-3 py-1 sm:space-y-4 sm:py-2">
                     <div className="rounded-xl border border-[#4565BF]/[0.14] bg-[#f7f8fc] p-3 sm:p-5">
-                      <ul className="inter-reg-font list-disc list-outside pl-5 text-[13.5px] leading-[1.8] text-slate-700 space-y-2">
+                      <ul className="inter-reg-font list-disc list-outside pl-5 text-[16px] leading-[1.8] text-slate-700 space-y-2">
                         <li>
                           You consent for your medical information to be
                           assessed by the clinical team at Online Weight Loss
@@ -166,9 +166,8 @@ export default function Acknowledgment() {
                           provided.
                         </li>
                       </ul>
-                    </div>
 
-                    <label className="flex items-center gap-3 cursor-pointer">
+                    <label className="mt-4 flex items-center gap-3 cursor-pointer border-t border-[#4565BF]/[0.14] pt-4">
                       <input
                         type="checkbox"
                         {...register("confirmConsent", { required: true })}
@@ -199,10 +198,11 @@ export default function Acknowledgment() {
                           </svg>
                         )}
                       </span>
-                      <span className="inter-semibold-font text-[14px] text-slate-800">
+                      <span className="inter-semibold-font text-[16px] text-slate-800">
                         I agree to the above
                       </span>
                     </label>
+                    </div>
                   </div>
                 )}
               </div>

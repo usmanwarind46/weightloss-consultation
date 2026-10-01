@@ -135,7 +135,7 @@ export default function PatientConsent() {
                       {/* Checklist (if exists) */}
                       {q.checklist && (
                         <div
-                          className="list-disc list-outside sm:pl-5 text-[14px] sm:text-[16px] text-gray-700 space-y-2 inter-reg-font [&>ul]:list-disc [&>ul]:ml-6 [&>li]:mt-0.5"
+                          className="list-disc list-outside sm:pl-5 text-[16px] sm:text-[16px] text-gray-700 space-y-2 inter-reg-font [&>ul]:list-disc [&>ul]:ml-6 [&>li]:mt-0.5"
                           dangerouslySetInnerHTML={{ __html: q.checklist }}
                         ></div>
                       )}
@@ -176,7 +176,7 @@ export default function PatientConsent() {
                             )}
                           </span>
                           <span
-                            className={`inter-medium-font text-[15px] ${selectedAnswer ? "text-[#4565BF]" : "text-gray-700"}`}
+                            className={`inter-medium-font text-[16px] ${selectedAnswer ? "text-[#4565BF]" : "text-gray-700"}`}
                           >
                             {q.question
                               .replace("I confirm and understand that:", "")
@@ -191,7 +191,7 @@ export default function PatientConsent() {
 
                 {/* Show error if not accepted */}
                 {!isNextEnabled && (
-                  <p className="inter-reg-font border-l-2 border-amber-300 pl-3 text-[13.5px] text-amber-700 mt-2">
+                  <p className="inter-reg-font border-l-2 border-amber-300 pl-3 text-[16px] text-amber-700 mt-2">
                     You must confirm before proceeding.
                   </p>
                 )}

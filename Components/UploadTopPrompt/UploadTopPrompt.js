@@ -10,6 +10,7 @@ import {
 
 import useIdVerificationUploadStore from "@/store/useIdVerificationUploadStore";
 import useImageUploadStore from "@/store/useImageUploadStore ";
+import BmiAlternativesModal from "../Modal/BmiAlternativesModal";
 
 const AlertBanner = ({
   icon: Icon,
@@ -17,7 +18,10 @@ const AlertBanner = ({
   description,
   buttonText,
   href,
+  alternativesText,
 }) => {
+  const [showAlternatives, setShowAlternatives] = useState(false);
+
   return (
     <section className="w-full overflow-hidden rounded-2xl border border-amber-200/70 bg-amber-50/40 shadow-[0_1px_4px_rgba(180,83,9,0.06)]">
       <div className="flex w-full flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
@@ -36,19 +40,33 @@ const AlertBanner = ({
             <p className="inter-reg-font mt-1 text-[16px] sm:text-[14px] leading-relaxed text-slate-500">
               {description}
             </p>
+            {alternativesText && (
+              <button
+                type="button"
+                onClick={() => setShowAlternatives(true)}
+                className="inter-medium-font mt-2.5 cursor-pointer text-left text-[16px] leading-snug text-[#4565BF] underline underline-offset-4 transition-colors hover:text-[#3550a0]"
+              >
+                {alternativesText}
+              </button>
+            )}
           </div>
         </div>
 
         {/* Action */}
         <Link
           href={href}
-          className="inter-medium-font group inline-flex min-h-[38px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-amber-50 border border-amber-200 px-5 py-2 text-[15px] max-sm:text-[16px] text-amber-600 no-underline transition-all duration-150 hover:bg-amber-100 active:scale-[0.98] lg:w-auto lg:min-w-[140px]"
+          className="inter-medium-font group inline-flex min-h-[38px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-amber-50 border border-amber-200 px-5 py-2 text-[15px] max-sm:text-[16px] text-amber-600 no-underline whitespace-nowrap transition-all duration-150 hover:bg-amber-100 active:scale-[0.98] lg:w-[190px]"
         >
           <UploadCloud size={14} strokeWidth={2.2} />
           <span>{buttonText}</span>
           <ChevronRight size={13} strokeWidth={2.5} className="transition-transform duration-150 group-hover:translate-x-0.5" />
         </Link>
       </div>
+
+      <BmiAlternativesModal
+        isOpen={showAlternatives}
+        onClose={() => setShowAlternatives(false)}
+      />
     </section>
   );
 };
@@ -104,8 +122,9 @@ const UploadTopPrompt = ({ isLoading = false }) => {
           icon={Camera}
           title="BMI Verification"
           description="Continue to upload a recent photo for the clinical team to verify your BMI. This may be required to process your order."
-          buttonText="Continue"
+          buttonText="Upload Photo"
           href="/photo-upload"
+          alternativesText="Don't prefer to send photos? See other ways to verify."
         />
       </div>
     );
@@ -118,7 +137,7 @@ const UploadTopPrompt = ({ isLoading = false }) => {
           icon={IdCard}
           title="Identity Verification"
           description="Please upload a valid proof of ID to verify your identity and complete your order."
-          buttonText="Continue"
+          buttonText="Upload ID"
           href="/id-verification"
         />
       </div>

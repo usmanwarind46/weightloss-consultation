@@ -97,7 +97,7 @@ export default function ReOrder() {
               {isSelected && <FiCheck className="text-[11px] text-white" />}
             </div>
             <span
-              className={`inter-medium-font text-[14px] capitalize ${
+              className={`inter-medium-font text-[16px] capitalize ${
                 isSelected
                   ? option === "yes"
                     ? "text-[#4565BF]"
@@ -123,7 +123,7 @@ export default function ReOrder() {
           <div className="relative">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <p className="inter-medium-font text-[14px] leading-relaxed text-slate-800">
+                <p className="inter-medium-font text-[16px] leading-relaxed text-slate-800">
                   Has anything changed since your last order?
                 </p>
                 {renderYesNo("personalUse", personalUse)}

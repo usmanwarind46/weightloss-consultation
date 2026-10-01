@@ -162,7 +162,7 @@ export default function ResidentialAddress() {
                       type="button"
                       onClick={handleSearch}
                       disabled={addressSearchLoading}
-                      className="inter-medium-font absolute right-0 top-[24px] flex min-h-[38px] min-w-[96px] cursor-pointer items-center justify-center gap-1.5 rounded-md bg-[#4565BF] px-4 py-2 text-[12px] text-white transition-colors hover:bg-[#3550a0] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inter-medium-font absolute right-0 top-[24px] flex min-h-[38px] min-w-[96px] cursor-pointer items-center justify-center gap-1.5 rounded-md bg-[#4565BF] px-4 py-2 text-[16px] text-white transition-colors hover:bg-[#3550a0] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {addressSearchLoading ? (
                         <motion.div
@@ -228,7 +228,7 @@ export default function ResidentialAddress() {
                     <button
                       type="button"
                       onClick={() => setManual(!manual)}
-                      className="inter-medium-font cursor-pointer text-[13px] text-[#4565BF] transition-colors hover:text-[#3550a0]"
+                      className="inter-medium-font cursor-pointer text-[16px] text-[#4565BF] transition-colors hover:text-[#3550a0]"
                     >
                       {manual
                         ? "Hide manual address entry"

@@ -473,7 +473,7 @@ const IdVerification = () => {
 
           <div className="mb-6 text-left">
             {/* Heading */}
-            <h1 className="inter-semibold-font text-[21px] max-sm:!text-[24px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[23px]">
+            <h1 className="inter-semibold-font text-[21px] max-sm:!text-[24px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[24px]">
               ID verification required
             </h1>
 

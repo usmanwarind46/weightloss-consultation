@@ -107,12 +107,12 @@ export default function StepsInformation() {
         setAuthUserDetail(data?.data?.data?.auth_user);
         setLastBmi(data?.data?.data?.bmi);
         setIsReturningPatient(data?.data?.data?.isReturning);
-        if (productId && !showProductSelection) {
-          if (authUserDetail?.isReturning) {
-          }
-          router.push("/personal-details");
-          return;
-        }
+      }
+
+      // product already chosen -> continue (also when there is no saved consultation yet)
+      if (productId && !showProductSelection) {
+        router.push("/personal-details");
+        return;
       }
 
       setShowLoader(false);

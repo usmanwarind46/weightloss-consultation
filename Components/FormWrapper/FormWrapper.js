@@ -23,7 +23,7 @@ const FormWrapper = ({ className, children, width = "", heading = "", descriptio
 
               {/* Description */}
               {description && (
-                <p className="inter-reg-font text-[13px] sm:text-[16px] leading-relaxed text-slate-500">
+                <p className="inter-reg-font text-[16px] sm:text-[16px] leading-relaxed text-slate-500">
                   {description}
                 </p>
               )}

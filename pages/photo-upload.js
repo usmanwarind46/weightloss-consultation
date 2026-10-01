@@ -28,6 +28,7 @@ import { MdDelete } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
 import { ArrowLeft } from "lucide-react";
+import BmiAlternativesModal from "@/Components/Modal/BmiAlternativesModal";
 import { UploadPhotoLogs } from "@/api/mergeRoutes";
 
 // ✅ Allowed file types
@@ -119,10 +120,10 @@ const UploadBox = ({
                 <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#4565BF] shadow-sm ring-1 ring-[#4565BF]/10">
                   <FiUpload className="h-5 w-5" />
                 </div>
-                <p className="inter-semibold-font text-[14px] text-slate-800">
-                  Choose a full-body photo
+                <p className="inter-semibold-font text-[16px] text-slate-800">
+                  Upload a full-body photo
                 </p>
-                <p className="inter-reg-font mt-1 text-[12px] leading-5 text-slate-500">
+                <p className="inter-reg-font mt-1 text-[16px] leading-6 text-slate-500">
                   Tap to browse files from your device
                 </p>
               </div>
@@ -138,7 +139,7 @@ const UploadBox = ({
                     >
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z" />
                     </svg>
-                    <p className="inter-reg-font w-full truncate px-3 text-center text-xs text-slate-600">
+                    <p className="inter-reg-font w-full truncate px-3 text-center text-[16px] text-slate-600">
                       {photo?.name}
                     </p>
                   </div>
@@ -171,7 +172,7 @@ const UploadBox = ({
         )}
       </div>
 
-      <p className="inter-reg-font mt-3 text-center text-[11px] leading-5 text-slate-500">
+      <p className="inter-reg-font mt-3 text-center text-[16px] leading-6 text-slate-500">
         JPEG, PNG, WEBP, HEIC, HEIF, AVIF or PDF · Maximum 30 MB
       </p>
     </div>
@@ -233,6 +234,7 @@ const PhotoUpload = () => {
   const GO = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showAlternatives, setShowAlternatives] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   // get Order id url to send photo uplaod api
   const searchParams = useSearchParams();
@@ -549,7 +551,7 @@ const PhotoUpload = () => {
                 </h2>
 
                 {/* Message */}
-                <p className="inter-reg-font mb-6 mt-3 text-center text-[14px] leading-6 text-slate-600">
+                <p className="inter-reg-font mb-6 mt-3 text-center text-[16px] leading-6 text-slate-600">
                   {!idVerificationUpload
                     ? "Your full body photo have been uploaded and are now under review by our prescribers. You need to complete the ID verification to proceed. Please click the button below to continue."
                     : "Your full body photo have been uploaded and are now under review by our prescribers. We'll approve your order once the review is complete and notify you straight away."}
@@ -568,27 +570,36 @@ const PhotoUpload = () => {
             </motion.div>
           )}
         </AnimatePresence>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mx-auto w-full max-w-[620px] rounded-2xl border border-[#4565BF]/10 bg-white px-5 py-6 shadow-[0_12px_36px_rgba(69,101,191,0.09)] sm:px-8 sm:py-8"
-        >
+        <div className="mx-auto mb-4 flex w-full max-w-[620px] items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => GO.push("/dashboard")}
             aria-label="Back to dashboard"
-            className="mb-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition-colors hover:border-[#4565BF]/40 hover:text-[#4565BF]"
+            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-[#4565BF]/40 hover:text-[#4565BF]"
           >
             <ArrowLeft size={18} strokeWidth={2} />
           </button>
+          <button
+            type="button"
+            onClick={() => setShowAlternatives(true)}
+            className="inter-medium-font min-w-0 cursor-pointer text-right text-[16px] leading-snug text-[#4565BF] underline underline-offset-4 transition-colors hover:text-[#3550a0] sm:whitespace-nowrap"
+          >
+            Don&apos;t prefer to send photos?<br className="sm:hidden" /> See other ways to verify.
+          </button>
+        </div>
 
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mx-auto w-full max-w-[620px] rounded-2xl border border-[#4565BF]/10 bg-white px-5 py-6 shadow-[0_12px_36px_rgba(69,101,191,0.09)] sm:px-8 sm:py-8"
+        >
           <div className="mb-6 text-left">
             {/* Heading */}
-            <h1 className="max-sm:text-[24px] inter-semibold-font text-[21px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[23px]">
+            <h1 className="inter-semibold-font text-[24px] leading-[1.3] tracking-[-0.02em] text-slate-900">
               Submit your photo for prescriber review
             </h1>
 
             {/* Description */}
-            <p className="inter-reg-font mt-2 text-[13.5px] leading-6 text-slate-500">
+            <p className="inter-reg-font mt-2 text-[16px] leading-6 text-slate-500">
               Please upload a recent{" "}
               <span className="inter-semibold-font text-slate-700">
                 full body
@@ -598,10 +609,10 @@ const PhotoUpload = () => {
 
             {/* Bullet Points */}
             <div className="mt-5 rounded-xl border border-[#4565BF]/10 bg-[#f4f6fd] px-4 py-3.5">
-              <p className="inter-semibold-font mb-2 text-[13px] text-slate-800">
+              <p className="inter-semibold-font mb-2 text-[16px] text-slate-800">
                 Why we need this
               </p>
-              <ul className="inter-reg-font list-disc space-y-2 pl-5 text-[12.5px] leading-5 text-slate-600 marker:text-[#4565BF]">
+              <ul className="inter-reg-font list-disc space-y-2 pl-5 text-[16px] leading-6 text-slate-600 marker:text-[#4565BF]">
                 <li>We will only ask for this once.</li>
                 <li>
                   We realise it's inconvenient, but this is a regulatory
@@ -614,7 +625,7 @@ const PhotoUpload = () => {
 
           {/* Example Images */}
           <div className="mb-6">
-            <p className="inter-semibold-font mb-3 text-[13px] text-slate-800">
+            <p className="inter-semibold-font mb-3 text-[16px] text-slate-800">
               Photo guidance
             </p>
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
@@ -624,7 +635,7 @@ const PhotoUpload = () => {
                   alt="correct"
                   className="aspect-[3/4] h-auto w-full object-cover"
                 />
-                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[10px] text-emerald-700 shadow-sm">
+                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[16px] text-emerald-700 shadow-sm">
                   <FaCheck size={10} /> Good
                 </span>
               </div>
@@ -641,7 +652,7 @@ const PhotoUpload = () => {
                   alt="incorrect"
                   className="aspect-[3/4] h-auto w-full object-cover"
                 />
-                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[10px] text-red-600 shadow-sm">
+                <span className="inter-semibold-font absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-1 text-[16px] text-red-600 shadow-sm">
                   <RxCross2 size={10} /> Avoid
                 </span>
               </div>
@@ -692,7 +703,7 @@ const PhotoUpload = () => {
             <button
               type="submit"
               disabled={loading || !frontPhoto}
-              className={`inter-semibold-font flex min-h-[54px] w-full items-center justify-center rounded-xl px-6 py-3 text-[15px] text-white transition-all duration-200
+              className={`inter-semibold-font flex min-h-[54px] w-full items-center justify-center rounded-xl px-6 py-3 text-[16px] text-white transition-all duration-200
       ${
         loading || !frontPhoto
           ? "cursor-not-allowed bg-slate-200 text-slate-400"
@@ -713,6 +724,11 @@ const PhotoUpload = () => {
           </div>
         </form>
       </main>
+
+      <BmiAlternativesModal
+        isOpen={showAlternatives}
+        onClose={() => setShowAlternatives(false)}
+      />
     </>
   );
 };

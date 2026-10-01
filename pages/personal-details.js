@@ -184,7 +184,7 @@ export default function PersonalDetails() {
                             )}
                           </div>
                           <span
-                            className={`inter-medium-font text-[15px] ${
+                            className={`inter-medium-font text-[16px] ${
                               selected ? "text-[#4565BF]" : "text-slate-700"
                             }`}
                           >
@@ -196,11 +196,11 @@ export default function PersonalDetails() {
 
                     {gender === "Female" && (
                       <div className="rounded-xl border border-slate-100 bg-[#FBFBFD] p-5 mt-4 space-y-4">
-                        <p className="inter-semibold-font text-[15px] text-slate-900">
+                        <p className="inter-semibold-font text-[16px] text-slate-900">
                           Are you pregnant, breastfeeding, or trying to
                           conceive?
                         </p>
-                        <p className="inter-reg-font text-[13px] text-slate-600">
+                        <p className="inter-reg-font text-[16px] text-slate-600">
                           Our treatment programme is not suitable while
                           breastfeeding, pregnant, or trying to conceive.
                         </p>
@@ -237,7 +237,7 @@ export default function PersonalDetails() {
                                   )}
                                 </div>
                                 <span
-                                  className={`inter-medium-font text-[15px] capitalize ${
+                                  className={`inter-medium-font text-[16px] capitalize ${
                                     isSelected
                                       ? "text-[#4565BF]"
                                       : "text-slate-700"
@@ -252,7 +252,7 @@ export default function PersonalDetails() {
 
                         {pregnancy === "yes" && (
                           <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
-                            <p className="inter-reg-font text-[13px] text-red-600">
+                            <p className="inter-reg-font text-[16px] text-red-600">
                               This treatment is not suitable if you are
                               pregnant, trying to get pregnant or breastfeeding.
                               We recommend you speak to your GP in person.
@@ -264,7 +264,7 @@ export default function PersonalDetails() {
                   </div>
 
                   {errors.gender && (
-                    <p className="inter-reg-font text-red-500 text-[12px] mt-1 text-center">
+                    <p className="inter-reg-font text-red-500 text-[16px] mt-1 text-center">
                       Please select your gender
                     </p>
                   )}

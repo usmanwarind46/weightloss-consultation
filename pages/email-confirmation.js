@@ -222,7 +222,7 @@ export default function EmailConfirmation() {
               />
 
               {already && (
-                <div className="inter-reg-font rounded-xl border border-red-100 bg-red-50 px-4 py-3.5 text-[13px] text-red-600">
+                <div className="inter-reg-font rounded-xl border border-red-100 bg-red-50 px-4 py-3.5 text-[16px] text-red-600">
                   The email address you have entered is already associated with
                   an existing account{" "}
                   <span
