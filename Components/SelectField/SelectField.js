@@ -25,7 +25,7 @@ const MUISelectField = ({
           className={
             isUnderline
               ? "inter-medium-font mb-1.5 flex items-center gap-1 text-[13px] text-slate-700"
-              : "inter-medium-font mb-2 block text-[13.5px] text-slate-700"
+              : "inter-medium-font mb-2 block text-[13px] text-slate-700"
           }
         >
           {label}

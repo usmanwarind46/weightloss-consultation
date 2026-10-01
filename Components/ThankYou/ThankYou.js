@@ -490,7 +490,7 @@ const ThankYou = () => {
             </section>
           )}
 
-          <div className="inter-reg-font space-y-4 text-left text-[13px] leading-relaxed text-slate-600">
+          <div className="inter-reg-font space-y-4 text-left text-[16px] sm:text-[16px] leading-relaxed text-slate-600">
             {/* <p>
               We have received your medical consultation form which is now being
               reviewed by our prescribers. You may be contacted by a member of

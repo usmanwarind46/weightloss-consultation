@@ -129,13 +129,13 @@ export default function PatientConsent() {
                       className="space-y-3 border rounded-xl border-slate-200 p-3 sm:space-y-4 sm:p-5"
                     >
                       {/* Question and Checkbox */}
-                      <span className="inter-semibold-font text-gray-700 sm:text-lg text-sm border-b border-slate-200 pb-2 block">
+                      <span className="inter-semibold-font text-gray-700 text-[16px] sm:text-[17px] border-b border-slate-200 pb-2 block">
                         I confirm and understand that:
                       </span>
                       {/* Checklist (if exists) */}
                       {q.checklist && (
                         <div
-                          className="list-disc list-outside sm:pl-5 text-sm text-gray-700 space-y-2 inter-reg-font [&>ul]:list-disc [&>ul]:ml-6 [&>li]:mt-0.5"
+                          className="list-disc list-outside sm:pl-5 text-[14px] sm:text-[16px] text-gray-700 space-y-2 inter-reg-font [&>ul]:list-disc [&>ul]:ml-6 [&>li]:mt-0.5"
                           dangerouslySetInnerHTML={{ __html: q.checklist }}
                         ></div>
                       )}
@@ -191,7 +191,7 @@ export default function PatientConsent() {
 
                 {/* Show error if not accepted */}
                 {!isNextEnabled && (
-                  <p className="inter-reg-font border-l-2 border-amber-300 pl-3 text-sm text-amber-700 mt-2">
+                  <p className="inter-reg-font border-l-2 border-amber-300 pl-3 text-[13.5px] text-amber-700 mt-2">
                     You must confirm before proceeding.
                   </p>
                 )}

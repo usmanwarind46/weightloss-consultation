@@ -151,7 +151,7 @@ const Dose = ({
                 </>
               ) : (
                 <>
-                  <FaInfoCircle className="text-[12px]" />
+                  <FaInfoCircle className="text-[11px]" />
                   <span className="whitespace-nowrap">Get Notified</span>
                 </>
               )}

@@ -86,7 +86,7 @@ export default function Acknowledgment() {
                 )}
               </div>
               <span
-                className={`inter-medium-font text-[14px] capitalize ${
+                className={`inter-medium-font text-[15px] capitalize ${
                   isSelected ? "text-[#4565BF]" : "text-slate-700"
                 }`}
               >
@@ -199,7 +199,7 @@ export default function Acknowledgment() {
                           </svg>
                         )}
                       </span>
-                      <span className="inter-semibold-font text-sm text-slate-800">
+                      <span className="inter-semibold-font text-[14px] text-slate-800">
                         I agree to the above
                       </span>
                     </label>

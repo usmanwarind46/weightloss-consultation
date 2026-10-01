@@ -451,7 +451,7 @@ export default function ShippingAddress({
                       </svg>
                     )}
                   </div>
-                  <span className="inter-reg-font text-[14px] text-gray-700">
+                  <span className="inter-reg-font text-[13.5px] text-gray-700">
                     Make billing address same as shipping address
                   </span>
                 </div>

@@ -12,7 +12,7 @@ const BmiTextField = ({
   return (
     <div className="mb-4">
       {label && (
-        <label htmlFor={name} className="inter-medium-font relative mb-2 block text-[13.5px] text-slate-700">
+        <label htmlFor={name} className="inter-medium-font relative mb-2 block text-[13px] text-slate-700">
           {label}
           {required ? (
             <span className="ms-1 text-red-500"> *</span>
@@ -29,14 +29,14 @@ const BmiTextField = ({
         disabled={disabled}
         {...fieldProps}
         onBlur={onBlur}
-        className={`inter-reg-font h-[42px] w-full border-b-2 bg-transparent px-1 text-[14px] text-slate-900 placeholder:text-slate-400
+        className={`inter-reg-font h-[42px] w-full border-b-2 bg-transparent px-1 text-[15px] text-slate-900 placeholder:text-slate-400
           transition-all duration-150 focus:outline-none focus:border-[#4565BF]
           ${errors[name] ? "border-red-300" : "border-slate-200 hover:border-slate-300"}
           ${(readOnly || disabled) ? "cursor-not-allowed opacity-50" : ""}
         `}
       />
       {errors[name] && (
-        <p className="inter-reg-font mt-1.5 text-[12.5px] text-red-500">
+        <p className="inter-reg-font mt-1.5 text-[12px] text-red-500">
           {errors[name]?.message || "This field is required"}
         </p>
       )}

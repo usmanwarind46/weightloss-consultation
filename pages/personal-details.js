@@ -184,7 +184,7 @@ export default function PersonalDetails() {
                             )}
                           </div>
                           <span
-                            className={`inter-medium-font text-[14px] ${
+                            className={`inter-medium-font text-[15px] ${
                               selected ? "text-[#4565BF]" : "text-slate-700"
                             }`}
                           >
@@ -200,7 +200,7 @@ export default function PersonalDetails() {
                           Are you pregnant, breastfeeding, or trying to
                           conceive?
                         </p>
-                        <p className="inter-reg-font text-[13.5px] text-slate-600">
+                        <p className="inter-reg-font text-[13px] text-slate-600">
                           Our treatment programme is not suitable while
                           breastfeeding, pregnant, or trying to conceive.
                         </p>
@@ -237,7 +237,7 @@ export default function PersonalDetails() {
                                   )}
                                 </div>
                                 <span
-                                  className={`inter-medium-font text-[14px] capitalize ${
+                                  className={`inter-medium-font text-[15px] capitalize ${
                                     isSelected
                                       ? "text-[#4565BF]"
                                       : "text-slate-700"
@@ -264,7 +264,7 @@ export default function PersonalDetails() {
                   </div>
 
                   {errors.gender && (
-                    <p className="inter-reg-font text-red-500 text-sm mt-1 text-center">
+                    <p className="inter-reg-font text-red-500 text-[12px] mt-1 text-center">
                       Please select your gender
                     </p>
                   )}

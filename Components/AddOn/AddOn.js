@@ -81,7 +81,7 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="inter-semibold-font break-words text-[14px] capitalize leading-snug text-slate-900 sm:text-[15px]">
+              <p className="inter-semibold-font break-words text-[15px] capitalize leading-snug text-slate-900 ">
                 {addon?.product_name || addon?.name}
               </p>
               {addon?.product_name && addon?.name && (

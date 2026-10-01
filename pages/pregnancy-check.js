@@ -79,7 +79,7 @@ export default function PregnancyCheck() {
                   <p className="inter-semibold-font text-[15px] text-slate-900">
                     Are you pregnant, breastfeeding, or trying to conceive?
                   </p>
-                  <p className="inter-reg-font text-[13.5px] text-slate-600">
+                  <p className="inter-reg-font text-[13px] text-slate-600">
                     Our treatment programme is not suitable while breastfeeding,
                     pregnant, or trying to conceive.
                   </p>
@@ -120,7 +120,7 @@ export default function PregnancyCheck() {
                             )}
                           </div>
                           <span
-                            className={`inter-medium-font text-[14px] capitalize ${
+                            className={`inter-medium-font text-[15px] capitalize ${
                               isSelected ? "text-[#4565BF]" : "text-slate-700"
                             }`}
                           >

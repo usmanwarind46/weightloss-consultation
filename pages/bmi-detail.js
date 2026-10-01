@@ -243,12 +243,12 @@ export default function BmiDetail() {
               <>
                 {patientInfo?.ethnicity === "No" ||
                 patientInfo?.ethnicity === "Prefer not to say" ? (
-                  <p className="inter-reg-font text-[14px] text-slate-700">
+                  <p className="inter-reg-font text-[13px] text-slate-700">
                     Your BMI is between 27-29.9 which indicates you are
                     overweight.
                   </p>
                 ) : null}
-                <p className="inter-reg-font text-[14px] text-slate-700">
+                <p className="inter-reg-font text-[13px] text-slate-700">
                   You should only continue with the consultation if you have
                   tried losing weight through a reduced-calorie diet and
                   increased physical activity but are still struggling to lose

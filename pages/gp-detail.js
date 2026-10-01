@@ -282,7 +282,7 @@ export default function GpDetail() {
                           </div>
 
                           <span
-                            className={`inter-medium-font text-[14px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
+                            className={`inter-medium-font text-[13px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}
                           >
                             {option.label}
                           </span>
