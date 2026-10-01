@@ -133,7 +133,7 @@ export default function ForgotForm({
           <NextButton
             label="Send Password Reset Link"
             type="submit"
-            disabled={isLoading}
+            loading={isLoading}
           />
 
           <div className="flex justify-center mt-4">

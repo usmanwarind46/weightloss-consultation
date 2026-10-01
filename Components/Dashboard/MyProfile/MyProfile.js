@@ -210,8 +210,9 @@ const MyProfile = () => {
               <div className="profile-save-button w-full sm:w-auto sm:min-w-[180px]">
                 <NextButton
                   type="submit"
-                  disabled={!isValid || isLoading}
-                  label={isLoading ? "Saving..." : "Save changes"}
+                  disabled={!isValid}
+                  loading={isLoading}
+                  label="Save changes"
                 />
               </div>
             </div>

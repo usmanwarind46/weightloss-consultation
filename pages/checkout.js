@@ -147,28 +147,28 @@ const Checkout = () => {
       <div className="min-h-[calc(100vh-66px)] bg-[#EEF2FA]">
         <div className="max-w-2xl mx-auto px-4 pb-14 space-y-6">
           <div ref={headingRef} className="pt-6 sm:pt-8">
-            <div className="sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:items-center sm:gap-2">
+            <div className="grid grid-cols-[40px_minmax(0,1fr)_40px] items-center gap-2 sm:grid-cols-[82px_minmax(0,1fr)_82px]">
               <button
                 type="button"
                 onClick={back}
-                className="inter-medium-font mb-2 inline-flex min-h-11 cursor-pointer items-center justify-start gap-1.5 px-0 text-[13px] text-[#4565BF] transition-colors duration-200 hover:text-[#3550a0] focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4565BF]/25 focus-visible:ring-offset-2 sm:mb-0 sm:min-h-9 sm:w-auto sm:justify-self-start sm:px-1"
+                className="inter-medium-font inline-flex h-10 w-10 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#4565BF]/40 text-[13px] text-[#4565BF] transition-colors duration-200 hover:text-[#3550a0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4565BF]/25 focus-visible:ring-offset-2 sm:min-h-9 sm:h-auto sm:w-auto sm:justify-self-start sm:justify-start sm:rounded-md sm:border-0 sm:px-1"
                 aria-label="Back to dosage selection"
               >
                 <ArrowLeft size={15} strokeWidth={2} />
-                <span>Back</span>
+                <span className="max-sm:hidden">Back</span>
               </button>
               <h1
-                className={`inter-bold-font text-center text-slate-900 ${
+                className={`inter-semibold-font text-center text-slate-900 ${
                   reorder
-                    ? "text-[19px] leading-tight sm:whitespace-nowrap sm:text-[30px]"
-                    : "text-[19px] leading-tight sm:text-[30px]"
+                    ? "text-[23px] leading-[1.15] sm:whitespace-nowrap sm:text-[30px] sm:leading-tight"
+                    : "text-[23px] leading-[1.15] sm:text-[30px] sm:leading-tight"
                 }`}
               >
                 {reorder
                   ? "Confirm your treatment re-order"
                   : "Checkout to kick-start your weight loss journey"}
               </h1>
-              <span className="hidden sm:block" aria-hidden="true" />
+              <span aria-hidden="true" />
             </div>
 
             <div className="text-center sm:grid sm:grid-cols-[82px_minmax(0,1fr)_82px] sm:gap-2">

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { CreditCard, Info, Loader2, Search } from "lucide-react";
 
 import TextField from "@/Components/TextField/TextField";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
 import NextButton from "@/Components/NextButton/NextButton";
 import MUISelectField from "@/Components/SelectField/SelectField";
 import { getProfileData, sendProfileData } from "@/api/myProfileApi";
@@ -283,17 +283,14 @@ export default function Billing({ billingCountries = [] }) {
             <NextButton
               label="Update billing"
               disabled={!isValid}
+              loading={showLoader}
               className="inter-medium-font !min-h-[46px] !rounded-[13px] !border-[#4565BF] !bg-[#4565BF] !px-6 !py-3 !text-[12px] !text-white hover:!bg-[#3550a0]"
             />
           </div>
         </div>
       </form>
 
-      {showLoader && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[22px] bg-white/75 backdrop-blur-[2px]">
-          <PageLoader />
-        </div>
-      )}
+      <GuardedLoader show={showLoader} onCancel={() => setShowLoader(false)} />
 
       <style jsx global>{`
         .address-form .MuiFormControl-root { width: 100%; }

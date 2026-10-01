@@ -10,12 +10,19 @@ import { UpdatePassword } from "@/api/mergeRoutes";
 import usePasswordReset from "@/store/usePasswordReset";
 import { RiLockPasswordLine } from "react-icons/ri";
 import NextButton from "../NextButton/NextButton";
+import GuardedLoader from "../PageLoader/GuardedLoader";
+import useAuthStore from "@/store/authStore";
+import { useRouter } from "next/router";
+import { getApiErrorMessage, isUnauthorized, useIsMounted } from "@/utils/apiError";
 
 const SetAPassword = ({ isCompleted, onComplete }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { isPasswordReset, setIsPasswordReset } = usePasswordReset();
   const { email } = useSignupStore();
+  const router = useRouter();
+  const { clearToken } = useAuthStore();
+  const isMounted = useIsMounted();
 
   const {
     register,
@@ -40,8 +47,9 @@ const SetAPassword = ({ isCompleted, onComplete }) => {
 
   const isPasswordStrongAndMatch = Object.values(validations).every(Boolean);
 
-  const { mutate, isLoading } = useMutation(UpdatePassword, {
+  const { mutate, isLoading, reset: resetMutation } = useMutation(UpdatePassword, {
     onSuccess: (data) => {
+      if (!isMounted.current) return;
       if (data?.status) {
         toast.success("Account created successfully!");
         if (onComplete) onComplete();
@@ -50,6 +58,13 @@ const SetAPassword = ({ isCompleted, onComplete }) => {
       }
     },
     onError: (error) => {
+      if (!isMounted.current) return;
+      if (isUnauthorized(error)) {
+        toast.error("Session Expired");
+        clearToken();
+        router.replace("/login");
+        return;
+      }
       const errorData = error?.response?.data?.errors;
       if (errorData && typeof errorData === "object") {
         Object.values(errorData).forEach((errArray) => {
@@ -60,7 +75,7 @@ const SetAPassword = ({ isCompleted, onComplete }) => {
           }
         });
       } else {
-        toast.error(error?.response?.statusText || "Something went wrong!");
+        toast.error(getApiErrorMessage(error));
       }
     },
   });
@@ -80,6 +95,7 @@ const SetAPassword = ({ isCompleted, onComplete }) => {
   };
 
   return (
+    <>
     <SectionWrapper>
       <SectionHeader
         stepNumber={<RiLockPasswordLine />}
@@ -156,14 +172,17 @@ const SetAPassword = ({ isCompleted, onComplete }) => {
             <NextButton
               label="Continue"
               disabled={
-                !isPasswordStrongAndMatch || isLoading || !isPasswordReset
+                !isPasswordStrongAndMatch || !isPasswordReset
               }
+              loading={isLoading}
               type="submit"
             />
           </div>
         </form>
       </SectionHeader>
     </SectionWrapper>
+    <GuardedLoader show={isLoading} onCancel={() => resetMutation()} />
+    </>
   );
 };
 

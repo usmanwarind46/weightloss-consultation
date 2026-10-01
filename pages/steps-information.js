@@ -11,7 +11,10 @@ import useMedicalInfoStore from "@/store/medicalInfoStore";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import useMedicalQuestionsStore from "@/store/medicalQuestionStore";
 import useConfirmationQuestionsStore from "@/store/confirmationQuestionStore";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
+import NextButton from "@/Components/NextButton/NextButton";
+import BackButton from "@/Components/BackButton/BackButton";
+import { getApiErrorMessage, goBackOr, isUnauthorized, useIsMounted } from "@/utils/apiError";
 import useShippingOrBillingStore from "@/store/shipingOrbilling";
 import useProductId from "@/store/useProductIdStore";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
@@ -34,6 +37,8 @@ export default function StepsInformation() {
   const [showContent, setShowContent] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const isMounted = useIsMounted();
 
   const router = useRouter();
 
@@ -77,6 +82,7 @@ export default function StepsInformation() {
   /* ───────────────  product id store ────────────── */
   const consultationMutation = useMutation(userConsultationApi, {
     onSuccess: (data) => {
+      if (!isMounted.current) return;
       if (data?.data?.data == null) {
         clearBmi();
         clearCheckout();
@@ -113,8 +119,9 @@ export default function StepsInformation() {
       return;
     },
     onError: (error) => {
+      if (!isMounted.current) return;
       setShowLoader(false);
-      if (error?.response?.data?.message == "Unauthenticated.") {
+      if (isUnauthorized(error)) {
         toast.error("Session Expired");
         clearBmi();
         clearCheckout();
@@ -137,6 +144,10 @@ export default function StepsInformation() {
         clearEmail();
         clearConfirmationEmail();
         router.push("/login");
+      } else {
+        const message = getApiErrorMessage(error);
+        toast.error(message);
+        setLoadError(message);
       }
     },
   });
@@ -144,6 +155,7 @@ export default function StepsInformation() {
   /* ───────────────  medical questions mutation ────────────── */
   const medicalQuestionsMutation = useMutation(getMedicalQuestions, {
     onSuccess: (data) => {
+      if (!isMounted.current) return;
       if (data) {
         setMedicalQuestions(data?.data?.data?.medical_question);
         setConfirmationQuestions(data?.data?.data?.confirmation_question);
@@ -152,19 +164,22 @@ export default function StepsInformation() {
       return;
     },
     onError: (error) => {
-      // setLoading(false);
+      if (!isMounted.current) return;
       if (error) {
         setShowLoader(false);
+        if (isUnauthorized(error)) return;
+        setLoadError(getApiErrorMessage(error));
       }
     },
   });
 
-  useEffect(() => {
+  const loadData = () => {
     const formData = {
       clinic_id: 2,
       product_id: productId,
     };
     if (productId != null) {
+      setLoadError("");
       setShowLoader(true);
       consultationMutation.mutate(formData);
       if (productId == WegovyPillProductId || productId == FoundayoProductId) {
@@ -174,6 +189,11 @@ export default function StepsInformation() {
         medicalQuestionsMutation.mutate();
       }
     }
+  };
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line
   }, [productId]);
 
   useEffect(() => { }, []);
@@ -188,7 +208,22 @@ export default function StepsInformation() {
       <StepsHeader />
 
       <main className="min-h-[calc(100vh-66px)] bg-[#EEF2FA]">
-        {showLoader && <PageLoader />}
+        <GuardedLoader
+          show={showLoader}
+          onRetry={loadData}
+          onCancel={() => goBackOr(router, "/")}
+          cancelLabel="Back"
+        />
+
+        {loadError && !showLoader && (
+          <div className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-16 text-center">
+            <p className="inter-reg-font text-[15px] text-slate-700">{loadError}</p>
+            <div className="flex w-full flex-col gap-2">
+              <NextButton type="button" label="Try again" onClick={loadData} />
+              <BackButton onClick={() => goBackOr(router, "/")} label="Back" />
+            </div>
+          </div>
+        )}
 
         {showProductSelection && (
           <ProductSelection showProductSelection={showProductSelection} />

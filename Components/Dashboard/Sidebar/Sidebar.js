@@ -118,7 +118,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               <Phone size={14} strokeWidth={2} />
             </span>
             <span className="min-w-0">
-              <span className="inter-medium-font block text-[10.5px] uppercase tracking-[0.1em] text-slate-400 leading-none">
+              <span className="inter-medium-font block text-[10.5px] capitalize tracking-[0.1em] text-slate-400 leading-none">
                 Contact Support
               </span>
               <span className="inter-medium-font mt-1.5 block truncate text-[12px] leading-none text-[#4565BF]">

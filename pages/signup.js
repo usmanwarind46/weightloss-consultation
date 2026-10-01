@@ -3,8 +3,10 @@ import TextField from "@/Components/TextField/TextField";
 import { useForm } from "react-hook-form";
 import NextButton from "@/Components/NextButton/NextButton";
 import { useRouter } from "next/navigation";
-import PageLoader from "@/Components/PageLoader/PageLoader";
-import { useState, useEffect } from "react";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
+import { useIsMounted } from "@/utils/apiError";
+import Router from "next/router";
+import { useState, useEffect, useRef } from "react";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import StepsHeader from "@/layout/stepsHeader";
@@ -16,6 +18,8 @@ import { meta_url } from "@/config/constants";
 export default function SignUp() {
   const [showLoader, setShowLoader] = useState(false);
   const { token } = useAuthStore();
+  const isMounted = useIsMounted();
+  const targetRoute = useRef("");
 
   // 🛒 Zustand State
   const { firstName, lastName, setFirstName, setLastName } = useSignupStore();
@@ -58,12 +62,23 @@ export default function SignUp() {
     setLastName(data.lastName);
 
     setShowLoader(true);
-    await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 2s
-    if (token) {
-      router.push("/steps-information");
-    } else {
-      router.push("/email-confirmation");
-    }
+    targetRoute.current = token ? "/steps-information" : "/email-confirmation";
+    router.push(targetRoute.current);
+  };
+
+  // recover if navigation fails
+  useEffect(() => {
+    if (!showLoader) return;
+    const onError = () => {
+      if (isMounted.current) setShowLoader(false);
+    };
+    Router.events.on("routeChangeError", onError);
+    return () => Router.events.off("routeChangeError", onError);
+  }, [showLoader]);
+
+  const goBack = () => {
+    setShowLoader(false);
+    router.push("/acknowledgment");
   };
 
   return (
@@ -106,6 +121,7 @@ export default function SignUp() {
                   <NextButton
                     label="Next"
                     disabled={!isValid} // ✅ disables until valid
+                    loading={showLoader}
                     type="submit"
                   />
                   <BackButton
@@ -114,16 +130,16 @@ export default function SignUp() {
                   />
                 </div>
               </form>
-
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>
       </FormWrapper>
+      <GuardedLoader
+        show={showLoader}
+        onRetry={() => router.push(targetRoute.current)}
+        onCancel={goBack}
+        cancelLabel="Back"
+      />
     </>
   );
 }

@@ -19,23 +19,21 @@ const AlertBanner = ({
   href,
 }) => {
   return (
-    <section className="w-full overflow-hidden rounded-2xl border border-amber-200 bg-amber-50 shadow-[0_1px_4px_rgba(180,83,9,0.06)]">
+    <section className="w-full overflow-hidden rounded-2xl border border-amber-200/70 bg-amber-50/40 shadow-[0_1px_4px_rgba(180,83,9,0.06)]">
       <div className="flex w-full flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
         {/* Content */}
-        <div className="flex min-w-0 flex-1 items-center gap-3.5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
-            <Icon size={18} strokeWidth={2} />
-          </div>
+        <div className="flex min-w-0 flex-1 items-center">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="inter-medium-font inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] uppercase tracking-[0.1em] text-amber-600">
+              <span className="inter-medium-font inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] max-sm:text-[13px] uppercase tracking-[0.08em] text-amber-600">
+                <Icon size={14} strokeWidth={2} className="h-3 w-3 shrink-0 max-sm:h-3.5 max-sm:w-3.5" />
                 Action required
               </span>
             </div>
-            <h3 className="inter-semibold-font text-[14px] leading-snug text-slate-900">
+            <h3 className="inter-semibold-font text-[16px] leading-snug text-slate-900">
               {title}
             </h3>
-            <p className="inter-reg-font mt-0.5 text-[12.5px] text-slate-500">
+            <p className="inter-reg-font mt-1 text-[16px] sm:text-[14px] leading-relaxed text-slate-500">
               {description}
             </p>
           </div>
@@ -44,7 +42,7 @@ const AlertBanner = ({
         {/* Action */}
         <Link
           href={href}
-          className="inter-medium-font group inline-flex min-h-[38px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-amber-100 border border-amber-200 px-5 py-2 text-[12.5px] text-amber-600 no-underline transition-all duration-150 hover:bg-amber-100 active:scale-[0.98] lg:w-auto lg:min-w-[140px]"
+          className="inter-medium-font group inline-flex min-h-[38px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-amber-50 border border-amber-200 px-5 py-2 text-[15px] max-sm:text-[16px] text-amber-600 no-underline transition-all duration-150 hover:bg-amber-100 active:scale-[0.98] lg:w-auto lg:min-w-[140px]"
         >
           <UploadCloud size={14} strokeWidth={2.2} />
           <span>{buttonText}</span>
@@ -104,9 +102,9 @@ const UploadTopPrompt = ({ isLoading = false }) => {
       <div className="w-full">
         <AlertBanner
           icon={Camera}
-          title="Upload your photo"
-          description="Please upload your Photo verification to complete your order."
-          buttonText="Upload photo"
+          title="BMI Verification"
+          description="Continue to upload a recent photo for the clinical team to verify your BMI. This may be required to process your order."
+          buttonText="Continue"
           href="/photo-upload"
         />
       </div>
@@ -118,9 +116,9 @@ const UploadTopPrompt = ({ isLoading = false }) => {
       <div className="w-full">
         <AlertBanner
           icon={IdCard}
-          title="Verify Your Identity"
-          description="Please upload a valid ID to verify your identity and complete your order."
-          buttonText="Upload ID"
+          title="Identity Verification"
+          description="Please upload a valid proof of ID to verify your identity and complete your order."
+          buttonText="Continue"
           href="/id-verification"
         />
       </div>

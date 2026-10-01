@@ -8,7 +8,6 @@ import TextField from "@/Components/TextField/TextField";
 import StepsHeader from "@/layout/stepsHeader";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import { useState, useEffect } from "react";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import BackButton from "@/Components/BackButton/BackButton";
 import useGpDetailsStore from "@/store/gpDetailStore";
 import MUISelectField from "@/Components/SelectField/SelectField";
@@ -422,7 +421,7 @@ export default function GpDetail() {
               )}
 
               <div className="space-y-3 mt-6">
-                <NextButton label="Next" disabled={!isNextEnabled} />
+                <NextButton loading={showLoader} label="Next" disabled={!isNextEnabled} />
                 <BackButton
                   label="Back"
                   onClick={() => router.push("/patient-consent")}
@@ -430,11 +429,6 @@ export default function GpDetail() {
               </div>
             </form>
 
-            {showLoader && (
-              <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                <PageLoader />
-              </div>
-            )}
           </div>
         </PageAnimationWrapper>
       </FormWrapper>

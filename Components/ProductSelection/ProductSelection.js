@@ -19,8 +19,11 @@ import useSignupStore from "@/store/signupStore";
 import useBmiStore from "@/store/bmiStore";
 import Router from "next/router";
 import NextButton from "../NextButton/NextButton";
+import BackButton from "../BackButton/BackButton";
 import useReorderButtonStore from "@/store/useReorderButton";
 import useReorder from "@/store/useReorderStore";
+import { getApiErrorMessage, goBackOr, isUnauthorized, useIsMounted } from "@/utils/apiError";
+import useAuthStore from "@/store/authStore";
 
 const ProductSelection = ({ showProductSelection }) => {
   /* ───────────────  skeleton card ────────────── */
@@ -48,9 +51,12 @@ const ProductSelection = ({ showProductSelection }) => {
   const [selectedProductId, setSelectedProductId] = useState(null); // NEW
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [redirection, setRedirection] = useState("");
+  const [loadError, setLoadError] = useState("");
+  const isMounted = useIsMounted();
 
   /* ───────────────  stores (init only what we SET/CLEAR) ────────────── */
   const { setReorder } = useReorder();
+  const { clearToken } = useAuthStore();
 
   const { setProductId, productId } = useProductId();
   const { firstName, lastName, setFirstName, setLastName } = useSignupStore();
@@ -60,15 +66,32 @@ const ProductSelection = ({ showProductSelection }) => {
   /* ───────────────  products mutation ────────────── */
   const getProducts = useMutation(GetProductsApi, {
     onSuccess: (res) => {
+      if (!isMounted.current) return;
       const resData = res?.data?.data || {};
       setProductData(resData);
+      setLoadError("");
       setIsLoading(false);
     },
     onError: (err) => {
-      toast.error(err?.response?.data?.errors || "Something went wrong");
+      if (!isMounted.current) return;
+      if (isUnauthorized(err)) {
+        toast.error("Session Expired");
+        clearToken();
+        Router.replace("/login");
+        return;
+      }
+      const message = getApiErrorMessage(err);
+      toast.error(message);
+      setLoadError(message);
       setIsLoading(false);
     },
   });
+
+  const fetchProducts = () => {
+    setLoadError("");
+    setIsLoading(true);
+    getProducts.mutate({});
+  };
 
   /* ───────────────  initial effects ────────────── */
   useEffect(() => {
@@ -133,7 +156,16 @@ const ProductSelection = ({ showProductSelection }) => {
         <div className="w-full flex flex-col items-center justify-center px-4 py-2">
           {renderSkeletons()}
         </div>
+      ) : loadError ? (
+        <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-8 text-center">
+          <p className="inter-reg-font text-[15px] text-slate-700">{loadError}</p>
+          <div className="flex w-full max-w-xs flex-col gap-2">
+            <NextButton type="button" label="Try again" onClick={fetchProducts} />
+            <BackButton onClick={() => goBackOr(Router, "/")} label="Back" />
+          </div>
+        </div>
       ) : (
+        <>
         <div className="w-full flex flex-col items-center justify-center px-4 py-2">
           <div className="w-full flex flex-col items-center justify-center gap-5">
             {/* ───── Reorder Treatments ───── */}
@@ -151,7 +183,7 @@ const ProductSelection = ({ showProductSelection }) => {
                   </p>
                 </div>
 
-                <div className="grid w-full grid-cols-2 gap-2.5 sm:grid-cols-1 sm:gap-3">
+                <div className="grid w-full grid-cols-1 gap-2.5 sm:gap-3">
                   {(Array.isArray(productData.reorder)
                     ? productData.reorder
                     : [productData.reorder]
@@ -206,17 +238,19 @@ const ProductSelection = ({ showProductSelection }) => {
               </p>
             )}
 
-            {/* ───── Continue Button ───── */}
-            <div className="pt-6">
-              <NextButton
-                disabled={!selectedProductId}
-                onClick={hanlePrevData}
-                label="Continue"
-                loading={isButtonLoading}
-              />
-            </div>
           </div>
         </div>
+
+        {/* ───── Continue Button (solid, full-bleed sticky bar) ───── */}
+        <div className="sticky -bottom-4 z-10 -mx-4 -mb-4 w-[calc(100%+2rem)] bg-white px-4 pb-4 pt-4 sm:-bottom-8 sm:-mx-8 sm:-mb-8 sm:w-[calc(100%+4rem)] sm:px-8 sm:pb-8">
+          <NextButton
+            disabled={!selectedProductId}
+            onClick={hanlePrevData}
+            label="Continue"
+            loading={isButtonLoading}
+          />
+        </div>
+        </>
       )}
     </FullScreenModal>
   );

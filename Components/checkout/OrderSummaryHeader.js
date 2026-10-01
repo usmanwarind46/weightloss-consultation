@@ -11,7 +11,7 @@ const OrderSummaryHeader = ({ stepNumber, title, description, isCompleted }) => 
     >
       <div className="flex items-center space-x-4">
         {/* Step Circle or Check */}
-        <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm transition-all duration-300 ${isCompleted ? "bg-primary text-white" : "border border-black text-black"
+        <div className={`flex shrink-0 items-center justify-center w-8 h-8 rounded-full font-bold text-sm transition-all duration-300 ${isCompleted ? "bg-primary text-white" : "border border-black text-black"
           }`}>
           <AnimatePresence mode="wait" initial={false}>
             {isCompleted ? (
@@ -22,7 +22,7 @@ const OrderSummaryHeader = ({ stepNumber, title, description, isCompleted }) => 
                 exit={{ scale: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <FiCheck className="w-5 h-5" />
+                <FiCheck className="h-4 w-4" />
               </motion.div>
             ) : (
               <motion.div

@@ -297,9 +297,9 @@ const OrderSummary = ({
           <div className="col-span-12 sm:col-span-4 mb-3">
             <div className="mb-24 sm:mb-0">
               <div className="overflow-hidden rounded-[20px] border border-slate-200/80 bg-white font-inter shadow-[0_12px_40px_rgba(30,41,59,0.06)]">
-                <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-[18px]">
+                <div className="flex items-center justify-between border-b border-slate-100 bg-white px-4 py-3 sm:px-6 sm:py-[18px]">
                   <div className="flex items-center gap-3">
-                    <div className={`flex items-center justify-center w-7 h-7 rounded-full text-[13px] transition-all duration-300 ${
+                    <div className={`flex shrink-0 items-center justify-center w-7 h-7 rounded-full text-[13px] transition-all duration-300 ${
                       onComplete ? "bg-[#4565BF] text-white" : "border-2 border-[#4565BF] text-[#4565BF] inter-semibold-font"
                     }`}>
                       {onComplete ? (
@@ -323,7 +323,7 @@ const OrderSummary = ({
                   </button>
                 </div>
 
-                <div className="bg-white px-6 py-5">
+                <div className="bg-white px-4 py-4 sm:px-6 sm:py-5">
                 <div>
                   <ul className="max-h-[250px] space-y-3 overflow-y-auto pr-1">
                     {items?.doses?.map((dose, index) => (

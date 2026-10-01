@@ -24,7 +24,7 @@ import useAuthStore from "@/store/authStore";
 import usePasswordReset from "@/store/usePasswordReset";
 import useUserDataStore from "@/store/userDataStore";
 import useSignupStore from "@/store/signupStore";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
 
@@ -275,7 +275,7 @@ const ReviewAnswers = () => {
 
               {/* Bottom Action Buttons */}
               <div className="mt-7 border-t border-slate-200 pt-6">
-                <NextButton
+                <NextButton loading={showLoader}
                   label="Confirm and Proceed"
                   onClick={handleSubmit}
                 />
@@ -286,15 +286,11 @@ const ReviewAnswers = () => {
                 />
               </div>
 
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>
       </FormWrapper>
+      <GuardedLoader show={showLoader} onCancel={() => setShowLoader(false)} />
     </>
   );
 };

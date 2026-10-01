@@ -50,8 +50,7 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
     <>
       <div
         onClick={!isOutOfStock && !isSelected ? handleAdd : undefined}
-        className={`relative mt-3 flex justify-between rounded-[14px] border-2 p-3 transition-all duration-200 sm:p-4
-          ${isSelected ? "flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-0" : "flex-row items-center gap-2"}
+        className={`relative mt-3 flex flex-col rounded-[14px] border-2 p-3 transition-all duration-200 sm:flex-row sm:items-center sm:justify-between sm:p-4
           ${
             isOutOfStock
               ? "cursor-not-allowed border-slate-200 bg-slate-50/80"
@@ -63,74 +62,64 @@ const AddOn = ({ addon, onAdd, onIncrement, onDecrement, isSelected, quantity })
         {isOutOfStock && (
           <>
             <div className="absolute inset-0 z-10 cursor-not-allowed rounded-[14px] bg-slate-100/20" />
-            <div className="inter-semibold-font absolute -top-3.5 left-3 z-20 inline-flex h-7 items-center rounded-lg border border-rose-200 bg-rose-50 px-3 text-[11.5px] text-rose-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <div className="inter-semibold-font absolute -top-3.5 left-3 z-20 inline-flex h-7 items-center rounded-lg border border-rose-200 bg-rose-50 px-3 text-[11.5px] max-sm:h-6 max-sm:text-[12px] text-rose-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
               Out of stock
             </div>
           </>
         )}
 
-        {/* Left Content */}
-        <div className={`flex min-w-0 items-center gap-2.5 sm:gap-3 ${isSelected ? "w-full sm:w-auto" : "w-auto flex-1"} ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
-          <div className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border-2 transition-all duration-150 sm:h-5 sm:w-5
-            ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}>
-            {isSelected && (
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" aria-hidden="true">
-                <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </div>
+        {/* Top row: details left, price always top-right */}
+        <div className="flex w-full min-w-0 items-start justify-between gap-3 sm:flex-1 sm:items-center">
+          <div className={`flex min-w-0 flex-1 items-start gap-2.5 sm:items-center sm:gap-3 ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
+            <div className={`mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[5px] border-2 transition-all duration-150 sm:h-5 sm:w-5
+              ${isSelected ? "border-[#4565BF] bg-[#4565BF]" : "border-slate-300 bg-white"}`}>
+              {isSelected && (
+                <svg viewBox="0 0 10 8" fill="none" aria-hidden="true" className="h-[8px] w-[10px] max-sm:h-[10px] max-sm:w-[13px]">
+                  <path d="M1 4L3.5 6.5L9 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </div>
 
-          <div className="min-w-0 flex-1">
-            <p className="inter-semibold-font truncate text-[14px] capitalize leading-snug text-slate-900 sm:text-[15px]">
-              {addon?.product_name || addon?.name}
-            </p>
-            {addon?.product_name && addon?.name && (
-              <p className={`inter-medium-font truncate text-[13px] ${isSelected ? "text-[#4565BF]" : "text-slate-500"}`}>
-                {addon.name}
+            <div className="min-w-0 flex-1">
+              <p className="inter-semibold-font break-words text-[14px] capitalize leading-snug text-slate-900 sm:text-[15px]">
+                {addon?.product_name || addon?.name}
               </p>
-            )}
+              {addon?.product_name && addon?.name && (
+                <p className={`inter-medium-font text-[13px] ${isSelected ? "text-[#4565BF]" : "text-slate-500"}`}>
+                  {addon.name}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Right Content */}
-        <div className={`flex items-center gap-2 sm:gap-3 ${isSelected ? "w-full justify-between" : "w-auto shrink-0 justify-end"} ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
-          <span className={`inter-semibold-font shrink-0 text-[16px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"}`}>
+          <span className={`inter-semibold-font shrink-0 text-[16px] ${isSelected ? "text-[#4565BF]" : "text-slate-700"} ${isOutOfStock ? "opacity-60 grayscale" : ""}`}>
             £{parseFloat(addon?.price).toFixed(2)}
           </span>
+        </div>
 
-          {isSelected && (
-            <>
-              <div className="ml-auto flex items-center gap-0.5 rounded-full border border-slate-200 bg-white p-1 shadow-sm sm:ml-0 sm:gap-1">
-                <button type="button" onClick={handleDecrement} className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors">
+        {/* Controls: quantity left, delete right (mobile row below) */}
+        {isSelected && (
+            <div className="mt-3 flex items-center justify-between sm:mt-0 sm:justify-start sm:gap-3">
+              <div className="flex items-center gap-0.5 rounded-full border border-slate-200 bg-white p-1 shadow-sm sm:gap-1">
+                <button type="button" onClick={handleDecrement}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors">
                   <FaMinus size={9} className="text-slate-600" />
                 </button>
-
                 <span className="inter-semibold-font w-6 text-center text-[13px] text-slate-900">{quantity}</span>
-
-                <button
-                  type="button"
-                  onClick={handleIncrement}
-                  className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
-                    quantity >= allowed ? "cursor-not-allowed bg-slate-100 opacity-40" : "bg-slate-100 hover:bg-slate-200 cursor-pointer"
-                  }`}
-                >
+                <button type="button" onClick={handleIncrement}
+                  className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors
+                    ${quantity >= allowed ? "cursor-not-allowed bg-slate-100 opacity-40" : "bg-slate-100 hover:bg-slate-200 cursor-pointer"}`}>
                   <FaPlus size={9} className="text-slate-600" />
                 </button>
               </div>
 
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowModal(true);
-                }}
-                className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-red-100 bg-red-50 text-red-500 transition-colors hover:border-red-200 hover:bg-red-100"
-              >
+              <button type="button"
+                onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
+                className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-red-100 bg-red-50 text-red-500 transition-colors hover:border-red-200 hover:bg-red-100 sm:h-8 sm:w-8 sm:rounded-lg">
                 <MdDelete size={15} />
               </button>
-            </>
+            </div>
           )}
-        </div>
       </div>
 
       <ConfirmationModal showModal={showModal} onConfirm={handleDelete} onCancel={() => setShowModal(false)} />

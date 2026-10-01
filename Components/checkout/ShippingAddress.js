@@ -4,7 +4,7 @@ import SectionWrapper from "./SectionWrapper";
 import SectionHeader from "./SectionHeader";
 import { FaSearch, FaShippingFast } from "react-icons/fa";
 import TextField from "@/Components/TextField/TextField";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
 import { Client } from "getaddress-api";
 import MUISelectField from "@/Components/SelectField/SelectField";
 import useShippingOrBillingStore from "@/store/shipingOrbilling";
@@ -458,16 +458,12 @@ export default function ShippingAddress({
               )}
             />
 
-            <NextButton label="Continue" disabled={!isValid} />
+            <NextButton label="Continue" disabled={!isValid} loading={showLoader} />
           </form>
 
-          {showLoader && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded ">
-              <PageLoader />
-            </div>
-          )}
         </SectionHeader>
       </SectionWrapper>
+      <GuardedLoader show={showLoader} onCancel={() => setShowLoader(false)} />
     </>
   );
 }

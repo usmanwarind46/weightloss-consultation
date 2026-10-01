@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import StepsHeader from "@/layout/stepsHeader";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import NextButton from "@/Components/NextButton/NextButton";
 import BackButton from "@/Components/BackButton/BackButton";
 import { useRouter } from "next/navigation";
@@ -52,6 +51,8 @@ export default function PatientConsent() {
   // }, [confirmationInfo, confirmationQuestions]);
 
   useEffect(() => {
+    // on submit the store update must not re-initialize (uncheck) the questions
+    if (showLoader) return;
     if (confirmationQuestions && confirmationQuestions.length) {
       // confirmationQuestions reliable hai — hamesha question field hota hai
       const initialized = confirmationQuestions.map((q) => {
@@ -71,8 +72,6 @@ export default function PatientConsent() {
       console.log("❌ No questions found");
     }
   }, [confirmationInfo, confirmationQuestions]);
-
-  console.log("questions state:", questions);
 
   // Prefill form fields
   useEffect(() => {
@@ -120,14 +119,14 @@ export default function PatientConsent() {
                 showLoader ? "pointer-events-none cursor-not-allowed" : ""
               }`}
             >
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
                 {questions.map((q) => {
                   const selectedAnswer = watch(`responses[${q.id}].answer`);
 
                   return (
                     <div
                       key={q.id}
-                      className="space-y-4 border rounded-xl border-slate-200 p-5"
+                      className="space-y-3 border rounded-xl border-slate-200 p-3 sm:space-y-4 sm:p-5"
                     >
                       {/* Question and Checkbox */}
                       <span className="inter-semibold-font text-gray-700 sm:text-lg text-sm border-b border-slate-200 pb-2 block">
@@ -197,8 +196,8 @@ export default function PatientConsent() {
                   </p>
                 )}
 
-                <div className="space-y-3 mt-6">
-                  <NextButton label="Next" disabled={!isNextEnabled} />
+                <div className="space-y-3 mt-4 sm:mt-6">
+                  <NextButton loading={showLoader} label="Next" disabled={!isNextEnabled} />
                   <BackButton
                     label="Back"
                     onClick={() => router.push("/medical-questions")}
@@ -206,11 +205,6 @@ export default function PatientConsent() {
                 </div>
               </form>
 
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>

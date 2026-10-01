@@ -3,8 +3,9 @@ import TextField from "@/Components/TextField/TextField";
 import { useForm } from "react-hook-form";
 import NextButton from "@/Components/NextButton/NextButton";
 import { useRouter } from "next/router";
-import PageLoader from "@/Components/PageLoader/PageLoader";
-import { useEffect, useState } from "react";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
+import { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage, useIsMounted } from "@/utils/apiError";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import StepsHeader from "@/layout/stepsHeader";
@@ -31,6 +32,8 @@ import useCartStore from "@/store/useCartStore";
 
 export default function LoginScreen() {
   const [showLoader, setShowLoader] = useState(false);
+  const isMounted = useIsMounted();
+  const hasRedirected = useRef(false);
   const { userData, setUserData } = useUserDataStore();
   const { setLastName, setFirstName, setEmail } = useSignupStore();
   const { token, setToken, setReview, review, clearReview } = useAuthStore();
@@ -79,8 +82,8 @@ export default function LoginScreen() {
 
   const loginMutation = useMutation(Login, {
     onSuccess: (data) => {
+      if (!isMounted.current) return;
       const user = data?.data?.data;
-      console.log(user, "user");
       if (user) {
         setUserData(user);
         setAuthUserDetail(user);
@@ -99,19 +102,8 @@ export default function LoginScreen() {
       }
     },
     onError: (error) => {
-      console.log(error?.response?.data?.errors, "sdseds");
-
-      const errorObj = error?.response?.data?.errors;
-
-      if (errorObj && typeof errorObj === "object") {
-        const firstErrorKey = Object.keys(errorObj);
-        const firstErrorMessage = errorObj[firstErrorKey]; // Get first message of first key
-
-        toast.error(firstErrorMessage);
-      } else {
-        toast.error("Something went wrong.");
-      }
-
+      if (!isMounted.current) return;
+      toast.error(getApiErrorMessage(error));
       setShowLoader(false);
     },
   });
@@ -124,8 +116,8 @@ export default function LoginScreen() {
   // Impersonation login mutation
   const impersonateLoginMutation = useMutation(impersonateLogin, {
     onSuccess: (data) => {
+      if (!isMounted.current) return;
       const user = data?.data?.data;
-      console.log(user, "user");
       if (user) {
         setUserData(user);
         setToken(user?.token);
@@ -144,19 +136,8 @@ export default function LoginScreen() {
       }
     },
     onError: (error) => {
-      console.log(error?.response?.data?.errors, "sdseds");
-
-      const errorObj = error?.response?.data?.errors;
-
-      if (errorObj && typeof errorObj === "object") {
-        const firstErrorKey = Object.keys(errorObj);
-        const firstErrorMessage = errorObj[firstErrorKey]; // Get first message of first key
-
-        toast.error(firstErrorMessage);
-      } else {
-        toast.error("Something went wrong.");
-      }
-
+      if (!isMounted.current) return;
+      toast.error(getApiErrorMessage(error));
       setShowLoader(false);
     },
   });
@@ -178,7 +159,9 @@ export default function LoginScreen() {
       impersonateLoginMutation.mutate(
         { impersonate_email: impersonateEmail, company_id: 2 },
         {
-          onSettled: () => setShowLoader(false),
+          onSettled: () => {
+            if (isMounted.current) setShowLoader(false);
+          },
         },
       );
     }
@@ -270,9 +253,7 @@ export default function LoginScreen() {
         percentage="0"E9F6FA
       > */}
       {token ? (
-        <div className="bg-white">
-          <PageLoader />
-        </div>
+        <div className="bg-white min-h-[calc(100vh-66px)]" />
       ) : (
         <>
           <div
@@ -292,9 +273,7 @@ export default function LoginScreen() {
               </p>
 
               <PageAnimationWrapper>
-                <div
-                  className={`relative ${showLoader ? "pointer-events-none cursor-not-allowed" : ""}`}
-                >
+                <div className="relative">
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <TextField
                       label="Email Address"
@@ -318,6 +297,7 @@ export default function LoginScreen() {
                     <NextButton
                       label="Login"
                       disabled={!isValid}
+                      loading={showLoader}
                       type="submit"
                       className="mb-5"
                     />
@@ -342,18 +322,17 @@ export default function LoginScreen() {
                     </div>
                     {/* <BackButton label="Back" className="mt-2" onClick={() => router.back()} /> */}
                   </form>
-
-                  {showLoader && (
-                    <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                      <PageLoader />
-                    </div>
-                  )}
                 </div>
               </PageAnimationWrapper>
             </div>
           </div>
         </>
       )}
+
+      <GuardedLoader
+        show={Boolean(token) || (showLoader && !showLoginModal)}
+        onCancel={token ? undefined : () => setShowLoader(false)}
+      />
 
       <LoginModal
         modes="forgot"
@@ -379,6 +358,7 @@ export default function LoginScreen() {
             Fetcher.axiosSetup.defaults.headers.common.Authorization = `Bearer ${user.token}`;
             closeLoginModal();
             setShowLoader(false);
+            if (!isMounted.current) return;
 
             if (abandonCard) {
               console.log("check2");
@@ -387,12 +367,8 @@ export default function LoginScreen() {
               router.push("/dashboard");
             }
           } catch (error) {
-            const errorMsg = error?.response?.data?.errors;
-            const firstMsg =
-              errorMsg && typeof errorMsg === "object"
-                ? Object.values(errorMsg)[0]
-                : "Something went wrong.";
-            toast.error(firstMsg);
+            if (!isMounted.current) return;
+            toast.error(getApiErrorMessage(error));
             setShowLoader(false);
           }
         }}

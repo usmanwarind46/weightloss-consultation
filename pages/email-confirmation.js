@@ -18,7 +18,8 @@ import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import LoginModal from "@/Components/LoginModal/LoginModal";
 import TextField from "@/Components/TextField/TextField";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
+import { getApiErrorMessage, useIsMounted } from "@/utils/apiError";
 import useLoginModalStore from "@/store/useLoginModalStore";
 import usePasswordReset from "@/store/usePasswordReset";
 import MetaLayout from "@/Meta/MetaLayout";
@@ -30,6 +31,7 @@ import { patientSource } from "@/api/mergeRoutes";
 export default function EmailConfirmation() {
   const [showLoader, setShowLoader] = useState(false);
   const [already, setAlready] = useState(false);
+  const isMounted = useIsMounted();
   // const [showLoginModal, setShowLoginModal] = useState(false);
   const router = useRouter();
   const {
@@ -70,7 +72,8 @@ export default function EmailConfirmation() {
   }, [email, confirmationEmail, setValue, trigger]);
 
   const registerMutation = useMutation(registerUser, {
-    onSuccess: async (data) => {
+    onSuccess: (data) => {
+      if (!isMounted.current) return;
       const user = data?.data?.data;
       setAuthUserDetail(user);
       setUserData(user);
@@ -83,10 +86,11 @@ export default function EmailConfirmation() {
         localStorage.getItem("owlc_attribution") || "null",
       );
 
+      // fire-and-forget: never block the redirect on the attribution call
       if (stored) {
         try {
-          await patientSource({
-            user_id: userData?.id,
+          patientSource({
+            user_id: user?.id ?? userData?.id,
             type: "register",
             first_touch: {
               channel: stored.first_touch?.channel || "Direct",
@@ -100,11 +104,9 @@ export default function EmailConfirmation() {
               medium: stored.last_touch?.medium || "none",
               paid_status: stored.last_touch?.paid_status || "unknown",
             },
+          }).catch((attributionError) => {
+            console.error("Attribution API failed:", attributionError);
           });
-
-          // Clear karo
-
-          console.log("✅ Attribution sent");
         } catch (attributionError) {
           console.error("Attribution API failed:", attributionError);
         }
@@ -113,9 +115,10 @@ export default function EmailConfirmation() {
       router.push("/steps-information");
     },
     onError: (error) => {
+      if (!isMounted.current) return;
       const emailError = error?.response?.data?.errors?.email;
       if (emailError === "This email is already registered.") setAlready(true);
-      if (emailError) toast.error(emailError);
+      toast.error(emailError || getApiErrorMessage(error));
       setShowLoader(false);
     },
   });
@@ -168,14 +171,11 @@ export default function EmailConfirmation() {
 
             // ✅ Hide loader immediately after success
             setShowLoader(false);
+            if (!isMounted.current) return;
             router.push("/dashboard");
           } catch (error) {
-            const errorMsg = error?.response?.data?.errors;
-            const firstMsg =
-              errorMsg && typeof errorMsg === "object"
-                ? Object.values(errorMsg)[0]
-                : "Something went wrong.";
-            toast.error(firstMsg);
+            if (!isMounted.current) return;
+            toast.error(getApiErrorMessage(error));
             setShowLoader(false);
           }
         }}
@@ -189,11 +189,7 @@ export default function EmailConfirmation() {
         description="This is where we will send information about your order."
       >
         <PageAnimationWrapper>
-          <div
-            className={`relative ${
-              showLoader ? "pointer-events-none cursor-not-allowed" : ""
-            }`}
-          >
+          <div className="relative">
             <form
               onSubmit={handleSubmit(handleSignupSubmit)}
               className="space-y-4"
@@ -239,22 +235,20 @@ export default function EmailConfirmation() {
               )}
 
               <div className="mt-6 flex flex-col gap-3">
-                <NextButton label="Next" type="submit" disabled={!isValid} />
+                <NextButton label="Next" type="submit" disabled={!isValid} loading={showLoader} />
                 <BackButton
                   label="Back"
                   onClick={() => router.push("/signup")}
                 />
               </div>
             </form>
-
-            {showLoader && (
-              <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg">
-                <PageLoader />
-              </div>
-            )}
           </div>
         </PageAnimationWrapper>
       </FormWrapper>
+      <GuardedLoader
+        show={showLoader && !showLoginModal}
+        onCancel={() => setShowLoader(false)}
+      />
     </>
   );
 }

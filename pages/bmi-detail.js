@@ -3,7 +3,6 @@ import { useForm, Controller } from "react-hook-form";
 import useBmiStore from "@/store/bmiStore";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import { useRouter } from "next/navigation";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import StepsHeader from "@/layout/stepsHeader";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
@@ -430,7 +429,7 @@ export default function BmiDetail() {
             )}
 
             <div className="mt-6 space-y-3 relative">
-              <NextButton
+              <NextButton loading={showLoader}
                 label="Next"
                 type="submit"
                 disabled={isNextDisabled}
@@ -440,11 +439,6 @@ export default function BmiDetail() {
                 onClick={() => router.push("/calculate-bmi")}
               />
             </div>
-            {showLoader && (
-              <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg">
-                <PageLoader />
-              </div>
-            )}
           </form>
         </PageAnimationWrapper>
       </FormWrapper>

@@ -24,7 +24,7 @@ const ProductGridCard = ({
       {/* Image */}
       <div className="relative h-[145px] 2xl:h-[160px] [@media(min-width:1921px)]:h-[200px] overflow-hidden bg-[#4565BF]/[0.07]">
         {isOutOfStock && (
-          <span className="inter-medium-font absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-red-100 bg-white px-2 py-0.5 text-[10px] text-red-500 shadow-sm">
+          <span className="inter-medium-font absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-red-100 bg-white px-2 py-0.5 text-[10px] max-sm:h-6 max-sm:text-[12px] text-red-500 shadow-sm">
             <PackageX size={9} strokeWidth={2} />
             Out of stock
           </span>
@@ -52,9 +52,9 @@ const ProductGridCard = ({
         <div className="mt-2.5 border-t border-slate-100 pt-2.5">
           <div className="flex items-center justify-between gap-2 mb-2">
             <p className="inter-reg-font text-[10px] uppercase tracking-[0.08em] text-slate-400">
-              Starting from
+              From
             </p>
-            <span className="inter-bold-font text-[14px] lg:text-[15px] 2xl:text-[16px] leading-none text-[#4565BF]">
+            <span className="inter-bold-font text-[14px] max-sm:text-[18px] lg:text-[15px] 2xl:text-[16px] leading-none text-[#4565BF]">
               £{originalPrice}
             </span>
           </div>
@@ -64,7 +64,7 @@ const ProductGridCard = ({
             onClick={onClick}
             disabled={isOutOfStock || isLoading}
             className={`inter-medium-font inline-flex min-h-[32px] lg:min-h-[33px] 2xl:min-h-[36px] w-full items-center
-              justify-center gap-2 rounded-xl px-3
+              justify-center gap-2 rounded-xl px-3 max-sm:min-h-10 max-sm:px-6 max-sm:py-2 max-sm:text-[15px]
               text-[11.5px] lg:text-[12px] 2xl:text-[12.5px] transition-all duration-150
               ${isOutOfStock
                 ? "cursor-not-allowed bg-slate-100 text-slate-400"

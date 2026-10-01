@@ -16,6 +16,10 @@ import { ChangePassword } from "@/api/mergeRoutes";
 import useSignupStore from "@/store/signupStore";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import { PageHeader } from "@/Components/Dashboard/MyAccount/MyAccount";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
+import useAuthStore from "@/store/authStore";
+import { useRouter } from "next/router";
+import { getApiErrorMessage, isUnauthorized, useIsMounted } from "@/utils/apiError";
 
 const PasswordRequirement = ({ valid, label }) => {
   return (
@@ -53,6 +57,9 @@ const PasswordRequirement = ({ valid, label }) => {
 
 const PasswordChange = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { clearToken } = useAuthStore();
+  const isMounted = useIsMounted();
 
   const { email } = useSignupStore();
 
@@ -88,18 +95,21 @@ const PasswordChange = () => {
 
   const changePasswordMutation = useMutation(ChangePassword, {
     onSuccess: () => {
+      if (!isMounted.current) return;
       toast.success("Password changed successfully.");
       reset();
       setIsLoading(false);
     },
     onError: (error) => {
-      const errorObj = error?.response?.data?.errors;
-      const message =
-        errorObj && typeof errorObj === "object"
-          ? Object.values(errorObj)?.[0]
-          : "Something went wrong.";
-      toast.error(message);
+      if (!isMounted.current) return;
       setIsLoading(false);
+      if (isUnauthorized(error)) {
+        toast.error("Session Expired");
+        clearToken();
+        router.replace("/login");
+        return;
+      }
+      toast.error(getApiErrorMessage(error));
     },
   });
 
@@ -234,7 +244,8 @@ const PasswordChange = () => {
                     <NextButton
                       type="submit"
                       disabled={!isValid || isLoading}
-                      label={isLoading ? "Saving..." : "Save password"}
+                      loading={isLoading}
+                      label="Save password"
                     />
                   </div>
                 </div>
@@ -320,6 +331,13 @@ const PasswordChange = () => {
           `}</style>
         </section>
       </div>
+      <GuardedLoader
+        show={isLoading}
+        onCancel={() => {
+          changePasswordMutation.reset();
+          setIsLoading(false);
+        }}
+      />
     </main>
   );
 };

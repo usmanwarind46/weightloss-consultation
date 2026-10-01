@@ -6,7 +6,10 @@ import { getVariationsApi } from "@/api/mergeRoutes";
 import toast from "react-hot-toast";
 import Fetcher from "@/library/Fetcher";
 import useVariationStore from "@/store/useVariationStore";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
+import NextButton from "@/Components/NextButton/NextButton";
+import BackButton from "@/Components/BackButton/BackButton";
+import { getApiErrorMessage, goBackOr, isUnauthorized, useIsMounted } from "@/utils/apiError";
 import useShipmentCountries from "@/store/useShipmentCountriesStore";
 import useBillingCountries from "@/store/useBillingCountriesStore";
 import useCartStore from "@/store/useCartStore";
@@ -36,6 +39,8 @@ import lastOrderStore from "@/store/lastOrderStore";
 export default function GatherData() {
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const isMounted = useIsMounted();
 
   // store addons or dose here 🔥🔥
   const { setVariation } = useVariationStore();
@@ -83,7 +88,7 @@ export default function GatherData() {
   // Variations fetch mutation
   const variationMutation = useMutation(getVariationsApi, {
     onSuccess: (data) => {
-      console.log(data, "getVariationsApi");
+      if (!isMounted.current) return;
       if (data) {
         clearCart();
         // toast.success("User registered successfully!");
@@ -96,8 +101,9 @@ export default function GatherData() {
       }
     },
     onError: (error) => {
+      if (!isMounted.current) return;
       if (error) {
-        if (error?.response?.data?.message == "Unauthenticated.") {
+        if (isUnauthorized(error)) {
           toast.error("Session Expired");
           clearBmi();
           clearCheckout();
@@ -123,27 +129,33 @@ export default function GatherData() {
           router.push("/login");
         } else {
           setShowLoader(false);
-          toast.error(error?.response?.data?.errors?.Product);
+          const message = error?.response?.data?.errors?.Product || getApiErrorMessage(error);
+          toast.error(message);
+          setLoadError(message);
         }
       }
     },
   });
 
-  // Call mutation on mount
-  useEffect(() => {
+  const loadVariations = () => {
+    setLoadError("");
     setShowLoader(true);
     if (productId != null) {
-      // console.log("Api Run");
       variationMutation.mutate({ id: productId, data: {} });
     }
+  };
+
+  // Call mutation on mount
+  useEffect(() => {
+    loadVariations();
+    // eslint-disable-next-line
   }, [productId]);
 
   // Abandoned cart post api call
 
   const consultationMutation = useMutation(userConsultationApi, {
     onSuccess: (data) => {
-      console.log(data, "Dataaaaaaaaaa");
-      console.log(data?.data?.data?.extra, "extraextra");
+      if (!isMounted.current) return;
       setExtra(data?.data?.data?.extra);
 
       if (data?.data?.data == null) {
@@ -180,10 +192,10 @@ export default function GatherData() {
       return;
     },
     onError: (error) => {
-      // setLoading(false);
-      console.log("error", error?.response?.data?.errors?.email);
+      if (!isMounted.current) return;
       if (error) {
         setShowLoader(false);
+        setLoadError(getApiErrorMessage(error));
       }
     },
   });
@@ -207,9 +219,20 @@ export default function GatherData() {
     <>
       <MetaLayout canonical={`${meta_url}gathering-data`} />
       <StepsHeader />
-      {showLoader && (
-        <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-          <PageLoader />
+      <GuardedLoader
+        show={showLoader}
+        onRetry={loadVariations}
+        onCancel={() => goBackOr(router, "/")}
+        cancelLabel="Back"
+      />
+
+      {loadError && !showLoader && (
+        <div className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-16 text-center">
+          <p className="inter-reg-font text-[15px] text-slate-700">{loadError}</p>
+          <div className="flex w-full flex-col gap-2">
+            <NextButton type="button" label="Try again" onClick={loadVariations} />
+            <BackButton onClick={() => goBackOr(router, "/")} label="Back" />
+          </div>
         </div>
       )}
     </>

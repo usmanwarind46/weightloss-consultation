@@ -396,7 +396,7 @@ const StepsHeader = ({ isOpen, toggleSidebar, percentage }) => {
                       <p className="inter-semibold-font mt-1.5 truncate text-[14px] text-slate-900 capitalize">
                         {displayName}
                       </p>
-                      <p title={email} className="inter-reg-font mt-0.5 truncate text-[12px] text-slate-500">
+                      <p title={email} className="inter-reg-font mt-0.5 break-all text-[12px] text-slate-500">
                         {email}
                       </p>
                     </div>

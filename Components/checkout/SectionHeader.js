@@ -31,11 +31,11 @@ const SectionHeader = ({
       transition={{ duration: 0.4 }}
     >
       <div
-        className={`flex items-center space-x-3 cursor-pointer bg-[#f2f4fb] px-6 py-4 ${className}`}
+        className={`flex items-center space-x-3 cursor-pointer bg-[#f2f4fb] px-4 py-3 sm:px-6 sm:py-4 ${className}`}
         onClick={toggleAccordion}
       >
         <div
-          className={`flex items-center justify-center w-7 h-7 rounded-full text-[13px] transition-all duration-300 ${isCompleted
+          className={`flex shrink-0 items-center justify-center w-7 h-7 rounded-full text-[13px] transition-all duration-300 ${isCompleted
             ? "bg-[#4565BF] text-white"
             : "border-2 border-[#4565BF] text-[#4565BF] inter-semibold-font"
             }`}
@@ -49,7 +49,7 @@ const SectionHeader = ({
                 exit={{ scale: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <FiCheck className="w-5 h-5" />
+                <FiCheck className="h-4 w-4" />
               </motion.div>
             ) : (
               <motion.div
@@ -86,7 +86,7 @@ const SectionHeader = ({
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="px-6 py-5">
+            <div className="px-4 py-4 sm:px-6 sm:py-5">
             {description && (
               <p className="inter-reg-font text-[13px] text-slate-500 mb-4">
                 {description}

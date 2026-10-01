@@ -47,7 +47,7 @@ const ProductListCard = ({
       {/* Title */}
       <div className="min-w-0 flex-1">
         {isOutOfStock && (
-          <span className="inter-medium-font mb-1 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] text-red-500">
+          <span className="inter-medium-font mb-1 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] max-sm:h-6 max-sm:items-center max-sm:text-[12px] text-red-500">
             Out of stock
           </span>
         )}
@@ -57,10 +57,10 @@ const ProductListCard = ({
       </div>
 
       {/* Price + Button */}
-      <div className="col-start-2 flex w-full shrink-0 flex-wrap items-center justify-between gap-2 sm:w-auto sm:flex-nowrap sm:justify-start sm:gap-4 2xl:gap-5">
-        <div className="flex items-baseline gap-1.5 text-right sm:block">
+      <div className="col-start-2 flex w-full shrink-0 flex-wrap items-center justify-between gap-2 max-sm:flex-col max-sm:items-stretch sm:w-auto sm:flex-nowrap sm:justify-start sm:gap-4 2xl:gap-5">
+        <div className="flex items-baseline gap-1.5 text-left sm:block sm:text-right">
           <p className="inter-reg-font text-[10px] uppercase tracking-[0.1em] text-slate-400">From</p>
-          <span className="inter-bold-font text-[16px] lg:text-[16px] 2xl:text-[20px] leading-tight text-[#4565BF]">
+          <span className="inter-bold-font text-[16px] max-sm:text-[18px] lg:text-[16px] 2xl:text-[20px] leading-tight text-[#4565BF]">
             £{originalPrice}
           </span>
         </div>
@@ -73,6 +73,7 @@ const ProductListCard = ({
           }}
           disabled={isOutOfStock || isLoading}
           className={`inter-medium-font inline-flex min-h-[36px] lg:min-h-[36px] 2xl:min-h-[42px] items-center justify-center gap-1.5
+            max-sm:min-h-10 max-sm:w-full max-sm:px-6 max-sm:py-2 max-sm:text-[15px]
             rounded-xl px-3 text-[12px] sm:px-4 sm:text-[12.5px] lg:px-4 lg:text-[12.5px] 2xl:px-6 2xl:text-[13.5px]
             whitespace-nowrap transition-all duration-150
             ${isOutOfStock

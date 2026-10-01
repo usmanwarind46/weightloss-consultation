@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -34,6 +34,10 @@ import brandTheme from "@/config/muiTheme";
 
 export default function DosageSelection() {
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const loadingTimeoutRef = useRef(null);
+
+  // clear the fallback timeout when leaving the page
+  useEffect(() => () => clearTimeout(loadingTimeoutRef.current), []);
   const [abandonData, setAbandonData] = useState([]);
   const [prevMedication, setPrevMedication] = useState("");
   const [prevDose, setPrevDose] = useState("");
@@ -126,6 +130,9 @@ export default function DosageSelection() {
 
   const onSubmit = () => {
     setIsButtonLoading(true);
+    // fallback: never leave the button loading forever if navigation stalls
+    clearTimeout(loadingTimeoutRef.current);
+    loadingTimeoutRef.current = setTimeout(() => setIsButtonLoading(false), 20000);
 
     const hasNeedles = items?.addons?.find(
       (addon) => addon.name === "Box of 5 Needles",
@@ -134,6 +141,7 @@ export default function DosageSelection() {
     // Product ID 4 = Mounjaro
     // If no needles selected, show popup and stop checkout
     if (productId == 4 && !hasNeedles) {
+      clearTimeout(loadingTimeoutRef.current);
       setShowModalForManjaro(true);
       setIsButtonLoading(false);
       return;
@@ -596,17 +604,17 @@ export default function DosageSelection() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-12 gap-4 w-full max-w-3xl mx-auto">
               {/* === LEFT COLUMN === */}
-              <div className="col-span-12 sm:col-span-8 px-4 md:px-4 py-10">
+              <div className="col-span-12 sm:col-span-8 px-0 sm:px-4 md:px-4 py-6 sm:py-10">
                 <div className="w-full max-w-screen-md mx-auto">
                   <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white mb-6">
-                    <div className="flex items-center justify-center bg-[#4565BF] p-4 sm:p-6">
+                    <div className="flex items-center justify-center bg-[#4565BF] p-3 sm:p-6">
                       <img
                         src={variation?.img}
                         alt={variation?.name}
                         className="w-full h-36 object-contain"
                       />
                     </div>
-                    <div className="p-4 sm:p-6">
+                    <div className="p-3 sm:p-6">
                       <h2 className="inter-semibold-font text-xl sm:text-2xl mb-1.5 text-slate-900">
                         {variation?.name}
                       </h2>
@@ -702,7 +710,7 @@ export default function DosageSelection() {
                     })}
 
                   {variation?.show_expiry === 1 && (
-                    <div className="mt-4 rounded-xl border border-slate-100 bg-white p-4">
+                    <div className="mt-3 rounded-xl border border-slate-100 bg-white p-3 sm:mt-4 sm:p-4">
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -728,8 +736,12 @@ export default function DosageSelection() {
                         }
                         label={
                           <p className="inter-medium-font text-[14px] leading-relaxed text-slate-700">
-                            Please confirm that you have reviewed the expiry
-                            dates of the selected doses.
+                            <span className="max-sm:block">
+                              Please confirm that you have reviewed
+                            </span>{" "}
+                            <span className="max-sm:block">
+                              the expiry dates of the selected doses.
+                            </span>
                           </p>
                         }
                       />
@@ -807,8 +819,8 @@ export default function DosageSelection() {
               {/* === RIGHT COLUMN === */}
               <div className="col-span-12 sm:col-span-4">
                 <div className="w-full sm:fixed mt-6 sm:mt-10">
-                  <div className="w-full overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 sm:max-w-[400px]">
-                    <h2 className="inter-semibold-font mb-4 p-4 text-[16px] text-slate-900">
+                  <div className="w-full overflow-hidden rounded-2xl border border-slate-100 bg-white p-3 sm:p-4 sm:max-w-[400px]">
+                    <h2 className="inter-semibold-font mb-3 p-2 text-[16px] text-slate-900 sm:mb-4 sm:p-4">
                       Order Summary
                     </h2>
                     <div className="overflow-y-auto max-h-[300px] space-y-3 scrollbar-thin scrollbar-thumb-gray-300 px-1">
@@ -914,7 +926,7 @@ export default function DosageSelection() {
               </div>
             </div>
 
-            <div className="space-y-3 mt-6 sm:hidden block">
+            <div className="space-y-3 mt-6 sm:hidden block max-sm:pb-[calc(env(safe-area-inset-bottom,0px)+48px)]">
               <NextButton
                 onClick={handleSubmit(onSubmit)}
                 disabled={totalSelectedQty() === 0 || !isValid}

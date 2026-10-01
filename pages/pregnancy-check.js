@@ -7,7 +7,6 @@ import NextButton from "@/Components/NextButton/NextButton";
 import BackButton from "@/Components/BackButton/BackButton";
 import StepsHeader from "@/layout/stepsHeader";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
@@ -144,7 +143,7 @@ export default function PregnancyCheck() {
                 </div>
 
                 <div className="mt-6">
-                  <NextButton
+                  <NextButton loading={showLoader}
                     label="Next"
                     disabled={!isValid || pregnancy === "yes"}
                   />
@@ -156,11 +155,6 @@ export default function PregnancyCheck() {
                 </div>
               </form>
 
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>

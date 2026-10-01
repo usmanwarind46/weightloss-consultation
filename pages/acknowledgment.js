@@ -7,7 +7,6 @@ import ProgressBar from "@/Components/ProgressBar/ProgressBar";
 import StepsHeader from "@/layout/stepsHeader";
 
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
@@ -61,7 +60,7 @@ export default function Acknowledgment() {
           return (
             <label
               key={option}
-              className={`flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-3.5 transition-all duration-150 select-none
+              className={`flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-4 py-2.5 sm:py-3.5 transition-all duration-150 select-none
                 ${
                   isSelected
                     ? "border-[#4565BF] bg-[#4565BF]/[0.05]"
@@ -108,9 +107,9 @@ export default function Acknowledgment() {
       <FormWrapper heading={"Patient Acknowledgment"} description={""}>
         <PageAnimationWrapper>
           <div className="bg-white">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-8">
               {/* Questions */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">
                   <p className="inter-reg-font text-sm text-slate-700">
                     Are you purchasing this medication for yourself, of your own
@@ -137,7 +136,38 @@ export default function Acknowledgment() {
                 )}
 
                 {showConsentBox && (
-                  <div className="bg-white space-y-4 py-2">
+                  <div className="bg-white space-y-3 py-1 sm:space-y-4 sm:py-2">
+                    <div className="rounded-xl border border-[#4565BF]/[0.14] bg-[#f7f8fc] p-3 sm:p-5">
+                      <ul className="inter-reg-font list-disc list-outside pl-5 text-[13.5px] leading-[1.8] text-slate-700 space-y-2">
+                        <li>
+                          You consent for your medical information to be
+                          assessed by the clinical team at Online Weight Loss
+                          Clinic and its pharmacy and to be prescribed
+                          medication.
+                        </li>
+                        <li>
+                          You consent to an age and ID check when placing your
+                          first order.
+                        </li>
+                        <li>
+                          You will answer all questions honestly and accurately,
+                          and understand that it is an offence to provide false
+                          information.
+                        </li>
+                        <li>
+                          You have capacity to understand all about the
+                          condition and medication information we have provided
+                          and that you give fully informed consent to the
+                          treatment option provided.
+                        </li>
+                        <li>
+                          You understand that the treatment or medical advice
+                          provided is based on the information you have
+                          provided.
+                        </li>
+                      </ul>
+                    </div>
+
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input
                         type="checkbox"
@@ -170,57 +200,21 @@ export default function Acknowledgment() {
                         )}
                       </span>
                       <span className="inter-semibold-font text-sm text-slate-800">
-                        Do you confirm that:
+                        I agree to the above
                       </span>
                     </label>
-
-                    <div className="rounded-xl border border-[#4565BF]/[0.14] bg-[#f7f8fc] p-4 sm:p-5">
-                      <ul className="inter-reg-font list-disc list-outside pl-5 text-[13.5px] leading-[1.8] text-slate-700 space-y-2">
-                        <li>
-                          You consent for your medical information to be
-                          assessed by the clinical team at Online Weight Loss
-                          Clinic and its pharmacy and to be prescribed
-                          medication.
-                        </li>
-                        <li>
-                          You consent to an age and ID check when placing your
-                          first order.
-                        </li>
-                        <li>
-                          You will answer all questions honestly and accurately,
-                          and understand that it is an offence to provide false
-                          information.
-                        </li>
-                        <li>
-                          You have capacity to understand all about the
-                          condition and medication information we have provided
-                          and that you give fully informed consent to the
-                          treatment option provided.
-                        </li>
-                        <li>
-                          You understand that the treatment or medical advice
-                          provided is based on the information you have
-                          provided.
-                        </li>
-                      </ul>
-                    </div>
                   </div>
                 )}
               </div>
 
-              <div className="mt-6">
-                <NextButton
+              <div className="mt-4 sm:mt-6">
+                <NextButton loading={showLoader}
                   disabled={!isValid || isNoSelected}
-                  label="I Confirm"
+                  label="Confirm"
                 />
               </div>
             </form>
 
-            {showLoader && (
-              <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                <PageLoader />
-              </div>
-            )}
           </div>
         </PageAnimationWrapper>
       </FormWrapper>

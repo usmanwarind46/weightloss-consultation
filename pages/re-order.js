@@ -7,7 +7,6 @@ import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import NextButton from "@/Components/NextButton/NextButton";
 import StepsHeader from "@/layout/stepsHeader";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import useReorder from "@/store/useReorderStore";
 import MetaLayout from "@/Meta/MetaLayout";
 import { meta_url } from "@/config/constants";
@@ -131,15 +130,10 @@ export default function ReOrder() {
               </div>
 
               <div>
-                <NextButton disabled={!isValid} label="I Confirm" />
+                <NextButton loading={showLoader} disabled={!isValid} label="I Confirm" />
               </div>
             </form>
 
-            {showLoader && (
-              <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                <PageLoader />
-              </div>
-            )}
           </div>
         </PageAnimationWrapper>
       </FormWrapper>

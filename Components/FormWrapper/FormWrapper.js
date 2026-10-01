@@ -1,7 +1,7 @@
 import ProgressBar from "../ProgressBar/ProgressBar";
 
 
-const FormWrapper = ({ className, children, width = "", heading = "", description = "", percentage = 0, showLoader = false }) => {
+const FormWrapper = ({ className, children, width = "", heading = "", description = "", percentage = 0, showLoader = false, headingClassName = "", headerClassName = "" }) => {
   return (
     <>
       <div className={`${className} py-6 sm:py-14 flex justify-center bg-[#EEF2FA] px-4 sm:px-6 ${showLoader ? "cursor-not-allowed" : ""}`}>
@@ -11,12 +11,12 @@ const FormWrapper = ({ className, children, width = "", heading = "", descriptio
 
           {(heading || description) && (
             <div
-              className="border-b border-[#e0e6f7] px-5 py-5 sm:px-8 sm:py-6"
+              className={`${headerClassName} border-b border-[#e0e6f7] px-5 py-5 sm:px-8 sm:py-6`}
               style={{ backgroundImage: "radial-gradient(120% 140% at 88% 0, #e8ecfb 0%, #f2f4fc 42%, #ffffff 78%)" }}
             >
               {/* Title */}
               {heading && (
-                <h1 className="inter-bold-font text-[22px] sm:text-[26px] leading-tight text-slate-900 mb-2">
+                <h1 className={`${headingClassName} inter-bold-font text-[22px] sm:text-[26px] leading-tight text-slate-900 mb-2`}>
                   {heading}
                 </h1>
               )}
@@ -30,7 +30,7 @@ const FormWrapper = ({ className, children, width = "", heading = "", descriptio
             </div>
           )}
 
-          <div className="px-5 sm:px-8 pt-6 pb-6 sm:pt-8 sm:pb-8">
+          <div className="px-5 sm:px-8 pt-6 pb-6 sm:pt-8 sm:pb-8 max-sm:pb-[calc(env(safe-area-inset-bottom,0px)+48px)]">
             {/* Slot: Form Fields and Buttons */}
             <div className={`${showLoader ? "pointer-events-none opacity-50" : ""}`}>{children}</div>
           </div>

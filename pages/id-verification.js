@@ -27,7 +27,8 @@ import useImageUploadStore from "@/store/useImageUploadStore ";
 import MUISelectField from "@/Components/SelectField/SelectField";
 import { heicTo, isHeic } from "heic-to"; // ✅ import heic converter
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
+import { ArrowLeft } from "lucide-react";
 
 const IdVerification = () => {
   const MAX_SIZE_MB = 30;
@@ -73,6 +74,7 @@ const IdVerification = () => {
   //   });
 
   const GO = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [open, setOpen] = useState(false);
   const [loadingPhoto, setLoadingPhoto] = useState(false);
 
@@ -275,6 +277,8 @@ const IdVerification = () => {
   };
 
   const handleRedirect = () => {
+    setIsRedirecting(true);
+    setTimeout(() => setIsRedirecting(false), 20000);
     if (!imageUploaded) {
       GO.push("/photo-upload");
     } else {
@@ -402,9 +406,7 @@ const IdVerification = () => {
     <>
       <StepsHeader />
       <MetaLayout canonical={`${meta_url}photo-upload`} />
-      {loading && (
-        <PageLoader message="Please wait while your ID images are being uploaded..." />
-      )}
+      <GuardedLoader show={loading} message="Please wait while your ID images are being uploaded..." />
       <main className="min-h-[calc(100vh-66px)] bg-[#EEF2FA] px-4 py-8 sm:py-12">
         <AnimatePresence>
           {open && (
@@ -447,6 +449,7 @@ const IdVerification = () => {
                 <NextButton
                   label={buttonLabel}
                   onClick={handleRedirect}
+                  loading={isRedirecting}
                   className="w-full"
                   // disabled={loading || !frontPhoto || !sidePhoto}
                   // loading={loading}
@@ -459,9 +462,18 @@ const IdVerification = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="mx-auto w-full max-w-[620px] rounded-2xl border border-[#4565BF]/10 bg-white px-5 py-6 shadow-[0_12px_36px_rgba(69,101,191,0.09)] sm:px-8 sm:py-8"
         >
+          <button
+            type="button"
+            onClick={() => GO.push("/dashboard")}
+            aria-label="Back to dashboard"
+            className="mb-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition-colors hover:border-[#4565BF]/40 hover:text-[#4565BF]"
+          >
+            <ArrowLeft size={18} strokeWidth={2} />
+          </button>
+
           <div className="mb-6 text-left">
             {/* Heading */}
-            <h1 className="inter-semibold-font text-[21px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[23px]">
+            <h1 className="inter-semibold-font text-[21px] max-sm:!text-[24px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[23px]">
               ID verification required
             </h1>
 
@@ -566,6 +578,14 @@ const IdVerification = () => {
     `}
             >
               {loading ? "Uploading..." : "Upload"}
+            </button>
+            <button
+              type="button"
+              onClick={() => GO.push("/dashboard")}
+              className="inter-medium-font mx-auto mt-4 flex min-h-11 cursor-pointer items-center justify-center gap-2 text-[17px] text-[#4565BF] transition-colors hover:text-[#3550a0]"
+            >
+              <ArrowLeft size={17} strokeWidth={2} />
+              I’ll do it later
             </button>
           </div>
         </form>

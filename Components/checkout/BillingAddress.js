@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import SectionWrapper from "./SectionWrapper";
 import SectionHeader from "./SectionHeader";
 import TextField from "@/Components/TextField/TextField";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
 import MUISelectField from "@/Components/SelectField/SelectField";
 import { Client } from "getaddress-api";
 import useShippingOrBillingStore from "@/store/shipingOrbilling";
@@ -274,6 +274,7 @@ export default function BillingAddress({
   }
 
   return (
+    <>
     <SectionWrapper>
       <SectionHeader
         stepNumber={<SlNote />}
@@ -411,15 +412,12 @@ export default function BillingAddress({
             errors={errors}
           />
 
-          <NextButton label="Continue" disabled={!isValid} />
+          <NextButton label="Continue" disabled={!isValid} loading={showLoader} />
         </form>
 
-        {showLoader && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded">
-            <PageLoader />
-          </div>
-        )}
       </SectionHeader>
     </SectionWrapper>
+    <GuardedLoader show={showLoader} onCancel={() => setShowLoader(false)} />
+    </>
   );
 }

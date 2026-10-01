@@ -6,7 +6,6 @@ import StepsHeader from "@/layout/stepsHeader";
 import BackButton from "@/Components/BackButton/BackButton";
 import NextButton from "@/Components/NextButton/NextButton";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import useMedicalQuestionsStore from "@/store/medicalQuestionStore";
 import useMedicalInfoStore from "@/store/medicalInfoStore";
 import MetaLayout from "@/Meta/MetaLayout";
@@ -204,7 +203,7 @@ const MedicalQuestions = () => {
               })}
 
               <div className="mt-6 flex flex-col gap-3">
-                <NextButton disabled={!isNextEnabled} label="Next" />
+                <NextButton loading={showLoader} disabled={!isNextEnabled} label="Next" />
                 <BackButton
                   label="Back"
                   onClick={() => router.push("/bmi-detail")}
@@ -212,11 +211,6 @@ const MedicalQuestions = () => {
               </div>
             </form>
 
-            {showLoader && (
-              <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                <PageLoader />
-              </div>
-            )}
           </div>
         </PageAnimationWrapper>
       </FormWrapper>

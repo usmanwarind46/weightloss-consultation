@@ -8,7 +8,6 @@ import TextField from "@/Components/TextField/TextField";
 import StepsHeader from "@/layout/stepsHeader";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
 import { useEffect, useState } from "react";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import MuiDatePickerField from "@/Components/DatePicker/DatePicker";
 import { differenceInYears, format, parse } from "date-fns";
 import usePatientInfoStore from "@/store/patientInfoStore";
@@ -281,7 +280,7 @@ export default function PersonalDetails() {
                 </div>
 
                 <div className="mt-6">
-                  <NextButton
+                  <NextButton loading={showLoader}
                     label="Next"
                     disabled={
                       !isValid || (gender === "Female" && pregnancy === "yes")
@@ -289,11 +288,6 @@ export default function PersonalDetails() {
                   />
                 </div>
               </form>
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>

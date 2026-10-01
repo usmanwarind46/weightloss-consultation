@@ -13,14 +13,14 @@ const ConfirmationModal2 = ({
   return (
     <AnimatePresence>
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-40 backdrop-blur-sm z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-40 px-4 backdrop-blur-sm z-50">
           {/* Modal Container */}
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.3 }}
-            className="bg-white p-6 rounded-xl shadow-lg w-96"
+            className="bg-white p-6 rounded-xl shadow-lg w-full max-w-96"
           >
             {/* Icon */}
             <div className="flex justify-center mb-4">

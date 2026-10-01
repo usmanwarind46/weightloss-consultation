@@ -12,7 +12,8 @@ import { passwordlink } from "@/config/constants";
 import ResetForm from "./ResetForm";
 import ForgotForm from "./ForgotForm";
 import LoginForm from "./LoginForm";
-import PageLoader from "../PageLoader/PageLoader";
+import GuardedLoader from "../PageLoader/GuardedLoader";
+import { getApiErrorMessage, useIsMounted } from "@/utils/apiError";
 
 export default function LoginModal({
   show = false,
@@ -44,14 +45,15 @@ export default function LoginModal({
 
   // }, [mode]);
 
-  console.log(mode, "mode");
   const [forceVisible, setForceVisible] = useState(false);
   const [showLoginMsg, setShowLoginMsg] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const isMounted = useIsMounted();
 
   const forgotMutation = useMutation(forgotPassword, {
     onMutate: () => setLocalLoading(true),
     onSuccess: () => {
+      if (!isMounted.current) return;
       toast.success("Password updated successfully.");
       setMode("login");
       setShowLoginMsg(true);
@@ -59,8 +61,7 @@ export default function LoginModal({
       setLocalLoading(false);
     },
     onError: (error) => {
-      console.log("Login error:", error);
-
+      if (!isMounted.current) return;
       const errors = error?.response?.data?.errors;
 
       if (errors && typeof errors === "object") {
@@ -72,7 +73,7 @@ export default function LoginModal({
           }
         });
       } else {
-        toast.error("Something went wrong.");
+        toast.error(getApiErrorMessage(error));
       }
 
       setLocalLoading(false);
@@ -82,12 +83,15 @@ export default function LoginModal({
   const forgotLinkMutation = useMutation(forgotPasswordLink, {
     onMutate: () => setLocalLoading(true),
     onSuccess: () => {
+      if (!isMounted.current) return;
       toast.success("Reset link sent. Please check your email.");
       reset();
       setForceVisible(true);
       setLocalLoading(false);
     },
     onError: (error) => {
+      if (!isMounted.current) return;
+      setLocalLoading(false);
       const errors = error?.response?.data?.errors;
 
       if (errors && typeof errors === "object") {
@@ -99,7 +103,7 @@ export default function LoginModal({
           }
         });
       } else {
-        toast.error("Something went wrong.");
+        toast.error(getApiErrorMessage(error));
       }
     },
   });
@@ -136,6 +140,7 @@ export default function LoginModal({
   }, [mode, isLoading, forgotLinkMutation.isLoading, forgotMutation.isLoading]);
 
   return (
+    <>
     <AnimatePresence>
       {showModal && (
         <motion.div
@@ -231,14 +236,20 @@ export default function LoginModal({
               />
             )}
 
-            {isFormLoading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 rounded-2xl">
-                <PageLoader />
-              </div>
-            )}
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
+
+    {/* outside the transformed modal so the loader covers the whole screen */}
+    <GuardedLoader
+      show={showModal && isFormLoading}
+      onCancel={() => {
+        forgotMutation.reset();
+        forgotLinkMutation.reset();
+        setLocalLoading(false);
+      }}
+    />
+    </>
   );
 }

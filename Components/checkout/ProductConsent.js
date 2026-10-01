@@ -41,13 +41,13 @@ const ProductConsent = ({ isCompleted, onComplete, onConsentChange, setIsConcent
         <div>
           {/* Consent List */}
           <div
-            className="list-disc list-outside pl-5 text-sm text-gray-700 space-y-2 reg-font paragraph my-3 product-concent-list concent-anchor"
+            className="list-disc list-outside pl-5 text-sm text-gray-700 space-y-2 reg-font paragraph !whitespace-normal my-3 product-concent-list concent-anchor"
             dangerouslySetInnerHTML={{ __html: variation?.terms_and_conditon }}
           ></div>
           {/* {variation?.terms_and_conditon} */}
 
           {/* Terms Checkbox */}
-          <div className="mt-8 font-inter mb-5">
+          <div className="mt-4 mb-2 font-inter sm:mt-8 sm:mb-5">
             <label
               className="flex items-center gap-3 text-[15px] text-gray-900 font-semibold cursor-pointer select-none"
               onClick={(e) => {

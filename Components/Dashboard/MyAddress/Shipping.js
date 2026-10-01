@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Info, Loader2, MapPin, Search } from "lucide-react";
 
 import TextField from "@/Components/TextField/TextField";
-import PageLoader from "@/Components/PageLoader/PageLoader";
+import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
 import NextButton from "@/Components/NextButton/NextButton";
 import MUISelectField from "@/Components/SelectField/SelectField";
 import { getProfileData, sendProfileData } from "@/api/myProfileApi";
@@ -261,16 +261,12 @@ export default function Shipping({ shipmentCountries = [] }) {
 
         <div className="!mt-9 flex justify-start border-t border-[#4565BF]/[0.07] pt-5">
           <div className="w-full sm:w-auto sm:min-w-[180px]">
-            <NextButton label="Update shipping" disabled={!isValid} className={UPDATE_BUTTON_CLASS} />
+            <NextButton label="Update shipping" disabled={!isValid} loading={showLoader} className={UPDATE_BUTTON_CLASS} />
           </div>
         </div>
       </form>
 
-      {showLoader && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[22px] bg-white/75 backdrop-blur-[2px]">
-          <PageLoader />
-        </div>
-      )}
+      <GuardedLoader show={showLoader} onCancel={() => setShowLoader(false)} />
 
       <style jsx global>{`
         .address-form .MuiFormControl-root { width: 100%; }

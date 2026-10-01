@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import StepsHeader from "@/layout/stepsHeader";
 import NextButton from "@/Components/NextButton/NextButton";
-import Image from "next/image";
 import useProductId from "@/store/useProductIdStore";
 import { useSearchParams } from "next/navigation";
 import useReorder from "@/store/useReorderStore";
@@ -13,11 +11,11 @@ import MetaLayout from "@/Meta/MetaLayout";
 import { indexMeta_url, meta_url } from "@/config/constants";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
 import useReorderButtonStore from "@/store/useReorderButton";
-import IntroSvg from "@/public/images/intro.svg";
 
 export default function Index() {
   const router = useRouter();
-  const [showLoader, setShowLoader] = useState(false);
+  // which button was clicked: "new" | "returning" | null
+  const [loadingAction, setLoadingAction] = useState(null);
 
   //Search Param to get product ID
   const searchParams = useSearchParams();
@@ -50,6 +48,8 @@ export default function Index() {
 
   const onSubmit = async (data, e) => {
     const action = e.nativeEvent.submitter.value;
+    if (loadingAction) return;
+    setLoadingAction(action === "Accept and re-order" ? "returning" : "new");
 
     if (action === "Accept and re-order") {
       if (token && authUserDetail?.isReturning) {
@@ -63,12 +63,7 @@ export default function Index() {
       setIsFromReorder(false);
       router.push("/acknowledgment");
     }
-
-    setShowLoader(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
   };
-
-  console.log("Comming from Vercel Consultation");
 
   return (
     <>
@@ -76,32 +71,21 @@ export default function Index() {
 
       <StepsHeader />
 
-      <section className="my-16 mx-6 sm:mx-0">
-        <div className="bg-white max-w-xl mx-auto rounded-3xl p-10 shadow-lg border border-gray-100 relative">
-          {/* Icon */}
-          <div className="flex justify-center">
-            <Image
-              src={IntroSvg}
-              alt="Online Weight Loss Icon"
-              width={200}
-              height={50}
-              className="rounded-lg"
-            />
-          </div>
-
+      <section className="min-h-[calc(100dvh-66px)] px-4 py-4 max-sm:flex max-sm:items-center sm:py-12">
+        <div className="relative mx-auto w-full max-w-[580px] overflow-hidden rounded-2xl border border-[#4565BF]/10 bg-white px-4 py-4 shadow-[0_12px_36px_rgba(69,101,191,0.09)] sm:px-8 sm:py-8 max-sm:w-full">
           {/* Heading */}
-          <h2 className=" bold-font paragraph text-xl text-start mb-3 p-0">
+          <h2 className="max-sm:text-[24px] inter-semibold-font mb-1.5 text-start text-[21px] leading-[1.3] tracking-[-0.02em] text-slate-900 sm:text-[24px]">
             Let's get you started on your weight loss journey.
           </h2>
 
-          <p className="reg-font text-start text-sm paragraph mb-8">
+          <p className="inter-reg-font mb-3 text-start text-[13.5px] max-sm:text-[16px] leading-[1.5] text-slate-500 sm:mb-6 sm:leading-6">
             We’ll now ask a few questions about you and your health.
           </p>
 
           {/* Good to know */}
-          <div className="mb-10">
-            <p className="bold-font paragraph mb-4">Good to know:</p>
-            <ul className="reg-font list-disc list-inside space-y-3 paragraph text-[15px] leading-relaxed">
+          <div className="mb-4 sm:mb-6">
+            <p className="inter-semibold-font mb-1 text-[13px] max-sm:text-[16px] text-slate-800">Good to know</p>
+            <ul className="inter-reg-font list-outside list-disc divide-y divide-slate-100 border-y border-slate-100 pl-4 text-[13px] max-sm:text-[16px] leading-[1.4] text-slate-600 marker:text-[#4565BF] [&>li]:py-1.5 sm:[&>li]:py-3">
               <li>
                 Your consultation will take about five minutes to complete.
               </li>
@@ -113,33 +97,39 @@ export default function Index() {
             </ul>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
             <NextButton
               type="submit"
               label="New Patient"
-              disabled={!isValid}
               subLabel="Click here to start online consultation"
+              subHeadingClassName="max-sm:hidden"
+              loading={loadingAction === "new"}
+              disabled={!isValid || loadingAction === "returning"}
+              className="!rounded-xl text-[16px]"
             />
 
             <button
               type="submit"
               name="action"
               value="Accept and re-order"
-              disabled={!isValid}
-              className=" w-full px-12   bold-font text-sm border-in duration-150 ease-in-out hover:bg-primary  py-3 rounded-md bold-font  transition my-3 border-2 text-primary hover:text-white border-[#4565BF] cursor-pointer"
+              disabled={!isValid || loadingAction !== null}
+              className="group inter-medium-font mt-2 flex min-h-[54px] w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-[#4565BF]/30 bg-white px-6 py-2.5 text-[#4565BF] transition-all hover:border-[#4565BF] hover:bg-[#4565BF]/[0.04] disabled:cursor-not-allowed max-sm:min-h-[48px] sm:mt-3 sm:py-3 disabled:border-slate-200 disabled:text-slate-400"
             >
-              Returning Patient
-              <p className="reg-font paragraph !text-[13px] text-primary">
-                Click here - your previous details will be saved
-              </p>
+              {loadingAction === "returning" ? (
+                <span className="flex items-center gap-2 whitespace-nowrap">
+                  <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-[#4565BF] border-t-transparent" />
+                  Please wait...
+                </span>
+              ) : (
+                <>
+                  Returning Patient
+                  <p className="inter-reg-font mt-0.5 !text-[12px] max-sm:hidden text-[#4565BF]/75 group-disabled:text-slate-400">
+                    Click here - your previous details will be saved
+                  </p>
+                </>
+              )}
             </button>
           </form>
-
-          {showLoader && (
-            <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-              <PageLoader />
-            </div>
-          )}
         </div>
       </section>
     </>

@@ -6,7 +6,6 @@ import TextField from "@/Components/TextField/TextField";
 import { useRouter } from "next/navigation";
 import StepsHeader from "@/layout/stepsHeader";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import BackButton from "@/Components/BackButton/BackButton";
 import SwitchTabs from "@/Components/Tabs/SwitchTabs";
 import useBmiStore from "@/store/bmiStore";
@@ -546,20 +545,20 @@ export default function CalculateBmi() {
                       lastBmi?.weight_unit == "metrics" ||
                       lastBmi?.weight_unit == "metric" ? (
                         <div className="mt-6 mb-6 rounded-xl border border-amber-200/70 bg-amber-50/70 px-4 py-3.5">
-                          <p className="inter-reg-font flex items-center gap-2 text-[13px] text-amber-800">
-                            <BsInfoCircle className="shrink-0" /> Your previous
-                            recorded weight was{" "}
-                            <span className="inter-semibold-font">
+                          <p className="inter-reg-font whitespace-nowrap text-[13px] max-sm:text-[clamp(12px,3.7vw,14px)] text-amber-800">
+                            <BsInfoCircle className="mr-2 inline-block shrink-0 align-[-2px]" />
+                            Your previous recorded weight was{" "}
+                            <span className="inter-semibold-font whitespace-nowrap">
                               {lastBmi?.kg} kg
                             </span>
                           </p>
                         </div>
                       ) : (
                         <div className="mt-6 mb-6 rounded-xl border border-amber-200/70 bg-amber-50/70 px-4 py-3.5">
-                          <p className="inter-reg-font flex items-center gap-2 text-[13px] text-amber-800">
-                            <BsInfoCircle className="shrink-0" /> Your previous
-                            recorded weight was{" "}
-                            <span className="inter-semibold-font">
+                          <p className="inter-reg-font whitespace-nowrap text-[13px] max-sm:text-[clamp(12px,3.7vw,14px)] text-amber-800">
+                            <BsInfoCircle className="mr-2 inline-block shrink-0 align-[-2px]" />
+                            Your previous recorded weight was{" "}
+                            <span className="inter-semibold-font whitespace-nowrap">
                               {lastBmi?.stones} st & {lastBmi?.pound} lbs
                             </span>
                           </p>
@@ -572,7 +571,7 @@ export default function CalculateBmi() {
                 )}
 
                 <div className="mt-6 flex flex-col gap-3">
-                  <NextButton
+                  <NextButton loading={showLoader}
                     label="Next"
                     onClick={handleNext}
                     type="button"
@@ -590,11 +589,6 @@ export default function CalculateBmi() {
                 </div>
               </form>
 
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>

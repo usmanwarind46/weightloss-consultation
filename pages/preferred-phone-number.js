@@ -2,7 +2,6 @@ import TextField from "@/Components/TextField/TextField";
 import { Controller, useForm } from "react-hook-form";
 import NextButton from "@/Components/NextButton/NextButton";
 import { useRouter } from "next/navigation";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import { useEffect, useState } from "react";
 import FormWrapper from "@/Components/FormWrapper/FormWrapper";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
@@ -144,7 +143,7 @@ export default function SignUp() {
                   )}
                 />
                 <div className="space-y-3 mt-6">
-                  <NextButton
+                  <NextButton loading={showLoader}
                     label="Next"
                     disabled={!isValid} // ✅ disables until valid
                     type="submit"
@@ -156,11 +155,6 @@ export default function SignUp() {
                 </div>
               </form>
 
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>

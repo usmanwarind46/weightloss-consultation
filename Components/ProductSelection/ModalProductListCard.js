@@ -29,7 +29,7 @@ const ModalProductListCard = ({
       role="button"
       tabIndex={isOutOfStock || isLoading ? -1 : 0}
       className={`
-        group flex h-full select-none flex-col items-stretch gap-2 rounded-2xl border bg-white
+        group flex h-full select-none flex-col items-stretch gap-2 rounded-2xl border bg-white max-sm:grid max-sm:grid-cols-[88px_1fr] max-sm:items-center max-sm:gap-x-3 max-sm:gap-y-1.5
         px-3 py-3 transition-none sm:h-auto sm:flex-row sm:items-center sm:gap-4 sm:px-4 sm:py-3.5 2xl:px-5 2xl:py-4
         ${isSelected
           ? "border-[#4565BF] bg-[#4565BF]/[0.025] shadow-[0_1px_4px_rgba(0,0,0,0.05)]"
@@ -40,7 +40,7 @@ const ModalProductListCard = ({
       `}
       aria-selected={isSelected}
     >
-      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#4565BF]/[0.07] sm:h-[64px] sm:w-[64px] 2xl:h-[76px] 2xl:w-[76px]">
+      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#4565BF]/[0.07] max-sm:row-span-2 max-sm:h-[88px] max-sm:w-[88px] sm:h-[64px] sm:w-[64px] 2xl:h-[76px] 2xl:w-[76px]">
         {isOutOfStock && (
           <span className="absolute inset-0 flex items-center justify-center bg-white/70">
             <PackageX size={16} strokeWidth={1.8} className="text-red-400" />
@@ -60,11 +60,11 @@ const ModalProductListCard = ({
 
       <div className="min-w-0 sm:flex-1">
         {isOutOfStock && (
-          <span className="inter-medium-font mb-1 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] text-red-500">
+          <span className="inter-medium-font mb-1 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] max-sm:h-6 max-sm:items-center max-sm:text-[12px] text-red-500">
             Out of stock
           </span>
         )}
-        <h3 className="inter-semibold-font break-words text-[13px] leading-[19px] text-slate-900 sm:truncate sm:text-[14px] sm:leading-snug lg:text-[14px] 2xl:text-[16px]">
+        <h3 className="max-sm:text-[18px] inter-semibold-font break-words text-[13px] leading-[19px] text-slate-900 sm:truncate sm:text-[14px] sm:leading-snug lg:text-[14px] 2xl:text-[16px]">
           {title}
         </h3>
       </div>
@@ -72,7 +72,7 @@ const ModalProductListCard = ({
       <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-start sm:gap-4 2xl:gap-5">
         <div className="flex items-baseline gap-1.5 text-left sm:block sm:text-right">
           <p className="inter-reg-font text-[10px] uppercase tracking-[0.1em] text-slate-400">From</p>
-          <span className="inter-bold-font text-[16px] leading-tight text-[#4565BF] lg:text-[16px] 2xl:text-[20px]">
+          <span className="inter-bold-font text-[16px] max-sm:text-[18px] leading-tight text-[#4565BF] lg:text-[16px] 2xl:text-[20px]">
             £{originalPrice}
           </span>
         </div>
@@ -85,8 +85,8 @@ const ModalProductListCard = ({
           }}
           disabled={isOutOfStock || isLoading}
           aria-pressed={isSelected}
-          className={`inter-medium-font inline-flex h-[34px] w-full shrink-0 items-center justify-center gap-1.5 overflow-hidden
-            whitespace-nowrap rounded-xl px-2 text-[10.5px] transition-none sm:h-9 sm:w-[142px] sm:px-4 sm:text-[12.5px] 2xl:h-[42px] 2xl:w-[160px] 2xl:px-6 2xl:text-[13.5px]
+          className={`inter-medium-font inline-flex h-[34px] max-sm:h-auto max-sm:min-h-11 w-full shrink-0 items-center justify-center gap-1.5 overflow-hidden
+            whitespace-nowrap rounded-xl px-2 max-sm:px-3 max-sm:py-2 max-sm:text-[15px] text-[10.5px] transition-none sm:h-9 sm:w-[142px] sm:px-4 sm:text-[12.5px] 2xl:h-[42px] 2xl:w-[160px] 2xl:px-6 2xl:text-[13.5px]
             ${isOutOfStock
               ? "cursor-not-allowed border border-slate-200 bg-slate-100 text-slate-400"
               : isSelected

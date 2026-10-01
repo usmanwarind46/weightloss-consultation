@@ -5,7 +5,6 @@ import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimatio
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import StepsHeader from "@/layout/stepsHeader";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 import usePatientInfoStore from "@/store/patientInfoStore";
 import useBmiStore from "@/store/bmiStore";
 import useAuthUserDetailStore from "@/store/useAuthUserDetailStore";
@@ -366,12 +365,12 @@ const ConfirmationSummary = () => {
             <div className="space-y-6 ">
               {/* Summary Box */}
               <div className="rounded-xl bg-[#FBFBFD] overflow-hidden p-3 sm:p-5">
-                <div className="grid grid-cols-2 gap-2.5 sm:gap-x-8 sm:gap-y-3">
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-3">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
                       Full Name
                     </p>
-                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {firstName ? (
                         <>
                           {firstName} {lastName}
@@ -383,35 +382,35 @@ const ConfirmationSummary = () => {
                       )}
                     </p>
                   </div>
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
                       Email
                     </p>
-                    <p className="inter-medium-font break-words text-[13px] text-slate-800 sm:text-[14px]">
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800  sm:text-[14px] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {email || patientInfo?.email}
                     </p>
                   </div>
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
                       Post code
                     </p>
-                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 [&::first-letter]:uppercase sm:text-[14px] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {patientInfo?.address?.postalcode}
                     </p>
                   </div>
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
                       Date of Birth
                     </p>
-                    <p className="inter-medium-font break-words text-[13px] text-slate-800 sm:text-[14px]">
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 sm:text-[14px] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {patientInfo?.dob}
                     </p>
                   </div>
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
                       Height
                     </p>
-                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {bmi?.height_unit == "imperial" ? (
                         <>
                           {bmi?.ft} ft {bmi?.inch} inch
@@ -421,19 +420,19 @@ const ConfirmationSummary = () => {
                       )}
                     </p>
                   </div>
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
                       Gender
                     </p>
-                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {patientInfo?.gender}
                     </p>
                   </div>
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
                       Weight
                     </p>
-                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px]">
+                    <p className="inter-medium-font break-words text-[13px] text-slate-800 capitalize sm:text-[14px] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {bmi?.weight_unit == "metrics" ? (
                         <>{bmi?.kg} kg</>
                       ) : (
@@ -443,11 +442,11 @@ const ConfirmationSummary = () => {
                       )}
                     </p>
                   </div>
-                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
-                    <p className="inter-medium-font text-[11px] uppercase tracking-wide text-slate-400 mb-0.5">
-                      BMI
+                  <div className="min-w-0 rounded-lg border border-slate-100 bg-white max-sm:flex max-sm:flex-wrap max-sm:items-start max-sm:justify-between max-sm:gap-x-3 px-3 py-2.5 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+                    <p className="inter-medium-font text-[11px] capitalize tracking-wide text-slate-400 mb-0.5 max-sm:mb-0 max-sm:shrink-0">
+                      Bmi
                     </p>
-                    <p className="inter-semibold-font text-[14px] text-[#4565BF]">
+                    <p className="inter-semibold-font text-[14px] text-[#4565BF] max-sm:min-w-0 max-sm:flex-1 max-sm:text-right">
                       {bmi?.bmi?.toFixed(1)}
                     </p>
                   </div>
@@ -456,14 +455,9 @@ const ConfirmationSummary = () => {
 
               {/* Confirm & Review Buttons */}
               <div className="space-y-3 relative mt-6">
-                <NextButton label="Next" onClick={hanldeConfirm} />
+                <NextButton loading={showLoader} label="Confirm and proceed" onClick={hanldeConfirm} />
                 <BackButton label="Back" onClick={back} />
               </div>
-              {showLoader && (
-                <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                  <PageLoader />
-                </div>
-              )}
             </div>
           </div>
         </PageAnimationWrapper>

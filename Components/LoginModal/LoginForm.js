@@ -26,7 +26,7 @@ export default function LoginForm({ register, handleSubmit, errors, isLoading, o
         required
         errors={errors}
       />
-      <NextButton label="Login" type="submit" disabled={isLoading} />
+      <NextButton label="Login" type="submit" loading={isLoading} />
 
       <p className="reg-font text-black text-sm text-center mt-5">
 

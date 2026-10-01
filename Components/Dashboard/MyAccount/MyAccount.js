@@ -105,7 +105,7 @@ export const PageHeader = ({ label, title, subtitle, right }) => (
 /* ── View toggle ── */
 const ViewToggle = ({ productView, setProductView }) => (
   <div className="flex shrink-0 flex-col items-end gap-1.5">
-    <span className="inter-medium-font text-[11px] uppercase tracking-[0.1em] text-slate-400">View as</span>
+    <span className="inter-medium-font text-[11px] max-sm:text-[12px] uppercase tracking-[0.1em] text-slate-400">View as</span>
     <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1 gap-0.5">
       {[
         { mode: "list", Icon: List, label: "List" },
@@ -116,7 +116,7 @@ const ViewToggle = ({ productView, setProductView }) => (
           type="button"
           onClick={() => setProductView(mode)}
           aria-pressed={productView === mode}
-          className={`inter-semibold-font inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-[13px] transition-all duration-150 cursor-pointer
+          className={`inter-semibold-font inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-[13px] max-sm:text-[14px] transition-all duration-150 cursor-pointer
             ${productView === mode
               ? "bg-white text-[#4565BF] shadow-sm border border-slate-200/80 ring-1 ring-[#4565BF]/10"
               : "text-slate-400 hover:text-slate-700"
@@ -344,7 +344,7 @@ const MyAccount = () => {
             <div className="flex items-center gap-3 rounded-xl border border-[#e0e6f7] bg-white/80 px-4 py-2.5">
               <div className="min-w-0">
                 <p className="inter-medium-font text-[9.5px] lg:text-[10px] uppercase tracking-[0.1em] text-slate-400 leading-none mb-1">Logged in as</p>
-                <p className="inter-semibold-font text-[12px] lg:text-[12px] 2xl:text-[13px] text-slate-800 truncate max-w-[160px]">{displayEmail}</p>
+                <p className="inter-semibold-font text-[12px] lg:text-[12px] 2xl:text-[13px] text-slate-800 break-all">{displayEmail}</p>
               </div>
             </div>
           }
@@ -404,14 +404,14 @@ const MyAccount = () => {
           <div className="flex flex-col gap-3 lg:grid lg:grid-cols-12 lg:gap-6">
             <div className="contents">
               <div className="order-1 lg:col-span-6">
-                <h2 className="inter-bold-font text-[15px] lg:text-[16px] 2xl:text-[19px] text-slate-900">Reorder Treatment</h2>
+                <h2 className="inter-bold-font text-[22px] sm:text-[17px] lg:text-[18px] 2xl:text-[22px] text-slate-900">Reorder Treatment</h2>
                 <p className="inter-reg-font mt-0.5 text-[12px] lg:text-[12.5px] 2xl:text-[13.5px] text-slate-500">
                   Continue your latest clinician-approved treatment.
                 </p>
               </div>
               <div className="order-3 block sm:flex items-center justify-between gap-3 lg:order-2 lg:col-span-6">
                 <div>
-                  <h2 className="inter-bold-font text-[15px] lg:text-[16px] 2xl:text-[19px] text-slate-900">Available Treatments</h2>
+                  <h2 className="inter-bold-font text-[22px] sm:text-[17px] lg:text-[18px] 2xl:text-[22px] text-slate-900">Available Treatments</h2>
                   <p className="inter-reg-font mt-0.5 text-[12px] lg:text-[12.5px] 2xl:text-[13.5px] text-slate-500">
                     We offer the following weight loss injections treatment options to help you in your weight loss journey.
                   </p>
@@ -454,11 +454,11 @@ const MyAccount = () => {
                       </p>
                     </div>
 
-                    <div className="flex shrink-0 items-end justify-between gap-3 sm:flex-col sm:justify-start">
+                    <div className="flex shrink-0 items-end justify-between gap-3 max-sm:flex-col max-sm:items-stretch sm:flex-col sm:justify-start">
                       {currentTreatmentDisplayPrice && (
-                        <div className="text-right">
+                        <div className="text-right max-sm:flex max-sm:items-baseline max-sm:gap-1.5 max-sm:text-left">
                           <p className="inter-reg-font text-[10px] uppercase tracking-[0.1em] text-slate-400">From</p>
-                          <p className="inter-bold-font text-[22px] 2xl:text-[24px] text-[#4565BF] leading-none mt-0.5">
+                          <p className="inter-bold-font text-[22px] max-sm:text-[18px] 2xl:text-[24px] text-[#4565BF] leading-none mt-0.5 max-sm:mt-0">
                             £{currentTreatmentDisplayPrice}
                           </p>
                         </div>
@@ -467,7 +467,7 @@ const MyAccount = () => {
                         type="button"
                         onClick={() => handleReorder(currentTreatment?.id)}
                         disabled={!currentTreatment?.id || isReorderLoading}
-                        className={`inter-medium-font inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] text-white transition-all duration-150 whitespace-nowrap
+                        className={`inter-medium-font inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] text-white transition-all duration-150 whitespace-nowrap max-sm:min-h-10 max-sm:w-full max-sm:justify-center max-sm:px-6 max-sm:py-2 max-sm:text-[15px]
                           ${!currentTreatment?.id || isReorderLoading
                             ? "cursor-not-allowed bg-slate-200 text-slate-400"
                             : "cursor-pointer bg-[#4565BF] hover:bg-[#3550a0] active:scale-[0.98]"
@@ -518,7 +518,7 @@ const MyAccount = () => {
             <section className="col-span-12 lg:col-span-6">
               <div className="mb-3 block sm:flex items-center justify-between gap-3">
                 <div>
-                  <h2 className="inter-bold-font text-[15px] lg:text-[16px] 2xl:text-[19px] text-slate-900">Available Treatments</h2>
+                  <h2 className="inter-bold-font text-[22px] sm:text-[17px] lg:text-[18px] 2xl:text-[22px] text-slate-900">Available Treatments</h2>
                   <p className="inter-reg-font mt-0.5 text-[12px] lg:text-[12.5px] 2xl:text-[13.5px] text-slate-500">
                     We offer the following weight loss injections treatment options to help you in your weight loss journey.
                   </p>

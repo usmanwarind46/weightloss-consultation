@@ -316,9 +316,9 @@ const MyOrders = () => {
             </div>
           </div>
 
-          <div className="mx-4 mt-4 sm:mx-5 flex items-center gap-2.5 rounded-xl border border-amber-200/70 bg-amber-50/50 px-4 py-2.5">
-            <Info size={13} strokeWidth={2} className="shrink-0 text-amber-500" />
-            <p className="inter-reg-font text-[12px] sm:text-[14px] leading-none text-slate-500">
+          <div className="mx-4 mt-4 mb-4 sm:mx-5 flex items-start gap-2.5 rounded-xl border border-amber-200/70 bg-amber-50/50 p-[14px]">
+            <Info size={13} strokeWidth={2} className="mt-1 shrink-0 text-amber-500" />
+            <p className="inter-reg-font text-[12px] sm:text-[14px] leading-relaxed text-slate-500">
               <span className="inter-medium-font text-slate-600">Note: </span>
               Changes to your shipping address will only apply to future orders and will not affect previous ones.
             </p>

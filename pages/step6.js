@@ -11,7 +11,6 @@ import StepsHeader from "@/layout/stepsHeader";
 // ✅ Initialize Inter font here
 import { Inter } from "next/font/google";
 import PageAnimationWrapper from "@/Components/PageAnimationWrapper/PageAnimationWrapper";
-import PageLoader from "@/Components/PageLoader/PageLoader";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 const Step6 = () => {
@@ -144,15 +143,10 @@ const Step6 = () => {
               </div>
 
               <div className="my-5">
-                <NextButton disabled={!isValid || isNoSelected} label="I Confirm" />
+                <NextButton loading={showLoader} disabled={!isValid || isNoSelected} label="I Confirm" />
               </div>
             </form>
 
-            {showLoader && (
-              <div className="absolute inset-0 z-20 flex justify-center items-center bg-white/60 rounded-lg cursor-not-allowed">
-                <PageLoader />
-              </div>
-            )}
           </div>
         </PageAnimationWrapper>
       </FormWrapper>
