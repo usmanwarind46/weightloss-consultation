@@ -56,7 +56,7 @@ const OrderSummary = ({
   const { patientInfo, clearPatientInfo } = usePatientInfoStore();
   const { medicalInfo, clearMedicalInfo } = useMedicalInfoStore();
   const { gpdetails, clearGpDetails } = useGpDetailsStore();
-  const { bmi, clearBmi } = useBmiStore();
+  const { bmi, clearBmi, clinicChangeConsent } = useBmiStore();
   const { confirmationInfo, clearConfirmationInfo } =
     useConfirmationInfoStore();
   const { email } = useSignupStore();
@@ -250,6 +250,7 @@ const OrderSummary = ({
         discount_value: discountAmount ? discountAmount : null,
       },
       type: abandonCard?.type ? abandonCard?.type : null,
+      clinic_change_consent: clinicChangeConsent || "",
       subTotal: parseFloat(totalAmount),
       total: parseFloat(finalTotal),
       shipment: {

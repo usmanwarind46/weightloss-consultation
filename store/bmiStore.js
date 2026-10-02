@@ -5,8 +5,11 @@ const useBmiStore = create(
   persist(
     (set) => ({
       bmi: "",
+      clinicChangeConsent: "",
       setBmi: (bmi) => set({ bmi }),
-      clearBmi: () => set({ bmi: null }),
+      setClinicChangeConsent: (clinicChangeConsent) =>
+        set({ clinicChangeConsent }),
+      clearBmi: () => set({ bmi: null, clinicChangeConsent: "" }),
     }),
     {
       name: "bmi-storage",
