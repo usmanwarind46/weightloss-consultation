@@ -155,7 +155,6 @@ export default function StepsInformation() {
   /* ───────────────  medical questions mutation ────────────── */
   const medicalQuestionsMutation = useMutation(getMedicalQuestions, {
     onSuccess: (data) => {
-      if (!isMounted.current) return;
       if (data) {
         setMedicalQuestions(data?.data?.data?.medical_question);
         setConfirmationQuestions(data?.data?.data?.confirmation_question);
