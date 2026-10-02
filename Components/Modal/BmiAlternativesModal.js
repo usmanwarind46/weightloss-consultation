@@ -76,9 +76,7 @@ const BmiAlternativesModal = ({ isOpen, onClose }) => {
               must be clearly visible, with your ID placed beside you and its
               details clearly legible.
             </li>
-            <li>
-              If you’re having issues with the verification process, contact Customer Care. The team can help you complete the required steps.
-            </li>
+            
           </ul>
 
           <div className="border-t border-slate-200 pt-4">
