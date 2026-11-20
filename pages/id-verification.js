@@ -31,7 +31,7 @@ import GuardedLoader from "@/Components/PageLoader/GuardedLoader";
 import { ArrowLeft } from "lucide-react";
 
 const IdVerification = () => {
-  const MAX_SIZE_MB = 30;
+  const MAX_SIZE_MB = 50;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   // ✅ Compress image using <canvas>

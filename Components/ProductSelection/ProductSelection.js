@@ -167,7 +167,7 @@ const ProductSelection = ({ showProductSelection }) => {
         <div className="w-full flex flex-col items-center justify-center gap-3 px-4 py-2">
           {isSlow && (
             <p className="inter-medium-font w-full rounded-xl bg-amber-50 px-3 py-2 text-center text-[13px] text-amber-800">
-              Your internet connection seems slow. Please wait…
+              Please wait, this may take a few moments…
             </p>
           )}
           {renderSkeletons()}

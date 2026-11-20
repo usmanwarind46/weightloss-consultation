@@ -208,7 +208,13 @@ export default function StepsInformation() {
 
       <main className="min-h-[calc(100vh-66px)] bg-[#EEF2FA]">
         <GuardedLoader
-          show={showLoader}
+          show={
+            showLoader ||
+            consultationMutation.isLoading ||
+            medicalQuestionsMutation.isLoading ||
+            // product already chosen: this page only redirects, so never show it blank
+            (!!productId && !showProductSelection && !loadError)
+          }
           onRetry={loadData}
           onCancel={() => goBackOr(router, "/")}
           cancelLabel="Back"

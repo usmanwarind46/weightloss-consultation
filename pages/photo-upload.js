@@ -173,14 +173,14 @@ const UploadBox = ({
       </div>
 
       <p className="inter-reg-font mt-3 text-center text-[16px] leading-6 text-slate-500">
-        JPEG, PNG, WEBP, HEIC, HEIF, AVIF or PDF · Maximum 30 MB
+        JPEG, PNG, WEBP, HEIC, HEIF, AVIF or PDF · Maximum 50 MB
       </p>
     </div>
   );
 };
 
 const PhotoUpload = () => {
-  const MAX_SIZE_MB = 30;
+  const MAX_SIZE_MB = 50;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   const logError = (message) => {

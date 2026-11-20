@@ -32,6 +32,7 @@ import useNeedleConsent from "@/store/needleConsent";
 import useAbandonCardStore from "@/store/abandonCardStore";
 import lastOrderStore from "@/store/lastOrderStore";
 import { isPregnancyBlocked, PREGNANCY_BLOCK_MESSAGE } from "@/utils/patientChecks";
+import { uploadHighDoseEvidenceForOrder } from "@/utils/highDoseEvidence";
 
 const OrderSummary = ({
   isConcentCheck,
@@ -86,6 +87,7 @@ const OrderSummary = ({
   const [couponLoading, setCouponLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const [documentFailed, setDocumentFailed] = useState(false);
 
   // Coupon Api
   const handleApplyCoupon = async () => {
@@ -142,10 +144,31 @@ const OrderSummary = ({
 
   // handle Payment ✌✌
   const checkoutMutation = useMutation(sendStepData, {
-    onSuccess: (data) => {
+    onSuccess: async (data, variables) => {
       if (data) {
+        const newOrderId = data?.data?.paymentData?.order_id;
+        setOrderId(newOrderId);
+
+        // High dose document (order/dosage-document) must be uploaded before
+        // the payment page opens. It retries 3 times; if it still fails the
+        // patient is asked to select their dose again.
+        let uploaded = false;
+        try {
+          uploaded = await uploadHighDoseEvidenceForOrder(
+            newOrderId,
+            variables?.items,
+          );
+        } catch (err) {
+          console.error("Dosage document", err);
+        }
+
+        if (!uploaded) {
+          setIsButtonLoading(false);
+          setDocumentFailed(true);
+          return;
+        }
+
         setPaymentData(data?.data?.paymentData);
-        setOrderId(data?.data?.paymentData?.order_id);
         clearCoupon();
         clearAbandonCard();
         clearReview();
@@ -291,6 +314,38 @@ const OrderSummary = ({
 
   return (
     <>
+      {documentFailed && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 px-4 py-6 backdrop-blur-sm">
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="document-failed-heading"
+            aria-describedby="document-failed-text"
+            className="w-full max-w-[440px] rounded-[22px] bg-white p-6 text-center shadow-[0_28px_80px_rgba(30,20,60,0.22)] sm:p-7"
+          >
+            <h2
+              id="document-failed-heading"
+              className="inter-semibold-font text-[19px] text-slate-900"
+            >
+              Something went wrong
+            </h2>
+            <p
+              id="document-failed-text"
+              className="inter-reg-font mt-2 text-[14px] leading-relaxed text-slate-600"
+            >
+              We couldn&apos;t upload your treatment evidence. We are taking you
+              back to dosage selection, kindly select your dose again.
+            </p>
+            <button
+              type="button"
+              onClick={() => router.push("/gathering-data")}
+              className="inter-semibold-font mt-6 inline-flex min-h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-[#4565BF] px-5 py-3 text-[15px] text-white transition-colors hover:bg-[#3550a0]"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
       {paymentData ? (
         <PaymentPage paymentData={paymentData} />
       ) : (

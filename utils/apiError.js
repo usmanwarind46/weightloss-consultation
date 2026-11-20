@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 export const NETWORK_ERROR_MESSAGE =
-  "Your internet connection seems slow or unavailable. Please try again.";
+  "Something went wrong. Please try again in a few moments.";
 export const GENERIC_ERROR_MESSAGE = "Something went wrong.";
 
 // axios 0.27 sets error.response to the XHR object on network errors, so check the HTTP status instead
