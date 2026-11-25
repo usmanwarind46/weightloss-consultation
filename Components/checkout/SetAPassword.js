@@ -3,7 +3,6 @@ import { useForm, useWatch } from "react-hook-form";
 import SectionWrapper from "./SectionWrapper";
 import SectionHeader from "./SectionHeader";
 import { FiCheck, FiX, FiEye, FiEyeOff } from "react-icons/fi";
-import useSignupStore from "@/store/signupStore";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { UpdatePassword } from "@/api/mergeRoutes";
@@ -19,7 +18,6 @@ const SetAPassword = ({ isCompleted, onComplete }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { isPasswordReset, setIsPasswordReset } = usePasswordReset();
-  const { email } = useSignupStore();
   const router = useRouter();
   const { clearToken } = useAuthStore();
   const isMounted = useIsMounted();
@@ -86,9 +84,10 @@ const SetAPassword = ({ isCompleted, onComplete }) => {
       return;
     }
 
+    // No email or company_id. The API identifies the account from the bearer
+    // token Fetcher attaches; sending an identity in the body was exactly how
+    // the old endpoint let anyone set anyone else's password.
     mutate({
-      company_id: 2,
-      email: email,
       password: password,
       password_confirmation: confirmPassword,
     });

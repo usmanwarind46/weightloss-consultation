@@ -151,13 +151,34 @@ export default function LoginScreen() {
     }
   }, [getValues, trigger]);
 
+  /*
+   * "View as patient", arriving from the CRM.
+   *
+   * The CRM used to send us ?impersonate_email=<address> and we posted that
+   * address to an anonymous endpoint which handed back a session for it.
+   * Anyone could do the same with any address, so it was account takeover for
+   * the whole platform.
+   *
+   * It now sends ?impersonation_token=<token>: single-use, expires in seconds,
+   * minted by a signed-in member of staff and tied to one patient. We strip it
+   * from the URL as soon as it has been read, so it does not sit in history or
+   * get copied out of the address bar.
+   */
   useEffect(() => {
     if (!router.isReady) return; // Wait for router to be ready
-    const impersonateEmail = router.query.impersonate_email;
-    if (impersonateEmail) {
+
+    const impersonationToken = router.query.impersonation_token;
+
+    if (impersonationToken) {
+      // router.pathname, not a hardcoded "/login", so this keeps working under
+      // the site's basePath and if the route moves.
+      router.replace({ pathname: router.pathname }, undefined, {
+        shallow: true,
+      });
+
       setShowLoader(true);
       impersonateLoginMutation.mutate(
-        { impersonate_email: impersonateEmail, company_id: 2 },
+        { token: impersonationToken },
         {
           onSettled: () => {
             if (isMounted.current) setShowLoader(false);
